@@ -39,11 +39,11 @@ export const FlexRowSpaceBtw = styled.div`
   top: 0;
   width: 100%;
   justify-content: space-between;
-  background: ${color.navbar};
+  // background: ${color.navbar};
   //ececec;
-  :hover {
-    background: linear-gradient(to bottom, #ececec, #0ff, #ececec);
-  }
+  // :hover {
+  //   background: linear-gradient(to bottom, #ececec, #0ff, #ececec);
+  // }
   h2 {
     padding: 0 1rem;
   }
@@ -75,9 +75,9 @@ background-color:${bg};
   }
 `
 // style for list of card details
-export const List = styled.div`
+ const List = styled.div`
   width: fit-content;
-  height: 1.5rem;
+  height: 1.5rem !important;
   overflow-y: hidden;
   position: relative;
   display: grid;
@@ -85,7 +85,7 @@ export const List = styled.div`
   grid-template-columns: 150px 150px 150px 150px 200px 50px 150px auto;
   grid-template-areas: 'lasrraId firstname middlename surname phone status comment edit';
   justify-content: space-between;
-  margin: 2px 10px;
+  margin: 2px 10px !important;
   padding: 2px 10px;
   background-color: rgba(217, 217, 217, 0.82);
   :hover {
@@ -223,8 +223,11 @@ padding:${padding};
 `
 export const WrapperDiv = styled.div`
   display: flex;
+  flex-direction:column;
+  height:100vh;
   padding: 0.5rem;
-  background-color: #d9d9d9;
+  margin:0.5rem;
+  background-color: transparent;//#d9d9d9;
   overflow-x: hidden;
 `
 export const SearchButton = styled(Button)`
@@ -296,8 +299,8 @@ export const Field = styled.div`
 background-color: ${bg};
 color:${color};
 `}
-  margin:0.5rem 1rem;
-  width: 'fit-content';
+  // margin:0.5rem 1rem;
+  // width: 'fit-content';
   padding: 0.5rem;
 `
 export const GridContainer = styled.div`
@@ -315,10 +318,12 @@ export const Sidebar = styled.div`
   height: 100vh;
   overflow-x: hidden;
   border-right: 1px solid black;
+  background:#f5fdfc;
+  font-weight:900px;
   grid-area: sidebar;
   .active {
     background: ${color.active};
-    color: ${color.white};
+    color: ${color.white} !important;
     // linear-gradient(to right,white, #0ff,#67f805,#0ff,white);
   }
   @media (max-width: 768px) {
@@ -380,4 +385,30 @@ color:white;
 input{
   background:white;
 }
+`
+
+export const Spinner =styled.div`
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+position:fixed;
+top:300px;
+left:600px;
+width: 70px;
+background:${({bg})=>`${bg}`};
+  height: 70px;
+  border: 15px solid #f3f3f3; /* Light grey */
+  border-top: 15px solid #383636; /* Black */
+  border-radius: 50%;
+  animation: spinner 1.5s linear infinite;
+`
+export const Paper = styled.div`
+background:white;
+padding:20px;
+overflow-y:hidden;
 `

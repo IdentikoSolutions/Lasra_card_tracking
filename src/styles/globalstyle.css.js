@@ -4,7 +4,7 @@ body{
     margin: 0;
     padding: 0;
     font-family: Open-Sans, Helvetica, Sans-Serif;
-    background-color: #8bceb3;
+    background-color: #8bceb3 !important;
 }
 a{
     background-image: linear-gradient(to right, rgba(18,39,1,1), rgba(18,39,1,1), rgba(203,12,12,1));
@@ -13,8 +13,8 @@ a{
     // background-image:linear-gradient(to right, blue,red);
 }
 a:active{
-    color:red;
-    -webkit-text-fill-color: red;
+    color:blue !important;
+    -webkit-text-fill-color: blue;
 
 }
 a:visited{
@@ -27,4 +27,8 @@ a:hover{
     -webkit-text-fill-color: #67f805;
 
 }
+// h2{
+//     align-self: center;
+//     text-align: center;
+// }
 `

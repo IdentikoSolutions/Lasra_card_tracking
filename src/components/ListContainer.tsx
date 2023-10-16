@@ -1,13 +1,17 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 // import styled from 'styled-components';
+import  Table from "react-bootstrap/Table"
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Pagination from "react-bootstrap/Pagination"
+
 import {
   FlexCol,
   FlexRow,
-  List,
+  // List,
   MainDiv,
   TitleDiv,
 } from '../styles/styles'
-import { Icard } from '../interface/interface'
+import { Icard, IcardReceipt } from '../interface/interface'
 import { ButtonElement } from './ButtonElement'
 import { ListItems } from './ListItemsComponent/ListItems'
 import { InputField } from './InputField'
@@ -17,7 +21,7 @@ interface IlistContainer {
   title?: string
   width?: string
   children?: ReactNode
-  list?: Icard[]
+  list?: Icard[]|IcardReceipt[]
   batchStatus?:number
 }
 export const ListContainer: React.FC<IlistContainer> = ({
@@ -28,12 +32,12 @@ export const ListContainer: React.FC<IlistContainer> = ({
   batchStatus,
   ...props
 }) => {
-  // console.log(batchStatus,'List container')
+  // console.log(list,'list from list container')
   const [pageSize, setPageSize] = useState(20)
   const [pageNumber, setPageNumber] = useState(0)
   const [currentPage, setCurrentPage] = useState(0)
   const [active, setActive] = useState(-1)
-  const [currentCard, setCurrentCard] = useState<Icard>({})
+  const [currentCard, setCurrentCard] = useState<any>({})
   const reset = (num?: number) => {
     if (num) return setActive(num)
     setActive(-1)
@@ -44,8 +48,7 @@ export const ListContainer: React.FC<IlistContainer> = ({
     if(active!==-1)return
     setActive(card.cardId)
     setCurrentCard(card)
-  console.log(currentCard, 'from setNewActive')
-
+  // console.log(currentCard, 'from setNewActive')
   }
   let totalPages = (list && Math.ceil(list.length / pageSize)) || 1
   //function to go to previous page
@@ -70,17 +73,20 @@ export const ListContainer: React.FC<IlistContainer> = ({
       return (
         idx + 3 <= currentPage ||
         (currentPage + 3 >= idx && (
-          <ButtonElement
+          // <ButtonElement
+          //   key={idx}
+          //   onClick={() => currentPage < totalPages && setCurrentPage(idx)}
+          //   label={(idx + 1).toString()}
+          // />
+          <Pagination.Item 
+         onClick={() => currentPage < totalPages && setCurrentPage(idx)}
             key={idx}
-            onClick={() => currentPage < totalPages && setCurrentPage(idx)}
-            label={(idx + 1).toString()}
-          />
+          >{idx+1}</Pagination.Item>
         ))
       )
     })
   useEffect(() => {
-    // console.log('List container rerendered', active, currentCard.cardId)/
-  }, [currentCard])
+  }, [list])
   return (
     <div>
       <TitleDiv>{title}</TitleDiv>
@@ -100,45 +106,65 @@ export const ListContainer: React.FC<IlistContainer> = ({
         ) : (
           ''
         )}
+        <Table
+         striped
+         bordered
+         hover
+         variant="flat"
+         size="xxl"
+         className="mb-3">
         {list?.length ? (
-          <List>
-            <p>lasrraId</p>
-            <p>firstname</p>
-            <p>middlename</p>
-            <p>surname</p>
-            <p>primarY_PHONE_NO</p>
-            <p>status</p>
-            <p>comments</p>
-          </List>
+          <thead>
+            <tr>
+            <th>lasrraId</th>
+            <th>firstname</th>
+            <th>middlename</th>
+            <th>surname</th>
+            <th>primarY_PHONE_NO</th>
+            <th>status</th>
+            <th>comments</th>
+            </tr>
+
+          </thead>
         ) : (
           ''
         )}
         {children}
         {/* <ListItems {...tableHeader }/> */}
+        
+          <tbody>
+
+
         {list &&
           list.length > 0 ?
           (list
-            // .filter((card, idx) => idx >= start && idx < end)
             .map((card, idx) => {
+              // console.log(card,"card from list con")
               if (idx >= start && idx < end) {
-                return <ListItems {...card} batchStatus={batchStatus} key={'key' + card.lasrraId} active={active} reset={reset} setNewActive={setNewActive} />
-
+                return <ListItems {...card} batchStatus={batchStatus} key={card.cardId+" "+idx} active={active} reset={reset} setNewActive={setNewActive} />
               }
             }))
           :
-
           ''
-
         }
+          </tbody>
+
+        </Table>
+
 
         {list && list.length > 1 ? (
           <FlexCol>
             <FlexCol>
               {<div>{`Page ${currentPage} of ${totalPages} pages`}</div>}
-              <FlexRow>
-                <ButtonElement onClick={getPrev} label={'Prev'} />
+              {/* <FlexRow> */}
+                <Pagination className='btn-success'>
+                <Pagination.Prev />
+                {/* <ButtonElement onClick={getPrev} label={'Prev'} />   */}
                 {pageButtons}
-                <ButtonElement onClick={getNext} label={'Next'} />
+                {/* <ButtonElement onClick={getNext} label={'Next'} /> */}
+<Pagination.Next/>
+</Pagination>
+
                 <InputField
                   label={'Go to'}
                   type="number"
@@ -156,14 +182,16 @@ export const ListContainer: React.FC<IlistContainer> = ({
                     }
                   }}
                 />
-              </FlexRow>
+
+              {/* </FlexRow> */}
             </FlexCol>
           </FlexCol>
         ) : (
           ''
         )}
         {
-           active === currentCard.cardId &&
+          currentCard.toString()!=="{}" &&
+          active === currentCard.cardId &&
           <EditCard {...currentCard}  reset={reset} active={active} />}
       </MainDiv>
     </div>

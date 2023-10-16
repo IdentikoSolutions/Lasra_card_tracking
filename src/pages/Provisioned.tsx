@@ -8,6 +8,7 @@ import {
   InputField,
   InputFieldContainer,
   ListContainer,
+  ReportACard,
 } from '../components'
 import { useSelector } from 'react-redux'
 import { IrootState } from '../redux/store'
@@ -15,8 +16,10 @@ import { color } from '../artifacts/colors'
 // import { IGridBox } from '../interface/interface'
 // import styled from 'styled-components'
 import { Axios } from '../Axios/Axios'
+import { OverlayCard } from '../styles/styles';
 
 export function Provisioned() {
+  const [active, toggle] = useState(false)
   const [search, setSearch] = useState({
     batch: 0,
     pageSize: 20,
@@ -55,14 +58,14 @@ const [receipts,setReceipts] = useState([])
         '/Provisioning/CreateBatchProvisioning',
         details,
       )
-      console.log(details,'details from provisioning');
+      // console.log(details,'details from provisioning');
     toast.success('New provision receipt created successfully')
 
-      console.log('response', response)
+      // console.log('response', response)
     } catch (e) {
       toast.error("Note: The provision receipt was not created.")
     // toast('New provision receipt created successfully')
-      console.log('response error from provision receipt creation', e)
+      // console.log('response error from provision receipt creation', e)
     }
   }
   async function getProvisioned () {
@@ -106,6 +109,7 @@ toast.error(`Could not complete the operation. Detail${e}`)
 
       {/* <Select options={receipts} path={'/receipts/provision/'} /> */}
       <h1>CARD Provision</h1>
+      <ButtonElement label={active ? "close report" : "open report"} onClick={() => toggle(!active)} />
       <DetailContainer title={'Batch Details: '}>
         <DetailField
           label="Batch No:"
@@ -118,6 +122,7 @@ toast.error(`Could not complete the operation. Detail${e}`)
           value={batchDetail?.noRecords}
         />
         <DetailField
+        type='date'
           label="Date created:"
           bg={color.auto}
           value={batchDetail?.dateCreated?.substring(0, 10)}
@@ -125,6 +130,7 @@ toast.error(`Could not complete the operation. Detail${e}`)
       </DetailContainer>
       <InputFieldContainer title={'Card received details: '}>
         <InputField
+        type='date'
           label="Date received:"
           value={receiptDetail.date}
           onChange={(e) =>
@@ -149,6 +155,13 @@ toast.error(`Could not complete the operation. Detail${e}`)
           bg={color.action}
         />
       </InputFieldContainer>
+      {cards.length > 0 &&
+          active &&
+          <OverlayCard>
+          <ReportACard />
+
+          </OverlayCard>
+          }
         <ListContainer title="CARDS" list={cards}/>
         {reports.length > 0 && (
           <>

@@ -1,66 +1,72 @@
-"use client";
+'use client'
 
-import React, { useEffect } from 'react'
-import {Accordion, AccordionListContainer,ReportACard} from './index'
+import React, { useEffect, useState } from 'react'
+import { Accordion } from './index'
 import { Sidebar } from '../styles/styles'
-import { Spinner } from '../skeleton.tsx/spinners'
 import { IrootState } from '../redux/store'
 import { useSelector } from 'react-redux'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FallbackRender } from '../pages/errorpages/error'
+import Navbar from 'react-bootstrap/Navbar'
+import Container from 'react-bootstrap/Container'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 export function SideNav() {
   // const
   const { Cards } = useSelector((state) => state as IrootState)
   const { cards } = Cards
-
+  const [active, toggle] = useState(-1)
+  let options = [
+    {
+      page: '/receipts/viewreceipts',
+      title: 'Card Production Receipt',
+      list: '',
+    },
+    {
+      page: '/receipts/viewprovision',
+      title: 'Card Provision  Receipt',
+      list: '',
+    },
+    { page: '/receipts/order', title: 'Dispatch Orders', list: '' },
+    { page: '/receipts/retrival', title: 'Retrival Orders', list: '' },
+    { page: 'delivery', title: 'Home Delivery Orders', list: '' },
+  ]
+  const setActive = (num: number) => {
+    toggle(num)
+  }
   useEffect(() => {}, [cards])
   return (
-    <ErrorBoundary FallbackComponent={FallbackRender} onReset={(details)=>{console.log("onreset")}}>
-
-    <Sidebar>
-      {cards.length ? (
-        <Accordion page= ''title={'Report a card'}>
-          <ReportACard />
-        </Accordion>
-      )
-      : ""
-    }
-      <Accordion page= '/receipts'title={'Card Production Receipt'} list={'Click to view receipt'}>
-        <AccordionListContainer
-          options={[]}
-          to='/receipts/receipt'
-          path={'cards/'}
-          source={'/receipts/viewreceipts'}
-          searchId={'/Batch/GetCardByBatchId?id'}
-        />
-        {/* <div onClick={()=>Toggle(!value)}>create new receipt</div> */}
-
-      </Accordion>
-      <Accordion
-      page='/receipts/provision'
-        title={'Card Provision  Receipt'}
-        list={'Click on batch to view receipt'}
-      >
-        <AccordionListContainer
-        to='/receipts/provision'
-          source={'/receipts/viewprovision'}
-          path={'provision/'}
-          searchId={'/Card/ViewCardReceiptByBatchId?BatchNo'}
-        />
-      </Accordion>
-      <Accordion page='/receipts/order' title={'Dispatch Orders'} list={'spinner'}>
-        <Spinner lines={10} />
-      </Accordion>
-      <Accordion title={'Retrival Orders'} list={'Lorem ipsum tros catn'} />
-      <Accordion
-        title={'Home Delivery Orders'}
-        list={'Lorem ipsum tros catn'}
-      />
-    </Sidebar>
+    <ErrorBoundary
+      FallbackComponent={FallbackRender}
+      onReset={(details) => {
+        console.log('onreset')
+      }}
+    >
+      {/* <Container> */}
+      {/* <> */}
+      <Sidebar>
+       
+        {options.map((item, idx) => (
+          <>
+            <Navbar className="bg-body-tertiary">
+              <Container>
+                <Accordion
+                  key={idx}
+                  page={item.page}
+                  title={item.title}
+                  list={item.list}
+                  active={active}
+                  setActive={setActive}
+                  idx={idx}
+                />
+              </Container>
+            </Navbar>
+            {/* <br /> */}
+          </>
+        ))}
+        {/* </Container> */}
+      </Sidebar>
+      {/* </> */}
     </ErrorBoundary>
-
   )
 }
-
-// export default SideNav

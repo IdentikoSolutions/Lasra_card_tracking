@@ -1,40 +1,61 @@
-import React, { Children, useEffect, useState } from 'react';
-import { FaChevronUp } from "react-icons/fa"
-import { LuChevronDown } from "react-icons/lu"
-import { AccordionStyle, FlexRowSpaceBtw } from '../styles/styles';
-// import { useNavigate } from 'react-router-dom';
+import React, { Children, useEffect, useState } from 'react'
+import { FaChevronUp } from 'react-icons/fa'
+import { FaChevronRight } from 'react-icons/fa'
+import { AccordionStyle, FlexRowSpaceBtw } from '../styles/styles'
+import { useNavigate } from 'react-router-dom'
+import Container from 'react-bootstrap/Container'
+import Navbar from 'react-bootstrap/Navbar'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 interface Iaccordion {
-    title?: string;
-    list?:string|string[],
-    children?:any,
-    className?:string|undefined;
-    page?:string
+  title?: string
+  list?: string | string[]
+  children?: any
+  className?: string | undefined
+  page?: string
+  active: number
+  setActive: (num: number) => void
+  idx: number
 }
 
-export const Accordion:React.FC< Iaccordion> =({title, list, page,children})=> {
-    const [active,setActive] = useState(false)
-    // const navigate = useNavigate()
-    // console.log(active)
-    useEffect(()=>{},[active,list])
-    const handleClick = ()=>{
-        setActive(!active)
+export const Accordion: React.FC<Iaccordion> = ({
+  title,
+  list,
+  active,
+  setActive,
+  idx,
+  page,
+  children,
+}) => {
+  const navigate = useNavigate()
+  useEffect(() => {}, [active, list])
+  const handleClick = () => {
+    navigate(`${page}`)
 
-        // if(page && active===false ) navigate(page)
+    setActive(idx)
+  }
+  return (
+    
+      <Navbar
+        className={` outline ${
+          active === idx ? 'active text-white' : 'undefined'
+        }`}
+        onClick={handleClick}
+        style={{width:'100%'}}
+      >
+        <FlexRowSpaceBtw>
 
-    }
-    return (
-        <AccordionStyle >
-            <FlexRowSpaceBtw onClick={handleClick} className={ active ? "active" :"undefined"}>
-            <h2>{title}</h2> <h2> {active ? <FaChevronUp/>:<LuChevronDown/> }</h2>
-            </FlexRowSpaceBtw>
-            { active && <div>
-                <h3>{list}</h3>
-                </div>}
-                { active && children}
-                {Array.isArray(list)  && <Accordion page='/' title={'child'} list={"another element"}/>}
-        </AccordionStyle>
-    );
+        {/* <span> */}
+          <p style={{ fontSize: '1.4rem' }}>
+            {title}
+            </p>
+            <p> {active === idx ? <FaChevronRight /> : <FaChevronUp />}
+          </p>
+          </FlexRowSpaceBtw>
+        {/* </span> */}
+      </Navbar>
+
+  )
 }
 
 // export default Accordion;

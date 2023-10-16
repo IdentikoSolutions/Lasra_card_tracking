@@ -5,7 +5,7 @@ const options = {
   headers: {
     accept: 'text/plain',
     'Content-Type': 'application/json',
-    // 'Authorization':
+    "XApikey":"pgH7QzFHJx4w46fI~5Uzi4RvtTwlEXp"
   },
 }
 console.log(options.baseURL, "baseUsrl")
