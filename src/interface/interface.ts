@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import Provisioned from '../pages/Provisioned';
+// import Provisioned from '../pages/Provisioned';
 
 export interface Icard {
   batch: string
@@ -106,7 +106,7 @@ export interface IinputFieldContainer{
     color:string
   }
   export interface Ireceipt{
-batchReceiptHeader:ReceiptType,
+batchProvisionHeader:ReceiptType,
 cardsReceipt:Icard[]|IcardReceipt[]
   }
   export interface ReceiptType{

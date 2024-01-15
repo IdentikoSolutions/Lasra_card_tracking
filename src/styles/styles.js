@@ -1,13 +1,13 @@
 import styled from 'styled-components'
 import { color } from '../artifacts/colors'
-export const Div = styled.div`
-  width: 100vw;
-  height: 'fit-content';
-  padding: 0.2rem;
-  background-color: #14763b;
-  display: flex;
-  justify-content: space-between;
-`
+// export const Div = styled.div`
+//   width: 100vw;
+//   height: 'fit-content';
+//   padding: 0.2rem;
+//   background-color: #14763b;
+//   display: flex;
+//   justify-content: space-between;
+// `
 export const LogoWrapper = styled.div`
   ${({ width, height, src }) => `
 width: ${width};
@@ -178,12 +178,12 @@ export const MainDiv = styled.div`
   padding-top: 10px;
   display: flex;
   flex-direction: column;
-  min-width: 30%;
-  overflow-y: hidden;
+  min-width: fit;
+height:fit;
   background-color: white;
   min-height: 200px;
-  border: 3px solid #67f835;
-  border-radius: 8px;
+
+  // border-radius: 8px;
   transition-property: background-color;
   transition-duration: 1s;
   transition-timing-function: linear;
@@ -204,7 +204,7 @@ export const TitleDiv = styled.div`
   left: 50px;
   width: fit-content;
   background-color: white;
-  border: 3px solid #67f835;
+  // border: 3px solid #67f835;
   border-radius: 8px;
   min-height: 20px;
 `
@@ -305,36 +305,19 @@ color:${color};
 `
 export const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: 300px auto auto auto;
+  grid-template-columns: 300px auto;
   grid-template-rows: auto;
-  grid-template-areas: ' sidebar main main main';
+  grid-template-areas: ' sidebar main';
   @media (max-width:768px){
     grid-template-columns auto;
     grid-template-areas:main;
     grid-template-rows: auto;
   }
 `
-export const Sidebar = styled.div`
-  height: 100vh;
-  overflow-x: hidden;
-  border-right: 1px solid black;
-  background:#f5fdfc;
-  font-weight:900px;
-  grid-area: sidebar;
-  .active {
-    background: ${color.active};
-    color: ${color.white} !important;
-    // linear-gradient(to right,white, #0ff,#67f805,#0ff,white);
-  }
-  @media (max-width: 768px) {
-    grid-area:main;
-    visibility:hidden;
-  }
-`
 export const Mainbar = styled.div`
-  overflow-x: hidden;
-  height: 100vh;
-  padding: 1rem;
+  // overflow-x: hidden;
+  height: fit;
+  padding: 0;
   grid-area: main;
 `
 export const AccordionStyle = styled.div`
@@ -363,19 +346,20 @@ export const Video = styled.video`
 
 export const OverlayCard = styled.div`
 position:fixed;
-top:200px;
+top:30%;
+left:30vw;
 padding:1rem;
 width:fit-content;
-background:green;
+background:#e0eee0;
+opacity:1;
 overflow-y:hidden;
 z-index:200;
 border-radius:6px;
-border:2px solid black;
+border:1px solid gray;
 display:flex;
 flex-direction:column;
 justify-content:space-between;
 align-items:stretch;
-box-shadow:0 0 5px 5px green;
 label{
   display:flex;
   padding:5px;
@@ -407,8 +391,4 @@ background:${({bg})=>`${bg}`};
   border-radius: 50%;
   animation: spinner 1.5s linear infinite;
 `
-export const Paper = styled.div`
-background:white;
-padding:20px;
-overflow-y:hidden;
-`
+

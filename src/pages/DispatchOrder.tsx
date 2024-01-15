@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
+import { Outlet, useLocation, useOutletContext } from 'react-router-dom'
 // import DetailContainer from '../components/DetailContainer'
 import { ButtonElement, Filter, InputField, InputFieldContainer } from '../components'
 import { color } from '../artifacts/colors'
 import { FlexRow, WrapperDiv } from '../styles/styles'
 import styled from 'styled-components'
-import  OrderBatchSummary  from '../components/ListItemsComponent/OrderBatchSummary'
+import OrderBatchSummary from '../components/ListItemsComponent/OrderBatchSummary'
 import { IFilterProp, Icard, Iorder } from '../interface/interface'
 import { Axios } from '../Axios/Axios'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-import Button from 'react-bootstrap/Button'
+// import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useNavigate } from 'react-router-dom'
@@ -31,7 +32,8 @@ const FlexX = styled(FlexRow)`
 `
 
 export const DispatchOrder = () => {
-  const navigate =useNavigate()
+  const navigate = useNavigate()
+  const location = useLocation().pathname
   const [receiptDetail, setReceiptDetail] = useState({
     destination: '',
     dispatcherName: '',
@@ -72,10 +74,11 @@ export const DispatchOrder = () => {
 
   //filter cards
   const getCard = async () => {
-    // if (!lga) {
-    //   toast.warn("You need to select destination(lga)")
-    //   return
-    // }
+    if (location !== '/receipts/order/all') {
+      navigate('/receipts/order/all')
+      return
+    }
+
     const result = await Axios.get(
       `/Provisioning/filterprovisionedcards?${cardId > 0 ? `cardId=${cardId}` : 'card=0'
       }${batchId > 0 ? `&batchno=${batchId}` : '&batchno=0'}${lasrraid ? `&lasrraid=${lasrraid}` : ''
@@ -83,21 +86,20 @@ export const DispatchOrder = () => {
       }${firstname ? `&firstname=${firstname}` : ''}${middlename ? `&middlename=${middlename}` : ''
       }${lga ? `&lga=${lga}` : ''}`,
     )
-    console.log("Result",result, 
-    // result.data[0].batch 
-    )
-    if(result.data.length<1){
+
+    if (result?.data?.length < 1) {
       toast.error("specified batch was not found")
-      return}
-    result.data && setOrderObjs([
+      return
+    }
+    result?.data && setOrderObjs([
       ...orderObjs,
       {
-        batchId:result.data[0].batch,
+        batchId: result?.data[0].batch,
         dispatcherName,
         pickUpDate,
-        noRecords: result.data.length,
+        noRecords: result?.data.length,
         destination: lga,
-        cards: result.data,
+        cards: result?.data,
         batchDispatchStatus: 0,
         createdBy,
         receivedBy: "string",
@@ -116,30 +118,33 @@ export const DispatchOrder = () => {
       lga: '',
     })
   }
-  const removeOrder =()=>{
-    const neworderlist = orderObjs.filter(order=>(order.batchId!==batchId && order.destination !==lga))
+  const removeOrder = () => {
+    const neworderlist = orderObjs.filter(order => (order.batchId !== batchId && order.destination !== lga))
     setOrderObjs(neworderlist)
   }
   // function to create dispatch
   const createDispatch = async () => {
-   console.log( orderObjs, 'dispatch oders')
-    const detail = JSON.stringify({dispatchOrders:{
-    "receivedBy": "string",
-    "deliveredBy": "string",
-    "dispatcherName": "string",
-    "createdBy": "string",
-    "batchDispatchStatus": 0,
-    "noRecords": 0,
-    //date of dispatch cant be know on creation point
-    "dispatchOrderOn": "2023-10-09T15:55:54.072Z",
-    "acknowledgedBy": "string",
-    "receivedOn": "2023-10-09T15:55:54.072Z", ...orderObjs }})
-    console.log(detail,'detail')
+    console.log(orderObjs, 'dispatch oders')
+    const detail = JSON.stringify({
+      dispatchOrders: {
+        "receivedBy": "string",
+        "deliveredBy": "string",
+        "dispatcherName": "string",
+        "createdBy": "string",
+        "batchDispatchStatus": 0,
+        "noRecords": 0,
+        //date of dispatch cant be know on creation point
+        "dispatchOrderOn": "2023-10-09T15:55:54.072Z",
+        "acknowledgedBy": "string",
+        "receivedOn": "2023-10-09T15:55:54.072Z", ...orderObjs
+      }
+    })
+    console.log(detail, 'detail')
     try {
       const result = await Axios.post("/dispatch/createcarddispatch", detail)
       toast.success(`${Object.values(result.data)[0]}`)
       // setOrderObjs([])
-    } catch (e:any) {
+    } catch (e: any) {
       toast.error(<><h3>{e.message}</h3> <p>{e.response.data.title}</p></>)
     }
   }
@@ -150,20 +155,24 @@ export const DispatchOrder = () => {
       <FlexX>
         {' '}
         <h2>Batches:  </h2>
-        {/* <ButtonElement label={'View Order'} onClick={()=> {navigate("/receipts/order/vieworders")}} />
-
-        <ButtonElement label={'Add order'} onClick={getCard} />
-        <ButtonElement label={'remove order'} onClick={removeOrder} /> */}
-        <InputGroup className="mb-3 mx-3">
-        <Button variant="outline-secondary " onClick={()=> {navigate("/receipts/order/vieworders")}}>View Orders</Button>
-        <Button variant="outline-secondary" onClick={getCard} >Add Order</Button>
-        <Button variant="outline-secondary" onClick={removeOrder}>Remove Order</Button>
-      </InputGroup>
+        <InputGroup className=" mb-3 mx-3">
+          <button className='hover:bg-green-500 hover:text-white bg-green-100 p-2 rounded-md border-1' onClick={() => { navigate("/receipts/order") }}>View Orders</button>
+          <button className='hover:bg-green-500  hover:text-white bg-green-100 p-2 rounded-md border-1' onClick={getCard} >Add Order</button>
+          <button className='hover:bg-green-500  hover:text-white bg-green-100 p-2 rounded-md border-1' onClick={removeOrder}>Remove Order</button>
+        </InputGroup>
 
       </FlexX>
-      <Filter state={filter} setState={setState} />
+      <Outlet context={{ filter, setState, orderObjs, setFilter, receiptDetail, setReceiptDetail, createDispatch } satisfies OutletContextType} />
+      <ToastContainer position='top-right' newestOnTop />
+    </div>
+  )
+}
+type OutletContextType = { filter: any, setState: any, orderObjs: any, setFilter: any, receiptDetail: any, setReceiptDetail: any, createDispatch: any }
+export function OrdersMAngager() {
+  const { filter, setState, orderObjs, setFilter, receiptDetail, setReceiptDetail, createDispatch } = useOutletContext<OutletContextType>()
+  return <><Filter state={filter} setState={setState} />
+    {orderObjs.length > 0 &&
       <InputFieldContainer title={'Order Details: '}>
-
         <InputField
           label="Destination:"
           value={filter.lga}
@@ -205,23 +214,21 @@ export const DispatchOrder = () => {
           }
           bg={color.action}
         />
-      </InputFieldContainer>
-      {
-        orderObjs.length > 0 &&
+      </InputFieldContainer>}
+    {
+      orderObjs.length > 0 &&
       <>
-      <WrapperDiv>
-        {orderObjs.map((cards, idx) => (
-          <OrderBatchSummary
-            key={idx+" "+cards.batchId}
-            {...cards}
-          />
-        ))}
-      </WrapperDiv>
-      <ButtonElement onClick={createDispatch} label={'Create Dispatch'} />
-      
+        <WrapperDiv>
+          {orderObjs.map((cards, idx) => (
+            <OrderBatchSummary
+              key={idx + " " + cards.batchId}
+              {...cards}
+            />
+          ))}
+        </WrapperDiv>
+        <ButtonElement onClick={createDispatch} label={'Create Dispatch'} />
+
       </>
-      }
-      <ToastContainer position='top-right' newestOnTop />
-    </div>
-  )
+    }
+  </>
 }

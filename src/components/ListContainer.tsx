@@ -1,13 +1,11 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 // import styled from 'styled-components';
-import  Table from "react-bootstrap/Table"
+import Table from 'react-bootstrap/Table'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Pagination from "react-bootstrap/Pagination"
+import Pagination from 'react-bootstrap/Pagination'
 
 import {
   FlexCol,
-  FlexRow,
-  // List,
   MainDiv,
   TitleDiv,
 } from '../styles/styles'
@@ -21,8 +19,8 @@ interface IlistContainer {
   title?: string
   width?: string
   children?: ReactNode
-  list?: Icard[]|IcardReceipt[]
-  batchStatus?:number
+  list?: Icard[] | IcardReceipt[]
+  batchStatus?: number
 }
 export const ListContainer: React.FC<IlistContainer> = ({
   title,
@@ -45,10 +43,10 @@ export const ListContainer: React.FC<IlistContainer> = ({
   function setNewActive(card: Icard) {
     if (active !== -1 && active === card.cardId) return reset(-1)
     // reset()
-    if(active!==-1)return
+    if (active !== -1) return
     setActive(card.cardId)
     setCurrentCard(card)
-  // console.log(currentCard, 'from setNewActive')
+    // console.log(currentCard, 'from setNewActive')
   }
   let totalPages = (list && Math.ceil(list.length / pageSize)) || 1
   //function to go to previous page
@@ -73,126 +71,104 @@ export const ListContainer: React.FC<IlistContainer> = ({
       return (
         idx + 3 <= currentPage ||
         (currentPage + 3 >= idx && (
-          // <ButtonElement
-          //   key={idx}
-          //   onClick={() => currentPage < totalPages && setCurrentPage(idx)}
-          //   label={(idx + 1).toString()}
-          // />
-          <Pagination.Item 
-         onClick={() => currentPage < totalPages && setCurrentPage(idx)}
+          <Pagination.Item
+          className={`${idx===currentPage?'bg-green-500 border-green-700 border-2 text-white':""}`}
+            onClick={() => currentPage < totalPages && setCurrentPage(idx)}
             key={idx}
-          >{idx+1}</Pagination.Item>
+          >
+            {idx + 1}
+          </Pagination.Item>
         ))
       )
     })
-  useEffect(() => {
-  }, [list])
+  useEffect(() => {}, [list])
   return (
     <div>
-      <TitleDiv>{title}</TitleDiv>
+      <div className="text-gray-800  font-bold ml-3 py-2">{title?.toLocaleUpperCase()}</div>
       <MainDiv {...props}>
         {list?.length && list?.length > pageSize ? (
-          <FlexRow>
-            <ButtonElement
+          <div
+          className='flex justify-center my-2'>
+            <button
+            className='bg-green-500 text-white px-4 mx-4 rounded-md'
               onClick={() => setPageSize(pageSize + 1)}
-              label={'+'}
-            />
+            >+</button>
             Page Size:{pageSize}
-            <ButtonElement
+            <button
+              className='bg-green-500 text-white px-4 mx-4 rounded-md'
               onClick={() => pageSize > 20 && setPageSize(pageSize - 1)}
-              label={'-'}
-            />
-          </FlexRow>
+            >-</button>
+          </div>
         ) : (
           ''
         )}
         <Table
-         striped
-         bordered
-         hover
-         variant="flat"
-         size="xxl"
-         className="mb-3">
-        {list?.length ? (
-          <thead>
-            <tr>
-            <th>lasrraId</th>
-            <th>firstname</th>
-            <th>middlename</th>
-            <th>surname</th>
-            <th>primarY_PHONE_NO</th>
-            <th>status</th>
-            <th>comments</th>
-            </tr>
+          striped
+          //  bordered
+          hover
+          variant="flat"
+          size="xxl"
+          className="mb-3"
+        >
+          {list?.length && (
+            <thead>
+              <tr>
+                <th>lasrraId</th>
+                <th>firstname</th>
+                <th>middlename</th>
+                <th>surname</th>
+                <th>primarY_PHONE_NO</th>
+                <th>status</th>
+                <th>comments</th>
+              </tr>
+            </thead>
+          )}
+          {children}
+          {/* <ListItems {...tableHeader }/> */}
 
-          </thead>
-        ) : (
-          ''
-        )}
-        {children}
-        {/* <ListItems {...tableHeader }/> */}
-        
           <tbody>
-
-
-        {list &&
-          list.length > 0 ?
-          (list
-            .map((card, idx) => {
-              // console.log(card,"card from list con")
-              if (idx >= start && idx < end) {
-                return <ListItems {...card} batchStatus={batchStatus} key={card.cardId+" "+idx} active={active} reset={reset} setNewActive={setNewActive} />
+            {list && list.length > 0
+              && list.map((card, idx) => 
+                
+                    idx >= start && idx < end
+                
+                  &&
+                      <ListItems
+                        {...card}
+                        batchStatus={batchStatus}
+                        key={card.cardId + ' ' + idx}
+                        active={active}
+                        reset={reset}
+                        setNewActive={setNewActive}
+                      />
+                    )
+                  
+              
               }
-            }))
-          :
-          ''
-        }
           </tbody>
-
         </Table>
-
-
         {list && list.length > 1 ? (
           <FlexCol>
             <FlexCol>
               {<div>{`Page ${currentPage} of ${totalPages} pages`}</div>}
               {/* <FlexRow> */}
-                <Pagination className='btn-success'>
-                <Pagination.Prev />
+              <div className='flex'>
+              <Pagination className="btn-success">
+                <Pagination.Prev className='' />
                 {/* <ButtonElement onClick={getPrev} label={'Prev'} />   */}
                 {pageButtons}
                 {/* <ButtonElement onClick={getNext} label={'Next'} /> */}
-<Pagination.Next/>
-</Pagination>
-
-                <InputField
-                  label={'Go to'}
-                  type="number"
-                  bg={color.action}
-                  width={'150px'}
-                  value={pageNumber === 0 ? '' : pageNumber}
-                  onClick={getPageNumber}
-                  onChange={(e: any) => {
-                    if (e.target.value < 0) {
-                      setPageNumber(1)
-                    } else if (e.target.value > totalPages) {
-                      setPageNumber(totalPages)
-                    } else {
-                      setPageNumber(e.target.value)
-                    }
-                  }}
-                />
-
-              {/* </FlexRow> */}
+                <Pagination.Next className=''/>
+              </Pagination>
+              </div>
             </FlexCol>
           </FlexCol>
         ) : (
           ''
         )}
-        {
-          currentCard.toString()!=="{}" &&
-          active === currentCard.cardId &&
-          <EditCard {...currentCard}  reset={reset} active={active} />}
+        {currentCard.toString() !== '{}' && active === currentCard.cardId && (
+          <EditCard {...currentCard} reset={reset} active={active} />
+        )}
       </MainDiv>
     </div>
   )

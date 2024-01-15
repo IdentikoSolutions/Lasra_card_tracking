@@ -1,23 +1,18 @@
 import React from 'react'
-import { Div, FlexCol, FlexRow } from '../styles/styles'
 import Logo from '../artifacts/Logo'
-import { Navlinks } from './Navlinks'
-import { Search } from './Search'
+import { useApp } from './context/AppContext'
 
 export function Header() {
+  const { pageName } = useApp() as any
   return (
-    <Div>
+    <div className="transparent w-[100vw] flex justify-between  h-fit p-[0.2rem] shadow-sm">
       <Logo />
-      {/* <FlexCol> */}
-        <FlexRow>
-          <Navlinks to={'/'} name={'Home'} />
-          <Navlinks to={'/batches'} name={'Batches'} />
-          <Navlinks to={'/relocation'} name={'Relocation Request'} />
-          <Navlinks to={'/delivery'} name={'Delivery Request'} />
-        </FlexRow>
-        {/* <Search/> */}
-      {/* </FlexCol> */}
-    </Div>
+      <div className="flex justify-between  flex-1 ">
+        <p className="  text-[3rem] self-start text-green-700 px-10 ">
+          {pageName}
+        </p>
+        <div>icon</div>
+      </div>
+    </div>
   )
 }
-

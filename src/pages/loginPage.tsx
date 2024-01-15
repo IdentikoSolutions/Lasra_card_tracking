@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import access from "../images/access.webp"
+import access from "../assets/images/access.webp"
 // import access from '../images/access.webp'
 
 import {AiOutlineEyeInvisible, AiOutlineEye} from "react-icons/ai"

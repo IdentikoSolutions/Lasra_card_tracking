@@ -18,7 +18,7 @@ interface Ireset{
       <td >{card.middlename}</td>
       <td >{card.surname}</td>
       <td>{card.primarY_PHONE_NO}</td>
-      <td>{card.status===0?"received":card.status===1?'Not received':'To be determind'}</td>
+      <td>{card.status===0?"P":card.status===1?'NP':'To be determind'}</td>
       {card.comment && <td >{card.comment}</td>}
      {card.batchStatus===0 && <button onClick={()=>card.setNewActive(card)}><AiOutlineEdit/></button>}
     </tr>

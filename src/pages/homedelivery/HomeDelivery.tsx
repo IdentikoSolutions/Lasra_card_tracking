@@ -1,35 +1,48 @@
-import React from 'react'
+import React, { useState,useEffect } from 'react'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Outlet } from 'react-router-dom'
-
-function HomeDelivery() {
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import ViewAllHomeDelivery from './ViewAllHomeDelivery'
+const list = [
+  { title: 'View All Request', to: '' },
+  { title: 'View All Delivery Order', to: 'viewall' },
+  { title: 'View All Fullfilled Request', to: 'neworder' },
+  { title: '...', to: '*' },
+]
+const NavLink: React.FC<{ title: string; to: string,active:number,idx:number,setActive:any }> = ({ title, to,active,idx,setActive }) => {
+  const navigate = useNavigate()
+  const handler=() => {
+      setActive(idx);
+      navigate(to)
+    }
   return (
     <div
-    //  style={{ background: 'white', color: 'black' }}
-     >
-      {/* <Navbar bg="light" data-bs-theme="light"> */}
-        <Nav variant="tabs" >
-          <Nav.Item className='text-gray-900 bg-green-200'>
-            <Nav.Link href="#" className="nav-link  ">
-              All Delivery Request
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item className='text-gray-900 bg-green-200'>
-            <Nav.Link href="viewall" className="nav-link  ">
-              View All Delivery Order
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item className='text-gray-900 bg-green-200'>
-            <Nav.Link href="neworder" className="nav-link">
-              ...
-            </Nav.Link>
-          </Nav.Item>
-        </Nav>
-      {/* </Navbar> */}
+      onClick={handler}
+      className={` ${active===idx? "bg-white text-black  border-b-[0px]  ":"bg-green-200 text-gray-600 border-b-2 "}w-fit h-10  border-t-2 border-l-2 border-r-2 px-3 py-2 flex-grow rounded-tr-[8px] rounded-tl-[8px]`}
+    >
+      <p className='text-center font-bold'>{title}</p>
+    </div>
+  )
+}
+function HomeDelivery() {
+  const [active,setActive] =useState(0)
+  return (
+    <div className='relative'>
+      {/* <div id='portal' className='absolute w-[100vw] h-[100vh]'></div> */}
 
+      <h1>Home Delivery</h1>
+      <div className="flex m-0 border-0">
+       
+        {list.map((item, idx) => (
+          <NavLink key={idx} title={item.title} active={active} idx={idx} setActive={setActive} to={item.to} />
+        ))}
+      </div>
+      <div className='w-[100%] m-0 p-5 bg-white border-0'>
       <Outlet />
+
+      </div>
+
     </div>
   )
 }

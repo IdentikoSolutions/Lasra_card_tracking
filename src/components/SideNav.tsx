@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Accordion } from './index'
-import { Sidebar } from '../styles/styles'
+// import { Sidebar } from '../styles/styles'
 import { IrootState } from '../redux/store'
 import { useSelector } from 'react-redux'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -39,19 +39,20 @@ export function SideNav() {
     <ErrorBoundary
       FallbackComponent={FallbackRender}
       onReset={(details) => {
-        console.log('onreset')
+        console.log(details)
       }}
     >
       {/* <Container> */}
       {/* <> */}
-      <Sidebar>
+      <div 
+      className='bg-[#299029] px-2 min-h-[90vh]'
+      
+      >
        
         {options.map((item, idx) => (
           <>
-            <Navbar className="bg-body-tertiary">
-              <Container>
                 <Accordion
-                  key={idx}
+                  key={item.page}
                   page={item.page}
                   title={item.title}
                   list={item.list}
@@ -59,14 +60,9 @@ export function SideNav() {
                   setActive={setActive}
                   idx={idx}
                 />
-              </Container>
-            </Navbar>
-            {/* <br /> */}
           </>
         ))}
-        {/* </Container> */}
-      </Sidebar>
-      {/* </> */}
+      </div>
     </ErrorBoundary>
   )
 }

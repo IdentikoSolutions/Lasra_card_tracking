@@ -2,7 +2,7 @@ import React from 'react';
 
 function ErrorPage() {
     return (
-        <div>
+        <div id='neworder'>
             this is error
         </div>
     );

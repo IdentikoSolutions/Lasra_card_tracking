@@ -7,7 +7,7 @@ import { GlobalStytle } from './styles/globalstyle.css'
 import LoginPage from './pages/loginPage'
 import AllReceipt from './pages/AllReceipt'
 import { ListSkeleton } from './skeleton.tsx/Listskeleton'
-import { DispatchOrder } from './pages/DispatchOrder'
+import { DispatchOrder, OrdersMAngager } from './pages/DispatchOrder'
 import { ReceiptDetailsPage } from './pages/ReceiptDetailsPage'
 import { LandingPage } from './pages/LandingPage'
 import ViewDispatchOrders from './pages/ViewDispatchOrders'
@@ -22,6 +22,7 @@ import HomeDelivery from './pages/homedelivery/HomeDelivery'
 import AllDeliveryRequest from './pages/homedelivery/AllDeliveryRequest'
 import ErrorPage from './pages/homedelivery/ErrorPage'
 import ViewAllHomeDelivery from './pages/homedelivery/ViewAllHomeDelivery'
+import { DeliveryContextProvider } from './components/context/DeliveryContext'
 // import Error from './pages/homedelivery/Error';
 // import AllDeliveryRequest from './pages/homedelivery/AllDeliveryRequest'
 const CardProductionReceipt = React.lazy(() =>
@@ -95,7 +96,25 @@ function App() {
                   <DispatchOrder />
                 </Suspense>
               }
+            >
+              <Route
+              index
+              element={
+                <Suspense fallback={<ListSkeleton lines={15} />}>
+                  <ViewDispatchOrders />
+                </Suspense>
+              }
             />
+            <Route
+              path={'all'}
+              element={
+                <Suspense fallback={<ListSkeleton lines={15} />}>
+                  {/* <DispatchOrder /> */}
+                  <OrdersMAngager/>
+                </Suspense>
+              }
+            />
+            </Route>
             <Route
               path={'retrival'}
               element={
@@ -128,14 +147,14 @@ function App() {
                 </Suspense>
               }
             />
-            <Route
+            {/* <Route
               path={'order/vieworders'}
               element={
                 <Suspense fallback={<ListSkeleton lines={15} />}>
                   <ViewDispatchOrders />
                 </Suspense>
               }
-            />
+            /> */}
             <Route
               path={'order/vieworders/:id'}
               element={
@@ -147,9 +166,11 @@ function App() {
             <Route
               path={'delivery'}
               element={
-                <Suspense fallback={<ListSkeleton lines={15} />}>
+                // <Suspense fallback={<ListSkeleton lines={15} />}>
+                <DeliveryContextProvider>
                   <HomeDelivery/>
-                </Suspense>
+                </DeliveryContextProvider>
+                // </Suspense>
               }
             >
                    <Route
@@ -160,7 +181,8 @@ function App() {
                     <AllDeliveryRequest />
                   </Suspense>
                     }
-                     /> <Route
+                     /> 
+                     <Route
                     path={'viewall'}
                         // path={'home'}
                   element={

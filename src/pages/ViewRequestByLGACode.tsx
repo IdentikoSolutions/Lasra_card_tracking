@@ -12,7 +12,8 @@ import { getLGAName } from '../Axios/helpers/getLgaName'
 import { ToastContainer, toast } from 'react-toastify'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-toastify/dist/ReactToastify.css'
-
+import { PrintPdf } from '../Axios/helpers/pdfRender'
+import { useApp } from '../components/context/AppContext'
 interface IRODetail {
   id: number
   createdBy: string
@@ -23,8 +24,10 @@ interface IRODetail {
   submissionStatus: number
 }
 const ViewRequestByLGACode = () => {
+  const {printRef} =useApp() as any
   const { lgacode } = useParams()
   const [cards, setCard] = useState<any[]>([])
+  const [status,setStatus]= useState(true)
   console.log([
         ...cards.map((card, idx) => idx)
   ],"initial value of seleceted")
@@ -85,6 +88,8 @@ const ViewRequestByLGACode = () => {
       )
       toast.success(status + ' Successfully created')
       console.log(data, 'retiveorder created')
+      setCard(selectedCards)
+      setStatus(false)
       setRetrivalOrderDetail({
         ...retrivalOrderDetail,
         id: data.reLocationOrderHeader.id,
@@ -103,6 +108,7 @@ const ViewRequestByLGACode = () => {
       setSelected([...selected, idx])
     }
   }
+  
   // console.log(getLGAName(Number(lgacode)))
   useEffect(() => {
     getRequestByLgaCode()
@@ -112,8 +118,10 @@ const ViewRequestByLGACode = () => {
     ])
   }, [lgacode])
   return (
-    <Container className="container">
-      <h2> Retrival Order Details</h2>
+    <Container className="container mt-10">
+      <PrintPdf title='Retrival Order Details' >
+    <div ref={printRef} className=' p-10 m-10'>
+     <h2> Retrival Order Details</h2>
       <Form onSubmit={handleSubmit}>
         <Row>
           {retrivalOrderDetail.id > 0 && (
@@ -221,7 +229,7 @@ const ViewRequestByLGACode = () => {
               <th>DESTINATION</th>
               <th>RELOCATION REQUEST ID</th>
               <th>CreatedAt</th>
-              <th>Selection</th>
+              {status&&<th>Selection</th>}
               {/* <th>Total card</th> */}
             </tr>
           </thead>
@@ -237,25 +245,29 @@ const ViewRequestByLGACode = () => {
                     <td>{getLGAName(Number(card.destinationLGACode))}</td>
                     <td>{card.relocateRequestId}</td>
                     <td>{card.createdAt.substring(0, 10)}</td>
-                    <td>
+                    {status &&<td>
                       <Form.Check
                         type={'checkbox'}
                         checked={selected.indexOf(idx) !== -1}
                         onChange={() => handleSelect(idx)}
                       />
-                    </td>
+                    </td>}
                   </tr>
                 )
               })}
           </tbody>
         </Table>
-        <Button type="submit" className="btn-success">
-          {' '}
-          Create{' '}
-        </Button>
+       {
+
+       status&& <Button type="submit" className="btn-success">
+          Create
+        </Button>}
       </Form>
+      </div>
+      </PrintPdf>
       <ToastContainer position="bottom-right" newestOnTop />
     </Container>
+
   )
 }
 

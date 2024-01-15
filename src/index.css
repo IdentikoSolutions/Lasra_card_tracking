@@ -14,8 +14,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-c{
-  background: radial-gradient();
-  /* align-items: ; */
+.logo{
+  width:100px;
+height: 100px;
+/* background-image:url('./src/assets/images/logo2.png'); */
+background-size: cover;
 }
+/* #whatsapp{
+  top:100px
+} */
 

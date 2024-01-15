@@ -27,6 +27,7 @@ export const AccordionListContainer: React.FC<Iselect> = ({
         
           {!toggle ? (<div onClick={()=>setToggle(true)}>Create new Receipt</div>):
           (<MainSearch
+          listPath=''
             field={'Batch No'}
             to={nextroute}
             api={`${searchId}=${search}`}

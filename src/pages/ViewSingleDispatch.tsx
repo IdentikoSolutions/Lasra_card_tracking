@@ -49,19 +49,15 @@ const ViewSingleDispatch = () => {
         dispatchorderon: order[0].dispatchedOrderOn,
         // "dispatchorderon"
       }
-console.log(payload,"payload")
 
     try {
-      // window.alert(JSON.stringify(payload))
       const result = await Axios.put(
         '/Dispatch/UpdateCardDispatchByOrderId',
         payload,
       )
       toast.success("Successfully updated dispatch status")
-      // window.alert(result)
     } catch (e) {
-      console.log(e)
-    }
+return <h1>error has occured</h1>    }
   }
   useEffect(() => {
     getOneDispatch()

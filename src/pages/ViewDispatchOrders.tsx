@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Axios } from '../Axios/Axios'
 // import { BatchDetail } from '../components/ListItemsComponent/BatchDetail';
-import { Paper } from '../styles/styles'
 import Table from 'react-bootstrap/Table'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { BatchDetail } from '../components/ListItemsComponent'
@@ -20,7 +19,7 @@ const ViewDispatchOrders = () => {
      getDispatchOrders()
   },[])
   return (
-    <Paper>
+    <div className='bg-white p-[20px] overflow-hidden'>
       <h2>All Dispatch Orders</h2>
       <Table
         striped
@@ -79,7 +78,7 @@ const ViewDispatchOrders = () => {
           )
         })}
         </Table>
-    </Paper>
+    </div>
   )
 }
 

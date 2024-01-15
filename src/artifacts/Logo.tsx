@@ -1,5 +1,6 @@
 import React from 'react'
-import lasralogo from '../images/lasralogo.png'
+// import lasralogo from '../assests/images/lasralogo.png'
+import lasralogo from '../assets/images/lasralogo.png'
 import { Link } from 'react-router-dom'
 import { LogoWrapper } from '../styles/styles'
 import styled from 'styled-components'

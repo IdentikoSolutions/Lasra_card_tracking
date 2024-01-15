@@ -8,5 +8,4 @@ const options = {
     "XApikey":"pgH7QzFHJx4w46fI~5Uzi4RvtTwlEXp"
   },
 }
-console.log(options.baseURL, "baseUsrl")
 export const Axios = axios.create(options)

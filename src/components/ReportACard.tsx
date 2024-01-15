@@ -9,7 +9,7 @@ export function ReportACard() {
   const rootState = useSelector((state) => state as IrootState)
   const { Cards } = rootState
   const [report, setReport] = useState({ lasrraId: '', comment: '' })
-  // console.log(Cards)
+  console.log(report.lasrraId,'report from report a card')
   const { cards, batchDetail, reports } = Cards
   const onsubmit = () => {
     // e.preventDefault();
@@ -35,7 +35,7 @@ export function ReportACard() {
           type="text"
           value={report.lasrraId}
           onChange={(e) =>
-            setReport((report) => ({ ...report, lasrraId: e.target.value }))
+            setReport((report) => ({ ...report, lasrraId: e.target.value.trim() }))
           }
           className="text"
         />

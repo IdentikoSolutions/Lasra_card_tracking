@@ -7,49 +7,7 @@ import Table from 'react-bootstrap/Table'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { getLGAName } from '../Axios/helpers/getLgaName'
 import { useNavigate } from 'react-router-dom'
-// const list =[
-//   {
-//     "FromLGACode": 24,
-//     "item_count": 34,
-//     "LGAName": "IKEJA LG"
-//   },
-//     {
-//       "FromLGACode": 27,
-//       "item_count": 1,
-//       "LGAName": "IKEJA LG"
-//     },
-//     {
-//         "FromLGACode": 20,
-//         "item_count": 15,
-//         "LGAName": "IKEJA LG"
-//       },
-//         {
-//           "FromLGACode": 17,
-//           "item_count": 21,
-//           "LGAName": "IKEJA LG"
-//         },
-// {
-//     "FromLGACode": "1",
-//     "Name": "AGEGE LG",
-//     "record_count": 3
-//   },
-//   {
-//     "FromLGACode": "8",
-//     "Name": "EREDO LCDA",
-//     "record_count": 8
-//   },
-//   {
-//     "FromLGACode": "10",
-//     "Name": "IBA LCDA",
-//     "record_count": 3
-//   },
-//   {
-//     "FromLGACode": "17",
-//     "Name": "IKEJA LG",
-//     "record_count": 2
-//   },
-//
-//   ]
+
 const RequestSummary = () => {
   const [list, setList] = useState<any[]>([])
 const navigate = useNavigate()
@@ -79,10 +37,12 @@ navigate(`/receipts/retrival/${list[selected]["FromLGACode"]}`)
     getRequests()
   },[selected])
   return (
-    <div>
-      {' '}
-      <h2>Retrival order page</h2>
-      <Container className="mb-5">
+    <div className='mx-auto'>
+      <div className='w-[60vw] m-auto'>
+
+      <h2 className='mt-7 mb-5'>Summary of pending request</h2>
+      <p>To create a new retrival order click on the row for the collection center you want to retrieve from the table below.  when selected a red dot appears on the row indication the selected row and a button appears. click the button to continue creating the order.</p>
+      {/* <Container className="mb-5"> */}
         <Table
           striped
           bordered
@@ -93,7 +53,7 @@ navigate(`/receipts/retrival/${list[selected]["FromLGACode"]}`)
         >
           <thead>
             <tr>
-              <th>{''}</th>
+              {/* <th>{''}</th> */}
               <th>Collection center</th>
               <th>Total card</th>
             </tr>
@@ -103,27 +63,29 @@ navigate(`/receipts/retrival/${list[selected]["FromLGACode"]}`)
               list.map((card, idx) => {
                 const lgaCode = Number(card.FromLGACode)
                 return (
-                  <tr key={idx}>
-                    <td>
+                  <tr key={idx} onClick={()=>handleCheck(idx)} className={`${selected===idx? '!bg-red-900 text-red-500':''}`}>
+                    {/* <td>
                       <Form.Check
                         type={'checkbox'}
                         checked={idx === selected}
                         onChange={() => handleCheck(idx)}
                       />
-                    </td>
+                    </td> */}
                     <td>{getLGAName(Number(lgaCode))}</td>
-                    <td>{card.record_count}</td>
+                    <td className='flex justify-between'>{card.record_count} {selected===idx && <div className='bg-red-500 w-4 h-4 rounded-full'></div>}</td>
                   </tr>
                 )
               })}
           </tbody>
         </Table>
+      </div>
+
         {selected >= 0 && (
           <Button className="btn-success" onClick={createRetrival}>
             Create Retrival Order for {list[selected]['Name']}
           </Button>
         )}
-      </Container>
+      {/* </Container> */}
     </div>
   )
 }

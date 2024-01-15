@@ -35,7 +35,6 @@ alert(e)
   }
 }
     const { createRelocationOrder,reLocationOrderHeader} = data
-    console.log(createRelocationOrder,reLocationOrderHeader,data,"data from single page")
     useEffect(()=>{
         getOneRetrivalOrder()
     },[])
