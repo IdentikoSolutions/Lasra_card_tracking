@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef,useCallback } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import AsyncSelect from 'react-select'
+import {saveAs} from 'file-saver'
 import {
   Button,
   FlexSearch,
@@ -178,6 +179,12 @@ console.log(selectedOption,'from handle cjhange',api)
           : data.cardReceipts
           ? data.cardReceipts
           : []
+          const writeToDestop =()=>{
+            const blob = new Blob([JSON.stringify(workingData)],{type: 'text/plain;charset=utf-8'})
+            saveAs(blob,'card_batch.txt');
+            window.alert('saved on destop')
+          }
+          writeToDestop()
         const cards = workingData.map((card: Icard) => ({ ...card, status: 0 }))
         const batchDetail = data.cardReceiptHeader
           ? data.cardReceiptHeader

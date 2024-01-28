@@ -17,7 +17,7 @@ export const InputField: React.FC<Iinput> = ({
 }) => {
   return (
     <Col>
-    <InputGroup className="my-2">
+    <InputGroup className="my-2 ">
     {label &&
      <InputGroup.Text className="bg-default"
     //  onClick={onClick} 

@@ -7,15 +7,25 @@ import { FloatingWhatsApp } from 'react-floating-whatsapp'
 
 function AllReceipt() {
   return (
-    <div>
-      <Header />
-      <GridContainer>
+    <div className='flex flex-row w-[100vw]'>
+      <div className='flex flex-row'>
         <SideNav />
-        <Mainbar className="relative flex flex-1 pt-3 w-[80vw] ml-10">
-          <div id="portal"></div>
-          <Outlet />
+        <Mainbar className=" flex flex-col flex-1 w-[80vw] ml-10 bg-slate-100">
+          <Header />
+          <div className='flex-1'>
+            <div id="portal">
+
+            </div>
+            <div className='mx-10'>
+              <Outlet />
+
+            </div>
+          </div>
+
+          <Footer />
+
         </Mainbar>
-      </GridContainer>
+      </div>
 
       <FloatingWhatsApp
         phoneNumber="07035182795"
@@ -23,7 +33,6 @@ function AllReceipt() {
         className=" !relative !top-10"
         accountName={'Lasrra'}
       />
-      <Footer />
     </div>
   )
 }

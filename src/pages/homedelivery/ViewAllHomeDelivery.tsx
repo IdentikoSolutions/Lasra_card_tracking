@@ -10,7 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
         try{
 const result = await Axios.post('Delivery/FetchDeliveryOrder?deliveryOrderId=0')
 updateList(result.data)
-console.log(result,'all order')
+console.log(result,'all order',list)
         }catch(e){
 console.log(e)
         }
@@ -21,7 +21,7 @@ console.log(e)
     return (
       <>
             <h1>Delivery Orders</h1>
-        <Table
+        {list.length > 0 ? (<Table
         striped
          bordered
          hover
@@ -50,7 +50,8 @@ console.log(e)
             </tr> )}
           </tbody>
 
-        </Table>
+        </Table>):(<p> There is not pending request at the moment</p>)
+        }
       </>
 
     );

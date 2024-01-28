@@ -37,7 +37,7 @@ function AllDeliveryRequest() {
     setRequest,
     orderlist,
   } = useDelivery() as any
-  const {setPageName} = useApp() as any
+  const { setPageName } = useApp() as any
   setPageName("Home Delivery")
   const [nextstep, updateNextstep] = useState(false)
   console.log(orderlist, 'orderlist')
@@ -62,14 +62,14 @@ function AllDeliveryRequest() {
       {/* </ModalWrap>} */}
       <h2 className="text-bold pb-3">Delivery request</h2>
       <Form className="flex justify-between">
-        <Form.Check // prettier-ignore
+        {false && <Form.Check // prettier-ignore
           className="justify-end mr-0"
           type="switch"
           id="custom-switch"
           label="Switch mode"
           value={mode ? 'selected' : 'not selected'}
           onChange={() => setMode(!mode)}
-        />
+        />}
         {orderlist.length > 0 && (
           <div className="flex flex-col align-end w-[150px]">
             <label className="flex-col  absolute top-[150px] text-sm italic">
@@ -84,7 +84,7 @@ function AllDeliveryRequest() {
           </div>
         )}
       </Form>
-      <Table striped bordered hover variant="flat" size="xxl" className="mb-3">
+      {orderlist.length > 0 ? <Table striped bordered hover variant="flat" size="xxl" className="mb-3">
         <thead>
           <tr>
             <th>Card Id</th>
@@ -121,7 +121,7 @@ function AllDeliveryRequest() {
             />
           ))}
         </tbody>
-      </Table>
+      </Table> : <p>Currently no pending request</p>}
     </div>
   )
 }

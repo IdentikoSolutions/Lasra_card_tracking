@@ -159,13 +159,13 @@ background-color: ${bg || '#164605'};
   border: none;
 `
 
-export const Input = styled.input`
-  width: fit-container;
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  border-radius: 0 8px 8px 0;
-`
+// export const Input = styled.input`
+//   width: fit-container;
+//   border: none;
+//   outline: none;
+//   font-size: 1rem;
+//   border-radius: 0 8px 8px 0;
+// `
 export const GridBox = styled.div`
   display: grid;
   ${({ template }) => `

@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 
 export function Footer() {
     return (
-        <div className='w-[100vw] text-white flex justify-center py-5 h-fit bg-black  sticky '>
+        <div className=' text-gray-600 flex justify-center py-5 h-fit  sticky '>
         {/* <LogoBox height={"80px"} width ={"200px"} src={logo2}/> */}
             <p>www.lasrra.com |  ©2020. | All rights reserved.</p>
             {/* <Link to="/batches">

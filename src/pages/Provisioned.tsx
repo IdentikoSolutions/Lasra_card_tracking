@@ -92,7 +92,8 @@ export function Provisioned() {
       localStorage.removeItem('Provisioned')
       toast.success('Completed the successfull')
     } catch (e) {
-      toast.error(`Could not complete the operation. Detail${e}`)
+
+      toast.error(`Could not complete the operation. Detail: This batch has been provissioned`)
     }
   }
   useEffect(() => {

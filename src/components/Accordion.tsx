@@ -19,6 +19,7 @@ interface Iaccordion {
   active: number
   setActive: (num: number) => void
   idx: number
+  icon:any
 }
 
 export const Accordion: React.FC<Iaccordion> = ({
@@ -28,33 +29,36 @@ export const Accordion: React.FC<Iaccordion> = ({
   setActive,
   idx,
   page,
+  icon,
   children,
 }) => {
-  const {setPageName} = useApp() as any
+  const { setPageName } = useApp() as any
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  useEffect(() => {}, [active, list])
+  useEffect(() => { }, [active, list])
   const handleClick = () => {
-  setPageName(title)
-dispatch(reset({}))
+    setPageName(title)
+    dispatch(reset({}))
     navigate(`${page}`)
 
     setActive(idx)
   }
   return (
-      <Navbar
-        className={`  ${
-          active === idx ? 'active text-black bg-green-100 ' : 'undefined text-white bg-transparent'
-        }  px-3 items-center flex-1 flex my-3 shadow-sm justify-between`}
-        onClick={handleClick}
-        style={{width:'100%'}}
-      >
-          <div className='text-[1.4rem]flex-1 stretch'>
-            {title}
-            </div>
-            <div className='text-[2rem] text-bold border-none absolute right-0 rotate-45  p-1'> {active === idx ? <FaChevronUp  className='rotate-45'/> : <FaChevronRight className='rotate-45'/>}
-          </div>
-      </Navbar>
+    <Navbar
+      className={`  ${active === idx ? 'active  ' : 'undefined bg-transparent'
+        }  mx-10 items-center flex-1 flex py-10  border-b justify-between text-gray-600 `}
+      onClick={handleClick}
+      style={{ width: '100%',height:'80px' }}
+    >
+       <div className='text-[1.4rem] text-bold border-none relative p-3'> 
+{icon}
+       {/* {active === idx ? <FaChevronUp className='rotate-45' /> : <FaChevronRight className='rotate-45' />} */}
+      </div>
+      <div className='text-[1.1rem] flex-1 stretch'>
+        {title}
+      </div>
+     
+    </Navbar>
 
   )
 }

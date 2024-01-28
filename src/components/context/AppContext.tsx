@@ -9,10 +9,11 @@ export function useApp(){
 
 export const AppContextProvider:React.FC<any> =({children}) =>{
 const [pageName, setPageName] = useState('Home')
+const [user,setUser]= useState('')
 const printRef = useRef()
 
 
-const contextData = {pageName,setPageName,printRef}
+const contextData = {pageName,setPageName,printRef,user,setUser}
     return (
         <AppContext.Provider value={contextData}>
             {children}

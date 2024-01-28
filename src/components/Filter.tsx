@@ -3,6 +3,7 @@ import { IFilterProp } from '../interface/interface'
 import { Input } from '../styles/styles'
 import styled from 'styled-components'
 import Form from 'react-bootstrap/Form'
+import { FaChevronRight } from 'react-icons/fa'
 import InputGroup from 'react-bootstrap/InputGroup'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { FloatingLabel } from 'react-bootstrap'
@@ -15,28 +16,31 @@ import { FloatingLabel } from 'react-bootstrap'
 // `
 
 export const Filter: React.FC<IFilterProp> = ({ state, setState }) => {
-  const searchoption = ["batchid", "cardid", "Comment", "surname", "firstname", "lastname", "middlename", "lasrraid", "lga"]
+  const searchoption = ["batchid", "cardid", "comment", "surname", "firstname", "lastname", "middlename", "lasrraid", "lga"]
   const [selection,setSelection]= useState<string[]>([])
+  const [open,setOpen]=useState(false)
   
   const handleOption =useCallback((item) => {
     const isPresent = selection.indexOf(item)
     if (isPresent >= 0) {
-      selection.splice(isPresent, 1)
-      setSelection(selection)
+      setSelection(selection=>selection.filter(type =>type!==item))
+      // useEffect(()=>{
+
+      // })
     } else {
-      selection.push(item)
-      setSelection(selection)
+      setSelection(selection=>[...selection,item])
     }
   },[selection])
   useEffect(() => {
-    console.log( selection, 'useeffect', selection.includes('batchid'))
+    console.log( selection,open, 'useeffect', selection.includes('batchid'))
 
-  },[handleOption, selection])
+  },[handleOption, selection,open])
   return (
     <>
 
       <div className='flex'>
-        <div className='w-fit h-20 m-1 overflow-y-scroll z-100'>
+        <div className={`w-fit ${ open ? 'h-40 overflow-y-scroll relative top-50 z-100 opacity-100 ':'overflow-hidden h-6'} m-1  rounded-md border-3`} onClick={()=> setOpen(!open)}>
+          {!open && <p>add filter<FaChevronRight className='rotate-90 m-1 inline'/></p>}
           {
             searchoption.map((item, idx) => (<div onClick={() => handleOption(item)} key={idx}><p className='bg-blue-200 hover:bg-blue-50 m-0 border-1' >{item}</p></div>))
           }
@@ -45,7 +49,7 @@ export const Filter: React.FC<IFilterProp> = ({ state, setState }) => {
         <FloatingLabel
           controlId="batchId"
           label="BatchId"
-          className={`${console.log(selection)}`}
+          className={`${selection.includes('batchid')?'':'hidden'}`}
         >
           <Form.Control aria-label="batchid"
             type="number"
@@ -59,6 +63,8 @@ export const Filter: React.FC<IFilterProp> = ({ state, setState }) => {
           controlId="cardId"
           label="CardId"
         // className="mb-3"
+        className={`${selection.includes('cardid')?'':'hidden'}`}
+
         >
           <Form.Control aria-label="cardid"
             type="number"
@@ -71,7 +77,7 @@ export const Filter: React.FC<IFilterProp> = ({ state, setState }) => {
         <FloatingLabel
           controlId="comment"
           label="comment"
-        // className="mb-3"
+          className={`${selection.includes('comment')?'':'hidden'}`}
         >
           <Form.Control aria-label="comment"
             type="text"
@@ -84,7 +90,7 @@ export const Filter: React.FC<IFilterProp> = ({ state, setState }) => {
         <FloatingLabel
           controlId="surname"
           label="surname"
-        // className="mb-3"
+          className={`${selection.includes('surname')?'':'hidden'}`}
         >
           <Form.Control aria-label="surname" type="text"
             placeholder="surname"
@@ -96,7 +102,7 @@ export const Filter: React.FC<IFilterProp> = ({ state, setState }) => {
         <FloatingLabel
           controlId="firstname"
           label="firstname"
-        // className="mb-3"
+          className={`${selection.includes('firstname')?'':'hidden'}`}
         >
           <Form.Control aria-label="firstname" type="text"
             value={state.firstname}
@@ -108,7 +114,7 @@ export const Filter: React.FC<IFilterProp> = ({ state, setState }) => {
         <FloatingLabel
           controlId="middlename"
           label="middlename"
-        // className="mb-3"
+          className={`${selection.includes('middlename')?'':'hidden'}`}
         >
           <Form.Control aria-label="middlename" type="text"
             placeholder="middlename"
@@ -119,7 +125,7 @@ export const Filter: React.FC<IFilterProp> = ({ state, setState }) => {
         <FloatingLabel
           controlId="lasrraid"
           label="lasrraid"
-        // className="mb-3"
+          className={`${selection.includes('lasrrraid')?'':'hidden'}`}
         >
           <Form.Control aria-label="lasrraid" type="text"
             value={state.lasrraid}
@@ -131,7 +137,7 @@ export const Filter: React.FC<IFilterProp> = ({ state, setState }) => {
         <FloatingLabel
           controlId="lga"
           label="lga"
-        // className="mb-3"
+          className={`${selection.includes('lga')?'':'hidden'}`}
         >
           <Form.Control aria-label="lga" type="text"
             value={state.lga}
