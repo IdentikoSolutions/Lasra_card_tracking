@@ -26,29 +26,32 @@ export function SideNav() {
       page: '/receipts/viewreceipts',
       title: 'Card Production Receipt',
       list: '',
-      icon:<CiReceipt />
+      icon: <CiReceipt />
     },
     {
       page: '/receipts/viewprovision',
       title: 'Card Provision  Receipt',
       list: '',
-      icon:<CiReceipt />
+      icon: <CiReceipt />
 
     },
-    { page: '/receipts/order', title: 'Dispatch Orders', list: '',      icon:<GoInbox />
+    {
+      page: '/receipts/order', title: 'Dispatch Orders', list: '', icon: <GoInbox />
 
-  },
-    { page: '/receipts/retrival', title: 'Retrival Orders', list: '' ,      icon:<GoInbox />
+    },
+    {
+      page: '/receipts/retrival', title: 'Retrival Orders', list: '', icon: <GoInbox />
 
-  },
-    { page: 'delivery', title: 'Home Delivery Orders', list: '' ,      icon:<SiPostman />
+    },
+    {
+      page: 'delivery', title: 'Home Delivery Orders', list: '', icon: <SiPostman />
 
-  },
+    },
   ]
   const setActive = (num: number) => {
     toggle(num)
   }
-  useEffect(() => {}, [cards])
+  useEffect(() => { }, [cards])
   return (
     <ErrorBoundary
 
@@ -57,32 +60,32 @@ export function SideNav() {
         console.log(details)
       }}
     >
-      <div 
-    className='flex flex-col'
-    >
-<Logo/>
-      <div 
-      className='bg-white px-2 min-h-[90vh]'
-      
+      <div
+        className=' flex-col hidden sm:flex w-[20%] p-0'
       >
-       
-        {options.map((item, idx) => (
-          <>
-                <Accordion
-                  key={item.page}
-                  page={item.page}
-                  title={item.title}
-                  list={item.list}
-                  active={active}
-                  setActive={setActive}
-                  idx={idx}
-                  icon={item.icon}
-                />
-          </>
-        ))}
+        <Logo />
+        <div
+          className='bg-white p-0 lg:px-2 min-h-[90vh] w-full flex-1'
+
+        >
+
+          {options.map((item, idx) => (
+            <>
+              <Accordion
+                key={item.page}
+                page={item.page}
+                title={item.title}
+                list={item.list}
+                active={active}
+                setActive={setActive}
+                idx={idx}
+                icon={item.icon}
+              />
+            </>
+          ))}
+        </div>
       </div>
-      </div>
-      
+
     </ErrorBoundary>
   )
 }

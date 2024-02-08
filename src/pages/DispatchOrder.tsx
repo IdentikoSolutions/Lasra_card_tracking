@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Outlet, useLocation, useOutletContext } from 'react-router-dom'
-// import DetailContainer from '../components/DetailContainer'
 import { ButtonElement, Filter, InputField, InputFieldContainer } from '../components'
 import { color } from '../artifacts/colors'
 import { FlexRow, WrapperDiv } from '../styles/styles'
@@ -10,7 +9,6 @@ import { IFilterProp, Icard, Iorder } from '../interface/interface'
 import { Axios } from '../Axios/Axios'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-// import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useNavigate } from 'react-router-dom'
@@ -133,7 +131,6 @@ export const DispatchOrder = () => {
         "createdBy": "string",
         "batchDispatchStatus": 0,
         "noRecords": 0,
-        //date of dispatch cant be know on creation point
         "dispatchOrderOn": "2023-10-09T15:55:54.072Z",
         "acknowledgedBy": "string",
         "receivedOn": "2023-10-09T15:55:54.072Z", ...orderObjs
@@ -160,7 +157,6 @@ export const DispatchOrder = () => {
           <button className='hover:bg-green-500  hover:text-white bg-green-100 p-2 rounded-md border-1' onClick={getCard} >Add Order</button>
           <button className='hover:bg-green-500  hover:text-white bg-green-100 p-2 rounded-md border-1' onClick={removeOrder}>Remove Order</button>
         </InputGroup>
-
       </FlexX>
       <Outlet context={{ filter, setState, orderObjs, setFilter, receiptDetail, setReceiptDetail, createDispatch } satisfies OutletContextType} />
       <ToastContainer position='top-right' newestOnTop />

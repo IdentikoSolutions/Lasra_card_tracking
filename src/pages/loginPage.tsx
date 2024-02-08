@@ -71,7 +71,7 @@ const LoginPage = () => {
                                 <form onSubmit={(e) => {
                                     e.preventDefault();
                                     console.log(values,'valiues')
-                                    setUser(values.email)
+                                    setUser({name:values.email, loggedin:true})
                                     navigate('/receipts')
                                     // window.location.replace('/receipts')
                                 }}>

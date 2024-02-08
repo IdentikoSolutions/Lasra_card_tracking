@@ -12,7 +12,7 @@ interface Ireset{
 }
   export const ListItems: React.FC<any> = (card) => {
   return (
-    <tr>
+    <tr className='even:bg-gray-200'>
       <td >{card.lasrraId}</td>
       <td >{card.firstname}</td>
       <td >{card.middlename}</td>

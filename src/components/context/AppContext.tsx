@@ -9,7 +9,7 @@ export function useApp(){
 
 export const AppContextProvider:React.FC<any> =({children}) =>{
 const [pageName, setPageName] = useState('Home')
-const [user,setUser]= useState('')
+const [user,setUser]= useState({name:'',loggedin: false})
 const printRef = useRef()
 
 

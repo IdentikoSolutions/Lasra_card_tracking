@@ -3,17 +3,16 @@ import React, { ReactNode, useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Pagination from 'react-bootstrap/Pagination'
+import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 
 import {
   FlexCol,
   MainDiv,
-  TitleDiv,
 } from '../styles/styles'
 import { Icard, IcardReceipt } from '../interface/interface'
-import { ButtonElement } from './ButtonElement'
+import { HiFilter } from "react-icons/hi";
+
 import { ListItems } from './ListItemsComponent/ListItems'
-import { InputField } from './InputField'
-import { color } from '../artifacts/colors'
 import { EditCard } from './Modals/editCard'
 interface IlistContainer {
   title?: string
@@ -69,100 +68,102 @@ export const ListContainer: React.FC<IlistContainer> = ({
     totalPages > 1 &&
     new Array(totalPages).fill(0, 0).map((item, idx) => {
       return (
-        idx + 3 <= currentPage ||
-        (currentPage + 3 >= idx && (
+        idx == currentPage && (
           <Pagination.Item
-          className={`${idx===currentPage?'bg-green-500 border-green-700 border-2 text-white':""}`}
-            onClick={() => currentPage < totalPages && setCurrentPage(idx)}
+            className={`${idx === currentPage ? 'bg-green-500 border-green-700 border-2 text-white' : ""}`}
+            // onClick={() => currentPage < totalPages && setCurrentPage(idx)}
             key={idx}
           >
             {idx + 1}
           </Pagination.Item>
-        ))
+        )
       )
+
     })
-  useEffect(() => {}, [list])
+  useEffect(() => {
+    console.log(currentPage)
+  }, [list, currentPage])
   return (
-    <div>
+    <div className=''>
       <div className="text-gray-800  font-bold ml-3 py-2">{title?.toLocaleUpperCase()}</div>
       <MainDiv {...props}>
-        {list?.length && list?.length > pageSize ? (
-          <div
-          className='flex justify-center my-2'>
-            <button
-            className='bg-green-500 text-white px-4 mx-4 rounded-md'
-              onClick={() => setPageSize(pageSize + 1)}
-            >+</button>
-            Page Size:{pageSize}
-            <button
-              className='bg-green-500 text-white px-4 mx-4 rounded-md'
-              onClick={() => pageSize > 20 && setPageSize(pageSize - 1)}
-            >-</button>
-          </div>
-        ) : (
-          ''
-        )}
-        <Table
-          striped
-          //  bordered
-          hover
-          variant="flat"
-          size="xxl"
-          className="mb-3"
-        >
-          {list?.length && (
-            <thead>
-              <tr>
-                <th>lasrraId</th>
-                <th>firstname</th>
-                <th>middlename</th>
-                <th>surname</th>
-                <th>primarY_PHONE_NO</th>
-                <th>status</th>
-                <th>comments</th>
-              </tr>
-            </thead>
-          )}
-          {children}
-          {/* <ListItems {...tableHeader }/> */}
 
-          <tbody>
-            {list && list.length > 0
-              && list.map((card, idx) => 
-                
-                    idx >= start && idx < end
-                
+        <div className='overflow-auto'>
+
+          <table
+            className="table-auto m-3 border-4"
+          >
+            {list?.length && (
+              <thead className='shadow-md' >
+                <tr >
+                  <th ><p className='flex border-2 p-2 uppercase justify-between'>lasrraId<HiFilter /></p>
+                  </th>
+                  <th ><p className='flex border-2 p-2  uppercase justify-between'>firstname<HiFilter /></p>
+                  </th>
+                  <th ><p className='flex border-2 p-2 uppercase justify-between'>middlename <HiFilter /></p></th>
+                  <th ><p className='flex border-2 p-2 uppercase justify-between'>surname <HiFilter /></p></th>
+                  <th ><p className='flex border-2 p-2 uppercase justify-between'>primarY_PHONE_NO <HiFilter /></p></th>
+                  <th ><p className='flex border-2 p-2 uppercase justify-between'>status<HiFilter /></p></th>
+                  <th ><p className='flex border-2 p-2 uppercase justify-between'>comments<HiFilter /></p></th>
+                </tr>
+              </thead>
+            )}
+            {children}
+            {/* <ListItems {...tableHeader }/> */}
+
+            <tbody className="bg-white even:bg-red-300">
+              {list && list.length > 0
+                && list.map((card, idx) =>
+                  idx >= start && idx < end
                   &&
-                      <ListItems
-                        {...card}
-                        batchStatus={batchStatus}
-                        key={card.cardId + ' ' + idx}
-                        active={active}
-                        reset={reset}
-                        setNewActive={setNewActive}
-                      />
-                    )
-                  
-              
+                  <ListItems
+                    {...card}
+                    batchStatus={batchStatus}
+                    key={card.cardId + ' ' + idx}
+                    active={active}
+                    reset={reset}
+                    setNewActive={setNewActive}
+                  />
+                )
               }
-          </tbody>
-        </Table>
+            </tbody>
+          </table>
+        </div>
         {list && list.length > 1 ? (
-          <FlexCol>
-            <FlexCol>
-              {<div>{`Page ${currentPage} of ${totalPages} pages`}</div>}
-              {/* <FlexRow> */}
-              <div className='flex'>
-              <Pagination className="btn-success">
-                <Pagination.Prev className='' />
-                {/* <ButtonElement onClick={getPrev} label={'Prev'} />   */}
-                {pageButtons}
-                {/* <ButtonElement onClick={getNext} label={'Next'} /> */}
-                <Pagination.Next className=''/>
-              </Pagination>
+          <div className='flex-row border-2'>
+            <div className='bg-gray-100 flex-row flex-1 text-center'>
+              <div className='flex justify-between items-end'>
+                <div className='flex'>
+
+                <Pagination className="btn-success justify-center m-auto bg-slate-200 text-[2rem]">
+                  <Pagination.Prev onClick={getPrev} />
+                  {pageButtons}
+                  <Pagination.Next onClick={getNext} />
+                </Pagination>
+                </div>
+
+                {<div><p>{`Page ${currentPage + 1} of ${totalPages} pages`}</p></div>}
+
+                {list?.length && list?.length > pageSize ? (
+                  <div
+                    className='flex justify-between  p-2 min-w-[200px] hover:underline'>
+
+                    <p className='hover:text-blue-500 '><FaArrowUp
+
+                      onClick={() => setPageSize(pageSize + 1)}
+                    /></p>
+                    Page Size:{pageSize}
+                    <p className='hover:text-red-500'><FaArrowDown
+                      className=''
+                      onClick={() => pageSize > 20 && setPageSize(pageSize - 1)}
+                    /></p>
+                  </div>
+                ) : (
+                  ''
+                )}
               </div>
-            </FlexCol>
-          </FlexCol>
+            </div>
+          </div>
         ) : (
           ''
         )}

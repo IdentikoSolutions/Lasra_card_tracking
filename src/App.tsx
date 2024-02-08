@@ -74,7 +74,7 @@ function App() {
               }
             />
             <Route
-              path={'provision/:id'}
+              path={'receipts'}
               element={
                 <Suspense fallback={<ListSkeleton lines={15} />}>
                   <ViewReceipt />
@@ -82,7 +82,7 @@ function App() {
               }
             />
             <Route
-              path={'cards/:id'}
+              path={'cards'}
               element={
                 <Suspense fallback={<ListSkeleton lines={15} />}>
                   <ViewReceipt />

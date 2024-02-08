@@ -1,38 +1,37 @@
 'use client'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
-  ButtonElement,
-  DetailContainer,
-  DetailField,
   ListContainer,
 } from '../components'
 import { color } from '../artifacts/colors'
 import { useDispatch, useSelector } from 'react-redux'
 import { IrootState } from '../redux/store'
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation, useParams, } from 'react-router-dom'
 import { Axios } from '../Axios/Axios'
 import { currentReceipt } from '../redux/CardReducer'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FallbackRender } from './errorpages/error'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { Reports } from '../components/pageTrail'
 
 function ViewReceipt() {
   const { id } = useParams()
-  const pathname = useLocation().pathname.substring(0, 15)
+  const location = useLocation()
+  const pathname = location.pathname.substring(0, 15)
   const dispatch = useDispatch()
-
+  const batchid = location.search.split('=')[1]
+  const [show, toggleShow] = useState(true)
+  const [showCards, toggleShowCards] = useState(false)
   const getBatch = useCallback(async () => {
-    // dispatch(currentReceipt({}))
     let endpoint
     if (pathname === '/receipts/cards') {
       endpoint = '/Card/ViewCardReceiptByBatchId?BatchNo='
-    } else if (pathname === '/receipts/provi') {
+    } else if (pathname === '/receipts/recei') {
       endpoint = '/Provisioning/ViewAllProvisionedBatchesById?id='
     }
     try {
-      const response = await Axios.get(`${endpoint}${id}`)
-      // console.log('RESPONSE FROM VIEW RECEIPT PAGE',response)
+      const response = await Axios.get(`${endpoint}${batchid}`)
       if (response.status === 200) {
         const { data } = response
         const header = data.cardReceiptHeader || data.batchProvisionHeader
@@ -65,90 +64,79 @@ function ViewReceipt() {
   const { receipt } = Cards
   let batchProvisionHeader = receipt?.batchProvisionHeader
   let cardsReceipt = receipt?.cardsReceipt
-  // console.log(batchProvisionHeader, receipt, 'batch provisioned header')
-  console.log(batchProvisionHeader?.receivedBy,"receivedby")
+  console.log(batchProvisionHeader?.receivedBy, "receivedby")
   useEffect(() => {
     getBatch()
   }, [getBatch])
 
   return (
-    <ErrorBoundary FallbackComponent={FallbackRender} onReset={(details) => {}}>
+    <ErrorBoundary FallbackComponent={FallbackRender} onReset={(details) => { }}>
       <div className="p-2">
-        <h2>Details page</h2>
-        <button
-          className="bg-green-500 text-white px-3 py-1 rounded-md absolute right-0 mr-10"
-          onClick={edit}
-        >
-          Edit
-        </button>
-        <div className=" flex flex-wrap justify-start">
-          <label className="min-w-[200px] p-3  font-bold flex">
-            Batch no:
-            <input
-              className="border-b-2"
-              type="text"
-              value={batchProvisionHeader?.batchNo}
-              readOnly
-            />
-          </label>
-          <label className="min-w-[200px] p-3 font-bold flex">
-            No of Cards:
-            <input
-              className="border-b-2"
-              type="text"
-              value={cardsReceipt?.length}
-              readOnly
-            />
-          </label>
-          <label className="min-w-[200px] p-3 font-bold flex">
-            Date Created:
-            <input
-              className="border-b-2"
-              type="date"
-              value={batchProvisionHeader?.dateCreated?.substring(0, 10)}
-              readOnly
-            />
-          </label>
+        <button className='hover:text-red-400 hover:underline' onClick={() => toggleShow(!show)}>{show ? 'Show' : "Hide "} Details</button>
 
-          <label className="min-w-[200px] p-3 font-bold flex">
-            {' '}
-            Date Provissioned:
-            <input
-              className="border-b-2"
-              type="date"
-              value={batchProvisionHeader?.provisionedOn?.substring(0, 10)}
-              readOnly
-            />
-          </label>
+        {show ?
+          <Reports /> :
+          (<>
+            <h2>Details page</h2>
+            <div className='flex-col flex'>
+            {!showCards &&  <div className="grid grid-cols-2 gap-4 bg-white p-3">
 
-          <label className="min-w-[200px] p-3 font-bold flex">
-            ReceivedBy:
-            <input
-              className="border-b-2"
-              type="text"
-              value={batchProvisionHeader?.receivedBy}
-              readOnly
-            />
-          </label>
+                <div className="min-w-[200px]  justify-between text-slate-400 flex">
+                  Batch no:
+                  <p className="text-gray-700 text-bold"
+                  >{batchProvisionHeader?.batchNo}</p>
+                </div>
+                <div className="min-w-[200px]  justify-between text-slate-400 flex">
+                  No of Cards:
+                  <p className="text-gray-700"
+                  >{cardsReceipt?.length}</p>
+                </div>
 
-          <label className="min-w-[180px] p-3 font-bold flex">
-            DeliveredBy:
-            <input
-              className="border-b-2"
-              type="text"
-              value={batchProvisionHeader?.deliveredBy}
-              readOnly
-            />
-          </label>
-        </div>
-        <ListContainer
-          title="cards in this Receipt"
-          batchStatus={batchProvisionHeader?.submissionstatus}
-          list={cardsReceipt}
-        />
+                <div className="min-w-[200px]  justify-between text-slate-400 flex">
+                  Date Created:
+                  <p className="text-gray-700"
+                  >{batchProvisionHeader?.dateCreated?.substring(0, 10)}</p>
+                </div>
+
+                <div className="min-w-[200px] justify-between text-slate-400 flex">
+                  Date Provissioned:
+                  <p className="text-gray-700"
+                  >{batchProvisionHeader?.provisionedOn?.substring(0, 10)}</p>
+                </div>
+
+
+                <div className="min-w-[200px] justify-between text-slate-400 flex">
+                  ReceivedBy:
+                  <p className="text-gray-700"
+                  >{batchProvisionHeader?.receivedBy}</p>
+                </div>
+                <div className="min-w-[200px] justify-between text-slate-400 flex">
+                  DeliveredBy:
+                  <p className="text-gray-700"
+                  >{batchProvisionHeader?.deliveredBy}</p>
+                </div>
+              </div>}
+              <div className='self-end flex'>
+                <button
+                  className="bg-green-500 hover:bg-green-700 text-white px-3 py-1 rounded-sm m-2"
+                  onClick={edit}
+                >
+                  Edit
+                </button>
+                <div className="bg-green-500 hover:bg-green-700 text-white px-3 py-1 rounded-sm  m-2 shadow-lg shadow-zinc-950 "
+                onClick={()=>toggleShowCards(!showCards)}>{showCards ? "View Summary" :"View Cards"}</div>
+              </div>
+
+            </div>
+            {showCards && <ListContainer
+              title="cards in this Receipt"
+              batchStatus={batchProvisionHeader?.submissionstatus}
+              list={cardsReceipt}
+            />}
+          </>)}
       </div>
 
-      <ToastContainer position="bottom-right" newestOnTop />
+      <ToastContainer position="bottom-left" newestOnTop />
     </ErrorBoundary>
   )
 }

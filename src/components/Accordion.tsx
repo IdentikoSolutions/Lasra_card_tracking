@@ -45,16 +45,16 @@ export const Accordion: React.FC<Iaccordion> = ({
   }
   return (
     <Navbar
-      className={`  ${active === idx ? 'active  ' : 'undefined bg-transparent'
-        }  mx-10 items-center flex-1 flex py-10  border-b justify-between text-gray-600 `}
+      className={`  ${active === idx ? 'active bg-green-100  ' : 'undefined bg-transparent'
+        }  px-10 m-0  items-center flex-1 flex py-10  border-b justify-between text-gray-600 `}
       onClick={handleClick}
       style={{ width: '100%',height:'80px' }}
     >
-       <div className='text-[1.4rem] text-bold border-none relative p-3'> 
+       <div className='text-[1.4rem] text-bold border-none relative lg:p-3 '> 
 {icon}
        {/* {active === idx ? <FaChevronUp className='rotate-45' /> : <FaChevronRight className='rotate-45' />} */}
       </div>
-      <div className='text-[1.1rem] flex-1 stretch'>
+      <div className='text-[1.1rem] flex-1 stretch hidden md:inline'>
         {title}
       </div>
      

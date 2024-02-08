@@ -13,22 +13,22 @@ import { useNavigate } from 'react-router-dom';
 export function Header() {
   const navigate = useNavigate()
   const { user } = useApp() as any
-  const [drop, toggleDrop] = useState(false)
-  console.log(user, 'user')
+  const [drop, toggleDrop] = useState(true)
+  // console.log(user, 'user')
   return (
-    <div className="bg-green-500 w-full flex justify-between items-center  h-fit p-[0.2rem] shadow-sm">
+    <div className="bg-green-500 w-full flex justify-between items-center  h-fit pb-.4 shadow-sm">
       {/* <Logo /> */}
       <div className="flex justify-between  flex-1 ">
         <div className='flex items-center'>
-          <label className='text-gray-300 text-[2rem] p-2'> <IoSearch />
+          <label className='text-white text-[1.5rem] p-2'> <IoSearch />
           </label>
-          <input type='search' className='bg-transparent border-b text-white active:border-none' />
+          <input type='search' placeholder='Search...' className='bg-transparent border-b active:open:border-red-600 placeholder:text-white text-white active:border-none' />
         </div>
         {/* <p className="  text-[3rem] self-start text-green-700 px-10 ">
           {pageName}
         </p> */}
         <div onClick={()=>toggleDrop(!drop)}  className='relative flex justify-end items-center border-l p-2 text-gray-200 font-bold text-center min-w-[250px]'>
-          {user}
+          {user.name}
           <div className='rounded-full w-[60px] h-[60px] mx-2 bg-slate-200 flex justify-center items-center text-[3rem] p-2 text-blue-400'>
             <FaUser />
           </div>

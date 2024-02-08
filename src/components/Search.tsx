@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef,useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import AsyncSelect from 'react-select'
-import {saveAs} from 'file-saver'
+import { saveAs } from 'file-saver'
 import {
   Button,
   FlexSearch,
@@ -9,7 +9,7 @@ import {
   SearchInput,
   WrapperDiv,
 } from '../styles/styles'
-import  InputGroup from 'react-bootstrap/InputGroup'
+import InputGroup from 'react-bootstrap/InputGroup'
 import Form from "react-bootstrap/Form"
 import { useDispatch, useSelector } from 'react-redux'
 import { reset, updateCard } from '../redux/CardReducer'
@@ -45,11 +45,11 @@ export function Search() {
 interface SearchType {
   field?: string
   padding?: string
-  listPath:string
-  to:string,
+  listPath: string
+  to: string,
   api: string
   search: number
-  setToggle?:(newValue:boolean)=>void
+  setToggle?: (newValue: boolean) => void
   onChange: (e: any) => void
 }
 // This MainSearch component handles search for create receipt page and create provision receipt page
@@ -67,47 +67,47 @@ export const MainSearch: React.FC<SearchType> = ({
   setToggle,
   onChange,
 }) => {
-  console.log(listPath,'listpath')
-  const [selectList,setSelectList] = useState<[any]|[]>([])
-  const getAllBatches = useCallback(async() =>{
-  const {data } = await Axios.get(listPath) as any
-  console.log(data,'select list')
-  // console.log(data.map((item:any)=>item.batchNo),'list from getall batches 2')
-setSelectList(data.map((item:any)=>item))
-  },[listPath])
+  console.log(listPath, 'listpath')
+  const [selectList, setSelectList] = useState<[any] | []>([])
+  const getAllBatches = useCallback(async () => {
+    const { data } = await Axios.get(listPath) as any
+    console.log(data, 'select list')
+    // console.log(data.map((item:any)=>item.batchNo),'list from getall batches 2')
+    setSelectList(data.map((item: any) => item))
+  }, [listPath])
   // const [search, setSearch] = useState('')
   const dispatch = useDispatch()
-  const navigate:NavigateFunction =useNavigate()
+  const navigate: NavigateFunction = useNavigate()
   const rootState = useSelector((state) => {
     return state as IrootState
   })
-  const handleSearch = async (e:any) => {
+  const handleSearch = async (e: any) => {
     e.preventDefault()
-    if(!search){
+    if (!search) {
 
       setToggle && setToggle(false)
       return
     }
-// return
+    // return
     try {
       const response = await Axios.get(api)
-      console.log(response,'response from search')
+      console.log(response, 'response from search')
       if (response.status === 200) {
         const { data } = response
         const workingData = data.cards
           ? data.cards
           : data.cardReceipts
-          ? data.cardReceipts
-          : []
+            ? data.cardReceipts
+            : []
         const cards = workingData.map((card: Icard) => ({ ...card, status: 0 }))
         const batchDetail = data.cardReceiptHeader
           ? data.cardReceiptHeader
           : data.batchDetails
-          ? data.batchDetails
-          : []
-        if(!batchDetail.noRecords) {
+            ? data.batchDetails
+            : []
+        if (!batchDetail.noRecords) {
           batchDetail.noRecords = data.cardReceipts?.length
-        } 
+        }
         // dispatch(reset({}))
         dispatch(
           updateCard({ ...rootState.Cards, cards, batchdetail: batchDetail }),
@@ -115,37 +115,37 @@ setSelectList(data.map((item:any)=>item))
         navigate(`${to}`);
       }
     } catch (e) {
-      console.error(e,'ERRROR')
+      console.error(e, 'ERRROR')
     }
   }
-  const handlechange=(e:any)=>{
-onChange(e);
-handleSearch(e)
+  const handlechange = (e: any) => {
+    onChange(e);
+    handleSearch(e)
   }
   useEffect(() => {
     getAllBatches()
-  }, [rootState,search, getAllBatches,listPath])
+  }, [rootState, search, getAllBatches, listPath])
   return (
     <>
-<Form onSubmit={(e)=>handleSearch(e)} className='flex'> 
-<p className='text-green-700 align-middle'> SELECT BATCH: </p>
-      <InputGroup className="text-green-700 w-200::after-input mb-2"  
-        style={{width: '200px'}}
+      <Form onSubmit={(e) => handleSearch(e)} className='flex'>
+        <p className='text-green-700 align-middle'> SELECT BATCH: </p>
+        <InputGroup className="text-green-700 w-200::after-input mb-2"
+          style={{ width: '200px' }}
         >
-        <Form.Select
-          // aria-label="id for batch you want to receive"
-          // aria-describedby="search"
-          // type="select"
-          value={search===0? "" :search}
-          onChange={handlechange}
-          placeholder={field}
-        >
-         <option className='bg-green-500'>Open to select batch</option>
-         { selectList.length && selectList.map((item:any , idx:any)=><option value={item.batchNo} key={idx}><div className='flex justify-between bg-green-50 text-green-700'><p>Batch {item.batchNo}</p> <p>No of Records {item.noRecords}</p></div></option>)}
-      </Form.Select>
-        <InputGroup.Text className='bg-gray-500 border-dashed ' onClick={(e:any)=>handleSearch(e)} id="search">search</InputGroup.Text>
-      </InputGroup>
-</Form>
+          <Form.Select
+            // aria-label="id for batch you want to receive"
+            // aria-describedby="search"
+            // type="select"
+            value={search === 0 ? "" : search}
+            onChange={handlechange}
+            placeholder={field}
+          >
+            <option className='bg-green-500'>Open to select batch</option>
+            {selectList.length && selectList.map((item: any, idx: any) => <option value={item.batchNo} key={idx}><div className='flex justify-between bg-green-50 text-green-700'><p>Batch {item.batchNo}</p> <p>No of Records {item.noRecords}</p></div></option>)}
+          </Form.Select>
+          <InputGroup.Text className='bg-gray-500 border-dashed ' onClick={(e: any) => handleSearch(e)} id="search">search</InputGroup.Text>
+        </InputGroup>
+      </Form>
     </>
 
   )
@@ -154,46 +154,44 @@ handleSearch(e)
 //
 //
 //
-export const MainSearch2 =({listPath,api,to})=>{
-  const [selectedOption,setSelectedOption] =useState(null)
-  const [selectList,setSelectList]=useState()
-  const rootState = useSelector(state=>state as IrootState)
-  const navigate =useNavigate()
+export const MainSearch2 = ({ listPath, api, to }) => {
+  const [selectedOption, setSelectedOption] = useState(null)
+  const [selectList, setSelectList] = useState()
+  const rootState = useSelector(state => state as IrootState)
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   // console.log(selectList,'select list from mainsearcch 2')
-  const getAllBatches = useCallback(async() =>{
-    const {data } = await Axios.get(listPath) as any
+  const getAllBatches = useCallback(async () => {
+    const { data } = await Axios.get(listPath) as any
     console.log(data,'data')
-  setSelectList(data.map((item:any)=>({value:item.batchNo,label:`${item.name||"Batch" +item.batchNo }    ${item.noRecords||item.record_count} Cards`})))
-    },[listPath])
-   const handleChange=async(selectedOption)=>{
-// return
-console.log(selectedOption,'from handle cjhange',api)
+    setSelectList(data.map((item: any) => ({
+      value: item.batchNo, label: <div className='flex justify-between'>
+        <p>{item.name || "Batch" + item.batchNo}</p>
+        <p>{` ${item.noRecords || item.record_count} Cards`}</p>
+        </div>
+    })))
+  }, [listPath])
+  const handleChange = async (selectedOption) => {
+    // return
+    // console.log(selectedOption,'from handle cjhange',api)
     try {
-      const response = await Axios.get(api+"="+selectedOption.value)
-      // console.log(response,'hnamdlechange')
+      const response = await Axios.get(api + "=" + selectedOption.value)
       if (response.status === 200) {
         const { data } = response
         const workingData = data.cards
           ? data.cards
           : data.cardReceipts
-          ? data.cardReceipts
-          : []
-          const writeToDestop =()=>{
-            const blob = new Blob([JSON.stringify(workingData)],{type: 'text/plain;charset=utf-8'})
-            saveAs(blob,'card_batch.txt');
-            window.alert('saved on destop')
-          }
-          writeToDestop()
+            ? data.cardReceipts
+            : []
         const cards = workingData.map((card: Icard) => ({ ...card, status: 0 }))
         const batchDetail = data.cardReceiptHeader
           ? data.cardReceiptHeader
           : data.batchDetails
-          ? data.batchDetails
-          : []
-        if(!batchDetail.noRecords) {
+            ? data.batchDetails
+            : []
+        if (!batchDetail.noRecords) {
           batchDetail.noRecords = data.cardReceipts?.length
-        } 
+        }
         // dispatch(reset({}))
         dispatch(
           updateCard({ ...rootState.Cards, cards, batchdetail: batchDetail }),
@@ -201,18 +199,19 @@ console.log(selectedOption,'from handle cjhange',api)
         navigate(`${to}`);
       }
     } catch (e) {
-      console.error(e,'ERRROR')
+      console.error(e, 'ERRROR')
     }
   }
   //  }
-  useEffect(()=>{
-    console.log(selectedOption,selectList,'selectedOption')
+  useEffect(() => {
+    console.log(selectedOption, selectList, 'selectedOption')
 
     getAllBatches()
-  },[getAllBatches])
+  }, [getAllBatches])
   return <AsyncSelect
-  value={selectedOption}
-  onChange={handleChange}
-  options={selectList}
+    className='hover:shadow-md'
+    value={selectedOption}
+    onChange={handleChange}
+    options={selectList}
   />
 }

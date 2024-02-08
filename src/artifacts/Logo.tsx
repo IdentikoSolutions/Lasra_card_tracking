@@ -20,21 +20,21 @@ function Logo() {
   const [openList, toggleOpen] = useState(false)
   return (
     <>
-      <div className='h-fit w-full flex  flex-row justify-between items-center p-3 m-0 text-[1.5rem] text-gray-600 border-b'>
+      <div className='h-fit flex-col lg:w-full flex md:flex-col md:w-fit lg:flex-row justify-between items-center lg:p-3 m-0 text-[1.5rem] text-gray-600 border-b'>
         <Link to={'/'}>
           <div className='w-[100px] h-[50px] bg-cover'
             style={{ backgroundImage: `url(${logo})` }}
           ></div>
         </Link>
 
-        <div className='px-3 flex flex-1 items-center justify-between' onClick={()=>toggleOpen(!openList)}> <VscTriangleDown />
+        <div className='px-3 flex lg:flex-1 items-center justify-between' onClick={()=>toggleOpen(!openList)}> <VscTriangleDown />
           LASRRA</div>
-        <MdMenu className='font-bold text-[2rem]' />
+        <MdMenu className='font-bold text-[2rem] hidden md:flex' />
 
       </div>
       <div
       onClick={()=>toggleOpen(!openList)}
-       className={`${openList?'flex flex-col ' :'hidden '}bg-white w-[200px] opacity-100 z-[100] h-fit absolute top-[82px] rounded left-[70px]  shadow-sm items-center text-center leading-10`}>
+       className={`${openList?'flex flex-col ' :'hidden '}bg-white w-fit lg:w-[200px] opacity-100 z-[100] h-fit absolute top-[82px] rounded left-[70px]  shadow-sm items-center text-center leading-10`}>
         <p className='hover:bg-blue-50 m-0'>
           item1
         </p>
