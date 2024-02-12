@@ -12,8 +12,9 @@ import { getLGAName } from '../Axios/helpers/getLgaName'
 import { ToastContainer, toast } from 'react-toastify'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-toastify/dist/ReactToastify.css'
-import { PrintPdf } from '../Axios/helpers/pdfRender'
-import { useApp } from '../components/context/AppContext'
+import { PrintPdf } from '../components/pdfRender'
+import { useApp } from '../context/AppContext'
+import { createRetrivalOrder, requestByLgaCode } from '../services'
 interface IRODetail {
   id: number
   createdBy: string
@@ -24,13 +25,13 @@ interface IRODetail {
   submissionStatus: number
 }
 const ViewRequestByLGACode = () => {
-  const {printRef} =useApp() as any
+  const { printRef } = useApp() as any
   const { lgacode } = useParams()
   const [cards, setCard] = useState<any[]>([])
-  const [status,setStatus]= useState(true)
+  const [status, setStatus] = useState(true)
   console.log([
-        ...cards.map((card, idx) => idx)
-  ],"initial value of seleceted")
+    ...cards.map((card, idx) => idx)
+  ], "initial value of seleceted")
 
   const [selected, setSelected] = useState<number[]>([
   ])
@@ -47,9 +48,7 @@ const ViewRequestByLGACode = () => {
   console.log(cards)
   const getRequestByLgaCode = useCallback(async () => {
     try {
-      const result = await Axios.get(
-        `/Relocation/ViewRelocationRequestByLGACode?FromLGACode=${lgacode}`,
-      )
+      const result = await requestByLgaCode(lgacode)
       const modifiedData = result.data.map((item: any) => ({
         relocateRequestId: Number(item.RelocateRequestId),
         fromLocationCode: Number(item.FromLocationCode),
@@ -74,20 +73,17 @@ const ViewRequestByLGACode = () => {
   //This handlescreation of retrival order
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault()
-    if(selected.length<=0)return
-    const selectedCards = cards.filter((card,idx)=>selected.indexOf(idx)!==-1)
-    console.log(selectedCards,"selectedCards")
+    if (selected.length <= 0) return
+    const selectedCards = cards.filter((card, idx) => selected.indexOf(idx) !== -1)
+    // console.log(selectedCards, "selectedCards")
     const payload = {
       reLocationOrderHeader: retrivalOrderDetail,
       createRelocationOrder: selectedCards,
     }
     try {
-      const { data, status } = await Axios.post(
-        'Relocation/CreateRetrievalOrder',
-        payload,
-      )
+      const { data, status } = await createRetrivalOrder(payload)
       toast.success(status + ' Successfully created')
-      console.log(data, 'retiveorder created')
+      // console.log(data, 'retiveorder created')
       setCard(selectedCards)
       setStatus(false)
       setRetrivalOrderDetail({
@@ -108,162 +104,162 @@ const ViewRequestByLGACode = () => {
       setSelected([...selected, idx])
     }
   }
-  
+
   // console.log(getLGAName(Number(lgacode)))
   useEffect(() => {
     getRequestByLgaCode()
     setSelected([
-    ...cards.map((card, idx) => idx),
+      ...cards.map((card, idx) => idx),
 
     ])
   }, [lgacode])
   return (
     <Container className="container mt-10">
       <PrintPdf title='Retrival Order Details' >
-    <div ref={printRef} className=' p-10 m-10'>
-     <h2> Retrival Order Details</h2>
-      <Form onSubmit={handleSubmit}>
-        <Row>
-          {retrivalOrderDetail.id > 0 && (
-            <Form.Group
-              as={Col}
+        <div ref={printRef} className=' p-10 m-10'>
+          <h2> Retrival Order Details</h2>
+          <Form onSubmit={handleSubmit}>
+            <Row>
+              {retrivalOrderDetail.id > 0 && (
+                <Form.Group
+                  as={Col}
+                  className="mb-3"
+                  controlId="formGridid"
+                  style={{ fontWeight: 900 }}
+                >
+                  <Form.Label>OrderId:</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={retrivalOrderDetail.id}
+                    readOnly
+                  />
+                </Form.Group>
+              )}
+              <Form.Group
+                as={Col}
+                className="mb-3"
+                controlId="formGridcollectionCenter"
+                style={{ fontWeight: 900 }}
+              >
+                <Form.Label>Collection Center:</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={getLGAName(Number(lgacode))}
+                  readOnly
+                />
+              </Form.Group>
+              <Form.Group
+                as={Col}
+                controlId="formGridCreatedBy"
+                className="mb-3"
+                style={{ fontWeight: 900 }}
+              >
+                <Form.Label>Created By:</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={retrivalOrderDetail.createdBy}
+                  onChange={(e) =>
+                    setRetrivalOrderDetail({
+                      ...retrivalOrderDetail,
+                      createdBy: e.target.value,
+                    })
+                  }
+                  placeholder="enter the creater"
+                />
+              </Form.Group>
+            </Row>
+            <Row>
+              <Form.Group
+                as={Col}
+                controlId="formGridpickupdate"
+                className="mb-3"
+                style={{ fontWeight: 900 }}
+              >
+                <Form.Label>Pickup date:</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={retrivalOrderDetail.pickupdate}
+                  onChange={(e) =>
+                    setRetrivalOrderDetail({
+                      ...retrivalOrderDetail,
+                      pickupdate: e.target.value,
+                    })
+                  }
+                />
+              </Form.Group>
+
+              <Form.Group
+                as={Col}
+                className="mb-3"
+                controlId="formGridRetrival"
+                style={{ fontWeight: 900 }}
+              >
+                <Form.Label>Retrival Date</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={retrivalOrderDetail.retrievaldate}
+                  onChange={(e) =>
+                    setRetrivalOrderDetail({
+                      ...retrivalOrderDetail,
+                      retrievaldate: e.target.value,
+                    })
+                  }
+                />
+              </Form.Group>
+            </Row>
+            <h2>Card Summary</h2>
+
+            <Table
+              striped
+              bordered
+              hover
+              variant="flat"
+              size="xxl"
               className="mb-3"
-              controlId="formGridid"
-              style={{ fontWeight: 900 }}
             >
-              <Form.Label>OrderId:</Form.Label>
-              <Form.Control
-                type="text"
-                value={retrivalOrderDetail.id}
-                readOnly
-              />
-            </Form.Group>
-          )}
-          <Form.Group
-            as={Col}
-            className="mb-3"
-            controlId="formGridcollectionCenter"
-            style={{ fontWeight: 900 }}
-          >
-            <Form.Label>Collection Center:</Form.Label>
-            <Form.Control
-              type="text"
-              value={getLGAName(Number(lgacode))}
-              readOnly
-            />
-          </Form.Group>
-          <Form.Group
-            as={Col}
-            controlId="formGridCreatedBy"
-            className="mb-3"
-            style={{ fontWeight: 900 }}
-          >
-            <Form.Label>Created By:</Form.Label>
-            <Form.Control
-              type="text"
-              value={retrivalOrderDetail.createdBy}
-              onChange={(e) =>
-                setRetrivalOrderDetail({
-                  ...retrivalOrderDetail,
-                  createdBy: e.target.value,
-                })
-              }
-              placeholder="enter the creater"
-            />
-          </Form.Group>
-        </Row>
-        <Row>
-          <Form.Group
-            as={Col}
-            controlId="formGridpickupdate"
-            className="mb-3"
-            style={{ fontWeight: 900 }}
-          >
-            <Form.Label>Pickup date:</Form.Label>
-            <Form.Control
-              type="date"
-              value={retrivalOrderDetail.pickupdate}
-              onChange={(e) =>
-                setRetrivalOrderDetail({
-                  ...retrivalOrderDetail,
-                  pickupdate: e.target.value,
-                })
-              }
-            />
-          </Form.Group>
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>CardId</th>
+                  <th>LASRRA ID</th>
+                  <th>DESTINATION</th>
+                  <th>RELOCATION REQUEST ID</th>
+                  <th>CreatedAt</th>
+                  {status && <th>Selection</th>}
+                  {/* <th>Total card</th> */}
+                </tr>
+              </thead>
+              <tbody>
+                {cards.length > 0 &&
+                  cards.map((card, idx) => {
+                    // const lgaCode = Number(card.FromLGACode)
+                    return (
+                      <tr key={idx}>
+                        <td>{card.id}</td>
+                        <td>{card.cardId}</td>
+                        <td>{card.lasrraId}</td>
+                        <td>{getLGAName(Number(card.destinationLGACode))}</td>
+                        <td>{card.relocateRequestId}</td>
+                        <td>{card.createdAt.substring(0, 10)}</td>
+                        {status && <td>
+                          <Form.Check
+                            type={'checkbox'}
+                            checked={selected.indexOf(idx) !== -1}
+                            onChange={() => handleSelect(idx)}
+                          />
+                        </td>}
+                      </tr>
+                    )
+                  })}
+              </tbody>
+            </Table>
+            {
 
-          <Form.Group
-            as={Col}
-            className="mb-3"
-            controlId="formGridRetrival"
-            style={{ fontWeight: 900 }}
-          >
-            <Form.Label>Retrival Date</Form.Label>
-            <Form.Control
-              type="date"
-              value={retrivalOrderDetail.retrievaldate}
-              onChange={(e) =>
-                setRetrivalOrderDetail({
-                  ...retrivalOrderDetail,
-                  retrievaldate: e.target.value,
-                })
-              }
-            />
-          </Form.Group>
-        </Row>
-        <h2>Card Summary</h2>
-
-        <Table
-          striped
-          bordered
-          hover
-          variant="flat"
-          size="xxl"
-          className="mb-3"
-        >
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>CardId</th>
-              <th>LASRRA ID</th>
-              <th>DESTINATION</th>
-              <th>RELOCATION REQUEST ID</th>
-              <th>CreatedAt</th>
-              {status&&<th>Selection</th>}
-              {/* <th>Total card</th> */}
-            </tr>
-          </thead>
-          <tbody>
-            {cards.length > 0 &&
-              cards.map((card, idx) => {
-                // const lgaCode = Number(card.FromLGACode)
-                return (
-                  <tr key={idx}>
-                    <td>{card.id}</td>
-                    <td>{card.cardId}</td>
-                    <td>{card.lasrraId}</td>
-                    <td>{getLGAName(Number(card.destinationLGACode))}</td>
-                    <td>{card.relocateRequestId}</td>
-                    <td>{card.createdAt.substring(0, 10)}</td>
-                    {status &&<td>
-                      <Form.Check
-                        type={'checkbox'}
-                        checked={selected.indexOf(idx) !== -1}
-                        onChange={() => handleSelect(idx)}
-                      />
-                    </td>}
-                  </tr>
-                )
-              })}
-          </tbody>
-        </Table>
-       {
-
-       status&& <Button type="submit" className="btn-success">
-          Create
-        </Button>}
-      </Form>
-      </div>
+              status && <Button type="submit" className="btn-success">
+                Create
+              </Button>}
+          </Form>
+        </div>
       </PrintPdf>
       <ToastContainer position="bottom-right" newestOnTop />
     </Container>

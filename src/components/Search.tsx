@@ -3,11 +3,7 @@ import { FaSearch } from 'react-icons/fa'
 import AsyncSelect from 'react-select'
 import { saveAs } from 'file-saver'
 import {
-  Button,
-  FlexSearch,
-  SearchButton,
-  SearchInput,
-  WrapperDiv,
+  button,
 } from '../styles/styles'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Form from "react-bootstrap/Form"
@@ -33,11 +29,11 @@ export function Search() {
   }
   return (
     <div>
-      <Button onClick={handleSearchClick}>
+      <button onClick={handleSearchClick} className={button}>
         <FaSearch />
         {isActive ? '' : 'Search'}
         {isActive && <input type="search" placeholder="search..." />}
-      </Button>
+      </button>
     </div>
   )
 }
@@ -72,10 +68,8 @@ export const MainSearch: React.FC<SearchType> = ({
   const getAllBatches = useCallback(async () => {
     const { data } = await Axios.get(listPath) as any
     console.log(data, 'select list')
-    // console.log(data.map((item:any)=>item.batchNo),'list from getall batches 2')
     setSelectList(data.map((item: any) => item))
   }, [listPath])
-  // const [search, setSearch] = useState('')
   const dispatch = useDispatch()
   const navigate: NavigateFunction = useNavigate()
   const rootState = useSelector((state) => {
@@ -108,7 +102,6 @@ export const MainSearch: React.FC<SearchType> = ({
         if (!batchDetail.noRecords) {
           batchDetail.noRecords = data.cardReceipts?.length
         }
-        // dispatch(reset({}))
         dispatch(
           updateCard({ ...rootState.Cards, cards, batchdetail: batchDetail }),
         )
@@ -133,9 +126,6 @@ export const MainSearch: React.FC<SearchType> = ({
           style={{ width: '200px' }}
         >
           <Form.Select
-            // aria-label="id for batch you want to receive"
-            // aria-describedby="search"
-            // type="select"
             value={search === 0 ? "" : search}
             onChange={handlechange}
             placeholder={field}
@@ -160,7 +150,6 @@ export const MainSearch2 = ({ listPath, api, to }) => {
   const rootState = useSelector(state => state as IrootState)
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  // console.log(selectList,'select list from mainsearcch 2')
   const getAllBatches = useCallback(async () => {
     const { data } = await Axios.get(listPath) as any
     console.log(data,'data')
@@ -172,8 +161,6 @@ export const MainSearch2 = ({ listPath, api, to }) => {
     })))
   }, [listPath])
   const handleChange = async (selectedOption) => {
-    // return
-    // console.log(selectedOption,'from handle cjhange',api)
     try {
       const response = await Axios.get(api + "=" + selectedOption.value)
       if (response.status === 200) {

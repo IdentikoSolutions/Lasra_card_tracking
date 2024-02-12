@@ -1,17 +1,10 @@
 import React, { ReactNode, useEffect, useState } from 'react'
-// import styled from 'styled-components';
 import Table from 'react-bootstrap/Table'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Pagination from 'react-bootstrap/Pagination'
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
-
-import {
-  FlexCol,
-  MainDiv,
-} from '../styles/styles'
 import { Icard, IcardReceipt } from '../interface/interface'
 import { HiFilter } from "react-icons/hi";
-
 import { ListItems } from './ListItemsComponent/ListItems'
 import { EditCard } from './Modals/editCard'
 interface IlistContainer {
@@ -86,9 +79,9 @@ export const ListContainer: React.FC<IlistContainer> = ({
   return (
     <div className=''>
       <div className="text-gray-800  font-bold ml-3 py-2">{title?.toLocaleUpperCase()}</div>
-      <MainDiv {...props}>
+      <div className='m-[5px] pt-[10px] flex flex-col min-w-fit h-fit bg-white min-h-[200px]'>
 
-        <div className='overflow-auto'>
+        <div className='overflow-x-scroll w-[90%]'>
 
           <table
             className="table-auto m-3 border-4"
@@ -170,7 +163,7 @@ export const ListContainer: React.FC<IlistContainer> = ({
         {currentCard.toString() !== '{}' && active === currentCard.cardId && (
           <EditCard {...currentCard} reset={reset} active={active} />
         )}
-      </MainDiv>
+      </div>
     </div>
   )
 }

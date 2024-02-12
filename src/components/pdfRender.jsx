@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import { useReactToPrint } from 'react-to-print'
-import { useApp } from '../../components/context/AppContext'
+import { useApp } from '../context/AppContext'
+import {button} from '../styles/styles'
 //This component handlig printing of a section of a page as pdf.
 //wrap around component you want to print and supply the tilte prop.
 // the component you want to print should have a ref prop whose value is printRef from AppContext
@@ -17,8 +18,8 @@ export const PrintPdf = ({ title, children }) => {
       {children}
       <button
         onClick={handlePrint}
-        className="bg-green-400 p-3 rounded-md"
-      >
+        className={button +' mx-2'}    
+         >
         Print
       </button>
     </div>

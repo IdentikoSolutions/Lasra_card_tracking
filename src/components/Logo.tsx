@@ -2,19 +2,16 @@ import React, { useState } from 'react'
 // import lasralogo from '../assests/images/lasralogo.png'
 // import lasralogo from '../assets/images/lasralogo.png'
 import { Link } from 'react-router-dom'
-import { LogoWrapper } from '../styles/styles'
 import { MdMenu } from "react-icons/md";
 import { VscTriangleDown } from "react-icons/vsc";
 import logo from '../assets/logo.jpg'
-import styled from 'styled-components'
 export interface Ilogowrapper {
   width: string,
   height: string,
   src: string
   // Other prop definitions
 }
-export const LogoBox = styled(LogoWrapper) <Ilogowrapper>`
-  `
+
 
 function Logo() {
   const [openList, toggleOpen] = useState(false)

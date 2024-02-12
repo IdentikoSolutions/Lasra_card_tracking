@@ -22,7 +22,7 @@ import HomeDelivery from './pages/homedelivery/HomeDelivery'
 import AllDeliveryRequest from './pages/homedelivery/AllDeliveryRequest'
 import ErrorPage from './pages/homedelivery/ErrorPage'
 import ViewAllHomeDelivery from './pages/homedelivery/ViewAllHomeDelivery'
-import { DeliveryContextProvider } from './components/context/DeliveryContext'
+import { DeliveryContextProvider } from './context/DeliveryContext'
 // import Error from './pages/homedelivery/Error';
 // import AllDeliveryRequest from './pages/homedelivery/AllDeliveryRequest'
 const CardProductionReceipt = React.lazy(() =>

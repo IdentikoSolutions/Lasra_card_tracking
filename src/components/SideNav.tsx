@@ -14,7 +14,7 @@ import { GoInbox } from "react-icons/go";
 import { SiPostman } from "react-icons/si";
 
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Logo from '../artifacts/Logo'
+import Logo from './Logo'
 
 export function SideNav() {
   // const

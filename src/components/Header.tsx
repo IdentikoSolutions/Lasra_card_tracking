@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Logo from '../artifacts/Logo'
+import Logo from './Logo'
 import { IoSearch } from "react-icons/io5";
 // import { FaUserLarge } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
@@ -7,7 +7,7 @@ import { FaSortDown } from "react-icons/fa";
 import { RiUser3Line } from "react-icons/ri";
 import { FaPowerOff } from "react-icons/fa";
 
-import { useApp } from './context/AppContext'
+import { useApp } from '../context/AppContext'
 import { useNavigate } from 'react-router-dom';
 
 export function Header() {

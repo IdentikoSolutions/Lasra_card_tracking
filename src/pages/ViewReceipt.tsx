@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import {
   ListContainer,
 } from '../components'
-import { color } from '../artifacts/colors'
+// import { color } from '../artifacts/colors'
 import { useDispatch, useSelector } from 'react-redux'
 import { IrootState } from '../redux/store'
 import { useLocation, useParams, } from 'react-router-dom'
@@ -78,8 +78,8 @@ function ViewReceipt() {
           <Reports /> :
           (<>
             <h2>Details page</h2>
-            <div className='flex-col flex'>
-            {!showCards &&  <div className="grid grid-cols-2 gap-4 bg-white p-3">
+            <div className='flex-col flex '>
+            {!showCards &&  <div className="grid grid-cols-2 gap-4 bg-white p-3 shadow-md mb-2">
 
                 <div className="min-w-[200px]  justify-between text-slate-400 flex">
                   Batch no:

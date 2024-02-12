@@ -3,10 +3,10 @@ import login from "../assets/images/login.avif"
 import logo from '../assets/logo.jpg';
 
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai"
-import { Button, Label, Overlay } from '../styles/styles';
-import Logo from '../artifacts/Logo';
+// import { Button, Label, Overlay } from '../styles/styles';
+// import Logo from '../artifacts/Logo';
 import { Formik } from 'formik'
-import { useApp } from '../components/context/AppContext';
+import { useApp } from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
 // import { Iimg } from '../interface/interface';
 const LoginPage = () => {

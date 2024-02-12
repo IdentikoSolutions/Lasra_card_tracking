@@ -1,0 +1,13 @@
+// npm install core-js regenerator-runtime --save-dev
+{
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "useBuiltIns": "entry",
+          "corejs": 3
+        }
+      ]
+    ]
+  }
+  

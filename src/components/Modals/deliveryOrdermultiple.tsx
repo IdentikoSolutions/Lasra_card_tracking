@@ -2,15 +2,10 @@ import React, { useEffect } from 'react'
 // import { createPortal } from 'react-dom';
 import '../../'
 import { IRequest } from '../../pages/homedelivery/AllDeliveryRequest'
-import { useDelivery } from '../context/DeliveryContext'
-import Logo from '../../artifacts/Logo'
+import { useDelivery } from '../../context/DeliveryContext'
+import Logo from '../Logo'
 import {
   Formik,
-  FormikHelpers,
-  FormikProps,
-  Form,
-  Field,
-  FieldProps,
 } from 'formik'
 import { Axios } from '../../Axios/Axios'
 interface Ierror {
@@ -20,23 +15,12 @@ interface Ierror {
 }
 export const DeliveryOrderMultiple = () => {
   const { current, mode, orderlist } = useDelivery() as any
-  //   const handleClick = () => {
-  //     console.log(current, 'before')
-  //     setCurrent(-1)
-  //     console.log(current, 'after')
-  //   }
   useEffect(() => {
-    // console.log(JSON.stringify(item), 'item')
   }, [mode])
   return (
     <div className="w-[600px] flex overflow-auto h-fit max-h-[100vh] shadow-sm min-h-[300px] bg-red m-auto  rounded-md  ">
-      {/* <div className="!bg-green-500 w-[50px] min-h-[300px]"></div> */}
       <div className="flex-col w-[500px] ml-3">
-        {/* <div className="w-[100%] flex justify-end">
-          <Logo />
-        </div> */}
         <h4 className="text-bold text-center">Complete the Order detail</h4>
-
         <Formik
           initialValues={{ name: '', dispatcher: '', pickup_date: '' }}
           validate={(values: Ierror) => {
@@ -50,7 +34,6 @@ export const DeliveryOrderMultiple = () => {
             if (!values.pickup_date) {
               errors.pickup_date = 'Required'
             }
-
             return errors
           }}
           onSubmit={async(values, { setSubmitting }) => {
@@ -77,11 +60,7 @@ export const DeliveryOrderMultiple = () => {
             } catch (e) {
                 console.log(e)
             }
-            // console.log('submitti')
-            // setTimeout(() => {
-            //   alert(JSON.stringify(values, null, 2))
               setSubmitting(false)
-            // }, 400)
           }}
         >
           {({

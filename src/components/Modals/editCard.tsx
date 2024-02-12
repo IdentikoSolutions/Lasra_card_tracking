@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Icard, IcardReceipt } from '../../interface/interface'
-import { ButtonElement } from '../ButtonElement';
 import { Axios } from '../../Axios/Axios'
 import { FallbackRender } from '../../pages/errorpages/error'
-import {  FlexRowSpaceBtw, OverlayCard } from '../../styles/styles'
+import { button, overlay } from '../../styles/styles'
 import { useLocation } from 'react-router-dom';
 interface Iarg {
   width?: string
@@ -46,18 +45,10 @@ console.log("CARD")
 
   },[card.active])
   return (
-    <OverlayCard >
+    <div  className={overlay}>
       {/* cardId */}
       <label htmlFor="cardId">
        <h2> cardId : {cardDetail.cardId}</h2>
-        {/* <input
-          name="cardId"
-          type="number"
-          value={cardDetail.cardId}
-          onChange={(e) =>
-            setCardDetail({ ...cardDetail, cardId: Number(e.target.value) })
-          }
-        /> */}
       </label>
 
       {/* status */}
@@ -86,11 +77,11 @@ console.log("CARD")
           }
         />
       </label>
-      <FlexRowSpaceBtw>
-      <ButtonElement onClick={handleEdit} label="Update" />
-      <ButtonElement onClick={()=>card.reset(-1)} label="Cancel"/>
-      </FlexRowSpaceBtw>
+      <div className='flex justify-between'>
+      <button onClick={handleEdit} className={button}>Update</button>
+      <button onClick={()=>card.reset(-1)} className={button}>Cancel</button>
+      </div >
     
-    </OverlayCard>
+    </div>
   )
 }

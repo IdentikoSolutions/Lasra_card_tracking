@@ -1,17 +1,18 @@
 import React, { memo, useEffect, useState,useCallback } from 'react'
 import { Flip, ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { ButtonElement, ListContainer, ReportACard } from '../components'
+import {  ListContainer, ReportACard } from '../components'
 import { useDispatch, useSelector } from 'react-redux'
 import { IrootState } from '../redux/store'
-import { color } from '../artifacts/colors'
+// import { color } from '../artifacts/colors'
 import { Aside } from '../components/Aside'
 import { Axios } from '../Axios/Axios'
-import { OverlayCard } from '../styles/styles'
-import { useNavigate } from 'react-router-dom'
-import { useApp } from '../components/context/AppContext'
+// import { OverlayCard } from '../styles/styles'
+// import { useNavigate } from 'react-router-dom'
+import { useApp } from '../context/AppContext'
 import { reportACard } from '../redux/CardReducer'
-import { PrintPdf } from '../Axios/helpers/pdfRender'
+import { PrintPdf } from '../components/pdfRender'
+import { button, overlay } from '../styles/styles'
 
 export function Provisioned() {
   const [active, toggle] = useState(false)
@@ -99,42 +100,42 @@ export function Provisioned() {
   useEffect(() => {
     getProvisioned()
     setProvisioned()
-    // if(cards.length<1)
-    // getProvisionedCookie()
   }, [setProvisioned ])
   return (
-    <div className=" overflow-hidden">
+    <div className=" overflow-scroll">
       <div>
       <PrintPdf title={'Provisioned cards'} >
         <div ref={printRef}>
-        <h1>CARD Provision</h1>
+        <h1 className='text-[2rem] text-center font-bold'>Card Provision</h1>
 
         {!active && (
           <div
             onClick={() => toggle(!active)}
-            className="mb-4 shadow-sm w-fit px-4 mr-0 bg-green-100"
+            className={button+ " w-fit"}
           >
             {active ? 'close report' : 'open report'}
           </div>
         )}
+<div>
+<h2>Batch Details</h2>
 
-        <div className="flex justify-evenly text-gray-600 mt-5">
+        <div className="flex justify-evenly text-gray-600  w-[80%]">
+
           <div>
-            <h2>Batch Details</h2>
-            <p className="mt-3">
-              Batch No: <span>{batchDetail?.batchNo}</span>
+            <p className="mt-3 flex justify-between">
+              <span>Batch No:</span> <span>{batchDetail?.batchNo}</span>
             </p>
-            <p className="mt-3">
+            <p className="mt-3 flex justify-between">
               No of Cards: <span>{batchDetail?.noRecords}</span>
             </p>
-            <p className="mt-3">
+            <p className="mt-3 flex justify-between">
               Date created:{' '}
               <span>{batchDetail?.bankDataCreatedOn?.substring(0, 10)}</span>
             </p>
           </div>
           <div className="flex-col flex">
-            <h2>Cards Received Details</h2>
-            <label htmlFor="date" className="mt-3">
+            {/* <h2>Cards Received Details</h2> */}
+            <label htmlFor="date" className="mt-3 flex justify-between">
               {' '}
               Date received :
               <input
@@ -149,7 +150,7 @@ export function Provisioned() {
                 }
               />
             </label>
-            <label htmlFor="date" className="mt-3">
+            <label htmlFor="date" className="mt-3 flex justify-between">
               {' '}
               Received by :
               <input
@@ -164,7 +165,7 @@ export function Provisioned() {
                 }
               />
             </label>
-            <label htmlFor="date" className="mt-3">
+            <label htmlFor="date" className="mt-3 flex justify-between">
               {' '}
               Delivered by :
               <input
@@ -180,17 +181,18 @@ export function Provisioned() {
               />
             </label>
           </div>
+          </div>
         </div>
         {cards.length > 0 && active && (
-          <OverlayCard>
+          <div className={overlay}>
             {active && (
-              <ButtonElement
-                label={active ? 'close report' : 'open report'}
+              <button
+              className={button +' m-2'}
                 onClick={() => toggle(!active)}
-              />
+              >{active ? 'close report' : 'open report'}</button>
             )}
             <ReportACard />
-          </OverlayCard>
+          </div>
         )}
         <ListContainer title="CARDS" list={cards} />
         {reports.length > 0 && (
@@ -200,9 +202,12 @@ export function Provisioned() {
         </PrintPdf>
       </div>
       <Aside />
-      <ButtonElement label="Save" onClick={save} />
-      <ButtonElement label="Submit" onClick={submit} />
+      <div className='flex justify-center'>
+      <button className={button+" m-3"} onClick={save} >Save</button>
+      <button className={button+' m-3'} onClick={submit}>Submit</button>
 
+      </div>
+     
       <ToastContainer position="bottom-right" newestOnTop transition={Flip} />
     </div>
   )

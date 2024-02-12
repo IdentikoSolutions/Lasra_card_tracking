@@ -2,7 +2,7 @@ import React from 'react';
 // import styled from 'styled-components';
 import {BiUpArrowAlt} from "react-icons/bi"
 // import { Div } from '../styles/styles';
-import { LogoBox } from '../artifacts/Logo';
+import { LogoBox } from './Logo';
 import logo2 from '../assets/images/logo2.png';
 import { Link } from 'react-router-dom';
 // const FlexDiv = styled(Div)`

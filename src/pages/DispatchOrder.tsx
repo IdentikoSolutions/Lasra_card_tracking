@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Outlet, useLocation, useOutletContext } from 'react-router-dom'
-import { ButtonElement, Filter, InputField, InputFieldContainer } from '../components'
-import { color } from '../artifacts/colors'
-import { FlexRow, WrapperDiv } from '../styles/styles'
+import {  Filter, InputField, InputFieldContainer } from '../components'
+// import { color } from '../artifacts/colors'
+// import { FlexRow, WrapperDiv } from '../styles/styles'
 import styled from 'styled-components'
 import OrderBatchSummary from '../components/ListItemsComponent/OrderBatchSummary'
 import { IFilterProp, Icard, Iorder } from '../interface/interface'
@@ -12,22 +12,23 @@ import 'react-toastify/dist/ReactToastify.css';
 import InputGroup from 'react-bootstrap/InputGroup'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useNavigate } from 'react-router-dom'
-const FlexX = styled(FlexRow)`
-  width: fit-content;
-  align-content: center;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-  h2 {
-    margin: 0;
-  }
-  button {
-    width: fit-content;
-  }
-  h3 {
-    margin: 0;
-  }
-`
+import { button } from '../styles/styles'
+// const FlexX = styled(FlexRow)`
+//   width: fit-content;
+//   align-content: center;
+//   justify-content: center;
+//   margin: 0;
+//   padding: 0;
+//   h2 {
+//     margin: 0;
+//   }
+//   button {
+//     width: fit-content;
+//   }
+//   h3 {
+//     margin: 0;
+//   }
+// `
 
 export const DispatchOrder = () => {
   const navigate = useNavigate()
@@ -149,7 +150,7 @@ export const DispatchOrder = () => {
   }, [])
   return (
     <div>
-      <FlexX>
+      <div className='flex'>
         {' '}
         <h2>Batches:  </h2>
         <InputGroup className=" mb-3 mx-3">
@@ -157,7 +158,7 @@ export const DispatchOrder = () => {
           <button className='hover:bg-green-500  hover:text-white bg-green-100 p-2 rounded-md border-1' onClick={getCard} >Add Order</button>
           <button className='hover:bg-green-500  hover:text-white bg-green-100 p-2 rounded-md border-1' onClick={removeOrder}>Remove Order</button>
         </InputGroup>
-      </FlexX>
+      </div>
       <Outlet context={{ filter, setState, orderObjs, setFilter, receiptDetail, setReceiptDetail, createDispatch } satisfies OutletContextType} />
       <ToastContainer position='top-right' newestOnTop />
     </div>
@@ -173,7 +174,7 @@ export function OrdersMAngager() {
           label="Destination:"
           value={filter.lga}
           onChange={(e) => setFilter({ ...filter, lga: e.target.value })}
-          bg={color.action}
+          bg={'green'}
         />
         <InputField
           label="Dispatcher's Name:"
@@ -182,7 +183,7 @@ export function OrdersMAngager() {
           onChange={(e) =>
             setReceiptDetail({ ...receiptDetail, dispatcherName: e.target.value })
           }
-          bg={color.action}
+          bg={'green'}
         />
         <InputField
           label=" Name of creator:"
@@ -191,7 +192,7 @@ export function OrdersMAngager() {
           onChange={(e) =>
             setReceiptDetail({ ...receiptDetail, createdBy: e.target.value })
           }
-          bg={color.action}
+          bg={'green'}
         />
         <InputField
           label="Pickup Date:"
@@ -200,7 +201,7 @@ export function OrdersMAngager() {
           onChange={(e) =>
             setReceiptDetail({ ...receiptDetail, pickUpDate: e.target.value })
           }
-          bg={color.action}
+          bg={'green'}
         />
         <InputField
           label="No of Cards:"
@@ -208,21 +209,21 @@ export function OrdersMAngager() {
           onChange={(e) =>
             setReceiptDetail({ ...receiptDetail, noOfCard: e.target.value })
           }
-          bg={color.action}
+          bg={'green'}
         />
       </InputFieldContainer>}
     {
       orderObjs.length > 0 &&
       <>
-        <WrapperDiv>
+        <div className='flex flex-col h-[100vh] p-[0.5rem] m-[0.5rem] transparent overfow-x-hidden'>
           {orderObjs.map((cards, idx) => (
             <OrderBatchSummary
               key={idx + " " + cards.batchId}
               {...cards}
             />
           ))}
-        </WrapperDiv>
-        <ButtonElement onClick={createDispatch} label={'Create Dispatch'} />
+        </div>
+        <button onClick={createDispatch} className={button} >Create Dispatch</button>
 
       </>
     }

@@ -2,8 +2,8 @@ import React, { useEffect } from 'react'
 // import { createPortal } from 'react-dom';
 import '../../'
 import { IRequest } from '../../pages/homedelivery/AllDeliveryRequest'
-import { useDelivery } from '../context/DeliveryContext'
-import Logo from '../../artifacts/Logo'
+import { useDelivery } from '../../context/DeliveryContext'
+import Logo from '../Logo'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

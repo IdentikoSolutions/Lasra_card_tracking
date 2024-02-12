@@ -3,7 +3,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import { Carousel } from 'react-responsive-carousel'
 import { carouselData } from '../artifacts/carouseldata'
 import 'react-responsive-carousel/lib/styles/carousel.min.css' // requires a loader
-import { useApp } from '../components/context/AppContext'
+import { useApp } from '../context/AppContext'
 import LoginPage from './loginPage'
 
 export function LandingPage() {

@@ -3,19 +3,21 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import {
   ListContainer,
-  ButtonElement,
   ReportACard,
 } from '../components'
+import { IoSaveSharp } from "react-icons/io5";
+import { RiSendPlaneFill } from "react-icons/ri";
 import { useDispatch, useSelector } from 'react-redux'
 import { IrootState } from '../redux/store'
-import { OverlayCard } from '../styles/styles'
-import { color } from '../artifacts/colors'
+// import { OverlayCard } from '../styles/styles'
+// import { color } from '../artifacts/colors'
 import { Axios } from '../Axios/Axios'
 import { useNavigate } from 'react-router-dom'
 import { reportACard, updateCard } from '../redux/CardReducer'
 import { Aside } from '../components/Aside'
-import { useApp } from '../components/context/AppContext'
-import { PrintPdf } from '../Axios/helpers/pdfRender'
+import { useApp } from '../context/AppContext'
+import { PrintPdf } from '../components/pdfRender'
+import { button, overlay } from '../styles/styles'
 export { }
 
 function CardProductionReceipt() {
@@ -98,41 +100,46 @@ function CardProductionReceipt() {
       <div className="flex relative  ">
         <PrintPdf title='card production' >
 
-          <div ref={printRef} id="content" className='overflow-hidden p-5 m5'>
-            {<h1>CARD PRODUCTION RECEIPT</h1>}
+          <div ref={printRef} id="content" className='overflow-hidden '>
+            {<h1 className='text-[2rem] text-center font-bold'>CARD PRODUCTION RECEIPT</h1>}
             <br />
             {
               <>
                 {!active && (
                   <div
                     onClick={() => toggle(!active)}
-                    className="mb-4 shadow-sm w-fit px-4 mr-0 bg-green-100"
+                    // className="mb-4 shadow-sm w-fit px-4 mr-0 bg-green-100"
+                    className={button + ' w-fit'}
+
                   >
                     {active ? 'close report' : 'open report'}
                   </div>
                 )}
-                <div className="flex justify-evenly text-gray-600 mt-5">
-                  <div>
-                    <h2>Batch Details</h2>
-                    <p className="mt-3">
-                      Batch No: <span>{batchDetail?.batchNo}</span>
-                    </p>
-                    <p className="mt-3">
+                <div>
+                <h2>Batch Details</h2>
+                <div className="flex justify-evenly text-gray-600 p-2 m-2  w-[80%] self-center bg-white">
+
+                  <div className='flex-1 m-3 '>
+                    <div className="text-gray-500 m-auto flex justify-between underline">
+                      <span>Batch No: </span><span>{batchDetail?.batchNo}</span>
+                    </div>
+                    <p className="flex m-auto justify-between underline">
                       No of Cards: <span>{batchDetail?.noRecords}</span>
                     </p>
-                    <p className="mt-3">
+                    <p className="m-auto flex justify-between underline">
                       Date created:{' '}
                       <span>
                         {batchDetail?.bankDataCreatedOn?.substring(0, 10)}
                       </span>
                     </p>
                   </div>
-                  <div className="flex-col flex">
-                    <h2>Cards Received Details</h2>
-                    <label htmlFor="date" className="mt-3">
+                  <div className="flex-1 flex-col flex">
+                    {/* <h2>Cards Received Details</h2> */}
+                    <label htmlFor="date" className="mx-5 underline flex justify-between">
                       {' '}
                       Date received :
                       <input
+                      className='p-1 border-b-2 mx-2'
                         type="date"
                         id="todayDate"
                         value={receiptDetail.date}
@@ -144,7 +151,7 @@ function CardProductionReceipt() {
                         }
                       />
                     </label>
-                    <label htmlFor="date" className="mt-3">
+                    <label htmlFor="date" className="mx-5 underline flex justify-between">
                       {' '}
                       Received by :
                       <input
@@ -159,7 +166,7 @@ function CardProductionReceipt() {
                         }
                       />
                     </label>
-                    <label htmlFor="date" className="mt-3">
+                    <label htmlFor="date" className="mx-5 underline flex justify-between">
                       {' '}
                       Delivered by :
                       <input
@@ -175,27 +182,29 @@ function CardProductionReceipt() {
                       />
                     </label>
                   </div>
+                  </div>
                 </div>
               </>
             }
             {
-              <>
+              <div className='overflow-scroll'>
                 {cards.length > 0 && active && (
-                  <OverlayCard>
+                  <div className={overlay}>
                     {active && (
-                      <ButtonElement
-                        label={active ? 'close report' : 'open report'}
+                      <button
                         onClick={() => toggle(!active)}
-                      />
+                        className={button +' m-2'}
+                      > 
+                          {active ? 'close report' : 'open report'}</button>
                     )}
 
                     <ReportACard />
-                  </OverlayCard>
+                  </div>
                 )}
 
                 <ListContainer title="CARDS" list={cards} />
 
-              </>
+              </div>
             }
           </div>
         </PrintPdf>
@@ -205,11 +214,13 @@ function CardProductionReceipt() {
 
       <ToastContainer position="top-right" newestOnTop />
       {
-        <>
-          <button className='bg-green-600 px-5 py-2 rounded-md text-white mb-10 m-3' onClick={save} >Save</button>
-          <button className='bg-green-600 px-5 py-2 rounded-md text-white mb-10 m-3' onClick={submit}>Submit</button>
+        <div className='flex justify-center'>
+          <button className={button+' mx-2'} onClick={save} ><IoSaveSharp className={' mx-2'}/>
+Save</button>
+          <button className={button +' mx-2'} onClick={submit}>Submit<RiSendPlaneFill className={' mx-2'}/>
+</button>
           {/* <button onClick={() => generatePdf('#content')}>generatepdf</button> */}
-        </>
+        </div>
       }
 
       {/* </VariableGrid> */}

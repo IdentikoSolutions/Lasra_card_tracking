@@ -3,7 +3,8 @@ import { Axios } from '../Axios/Axios'
 // import { BatchDetail } from '../components/ListItemsComponent/BatchDetail';
 import Table from 'react-bootstrap/Table'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { BatchDetail } from '../components/ListItemsComponent'
+import BatchDetail from '../components/ListItemsComponent/BatchDetail'
+// import { BatchDetail } from '../components/ListItemsComponent'
 
 const ViewDispatchOrders = () => {
   const [orders, setOrders] = useState([])
@@ -21,13 +22,13 @@ const ViewDispatchOrders = () => {
   return (
     <div className='bg-white p-[20px] overflow-hidden'>
       <h2>All Dispatch Orders</h2>
-      <Table
-        striped
-        bordered
-        hover
-        variant="flat"
-        size="xxl"
-        className="mb-3"
+      <table
+        // striped
+        // bordered
+        // hover
+        // variant="flat"
+        // size="xxl"
+        className="mb-3 border-2 bg-white"
       >
       {orders.length > 0 && (
        <thead>
@@ -59,7 +60,7 @@ const ViewDispatchOrders = () => {
             id
           } = order
           return (
-            <tbody>
+            <tbody className='bg-red-500'>
 
             <BatchDetail
               key={idx}
@@ -77,7 +78,7 @@ const ViewDispatchOrders = () => {
 
           )
         })}
-        </Table>
+        </table>
     </div>
   )
 }
