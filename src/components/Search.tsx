@@ -63,11 +63,11 @@ export const MainSearch: React.FC<SearchType> = ({
   setToggle,
   onChange,
 }) => {
-  console.log(listPath, 'listpath')
+  // console.log(listPath, 'listpath')
   const [selectList, setSelectList] = useState<[any] | []>([])
   const getAllBatches = useCallback(async () => {
     const { data } = await Axios.get(listPath) as any
-    console.log(data, 'select list')
+    // console.log(data, 'select list')
     setSelectList(data.map((item: any) => item))
   }, [listPath])
   const dispatch = useDispatch()
@@ -88,6 +88,7 @@ export const MainSearch: React.FC<SearchType> = ({
       console.log(response, 'response from search')
       if (response.status === 200) {
         const { data } = response
+        console.log(data, "data from searchhhh")
         const workingData = data.cards
           ? data.cards
           : data.cardReceipts
@@ -152,7 +153,7 @@ export const MainSearch2 = ({ listPath, api, to }) => {
   const dispatch = useDispatch()
   const getAllBatches = useCallback(async () => {
     const { data } = await Axios.get(listPath) as any
-    console.log(data,'data')
+    // console.log(data,'data')
     setSelectList(data.map((item: any) => ({
       value: item.batchNo, label: <div className='flex justify-between'>
         <p>{item.name || "Batch" + item.batchNo}</p>
@@ -163,6 +164,7 @@ export const MainSearch2 = ({ listPath, api, to }) => {
   const handleChange = async (selectedOption) => {
     try {
       const response = await Axios.get(api + "=" + selectedOption.value)
+      console.log(response, 'search by id')
       if (response.status === 200) {
         const { data } = response
         const workingData = data.cards

@@ -11,7 +11,7 @@ export const PageTrail = () => {
     const paths = pathname.split("/")
     paths.shift()
     paths.shift()
-    console.log(pathname, paths, 'pathname')
+    // console.log(pathname, paths, 'pathname')
 
     return (
         <div className=' my-[15px] mx-12'>
