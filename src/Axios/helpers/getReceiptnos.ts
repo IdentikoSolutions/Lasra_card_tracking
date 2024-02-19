@@ -3,8 +3,6 @@ import { Axios } from '../Axios'
 export async function getReceiptsNos(path: string): Promise<any[]> {
   try {
     const {data} = await Axios.get(path)
-    // console.log(result)
-    // const data = result.data.map((datum: any) => datum.batchNo)
     return data;
   } catch (e) {
     console.log(path)

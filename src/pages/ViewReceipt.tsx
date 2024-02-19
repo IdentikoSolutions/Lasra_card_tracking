@@ -1,109 +1,142 @@
 'use client'
-import React, { useEffect } from 'react'
-import {ButtonElement, DetailContainer, DetailField, ListContainer } from '../components'
-import { color } from '../artifacts/colors'
+import React, { useCallback, useEffect, useState } from 'react'
+import {
+  ListContainer,
+} from '../components'
+// import { color } from '../artifacts/colors'
 import { useDispatch, useSelector } from 'react-redux'
 import { IrootState } from '../redux/store'
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation, useParams, } from 'react-router-dom'
 import { Axios } from '../Axios/Axios'
 import { currentReceipt } from '../redux/CardReducer'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FallbackRender } from './errorpages/error'
-import { Ireceipt } from '../interface/interface'
-import {ToastContainer, toast} from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { Reports } from '../components/pageTrail'
+
 function ViewReceipt() {
   const { id } = useParams()
-  const pathname = useLocation().pathname.substring(0, 15)
-  console.log(pathname, 'url')
-
+  const location = useLocation()
+  const pathname = location.pathname.substring(0, 15)
   const dispatch = useDispatch()
-  const getBatch = async () => {
-    dispatch(currentReceipt({  }))
-    
+  const batchid = location.search.split('=')[1]
+  const [show, toggleShow] = useState(true)
+  const [showCards, toggleShowCards] = useState(false)
+  const getBatch = useCallback(async () => {
     let endpoint
     if (pathname === '/receipts/cards') {
       endpoint = '/Card/ViewCardReceiptByBatchId?BatchNo='
-    } else if (pathname === '/receipts/provi') {
+    } else if (pathname === '/receipts/recei') {
       endpoint = '/Provisioning/ViewAllProvisionedBatchesById?id='
     }
-
     try {
-      const response = await Axios.get(`${endpoint}${id}`)
-      console.log('ENDPOINT', endpoint)
-console.log('RESPONSE FROM VIEW RECEIPT PAGE',response)
+      const response = await Axios.get(`${endpoint}${batchid}`)
       if (response.status === 200) {
         const { data } = response
-        console.log(data,'this is the data received from batchview')
-        const dataObj:Ireceipt ={}
-        dataObj.batchReceiptHeader = data.cardReceiptHeader ||data.batchProvisionHeader 
-        dataObj.cardsReceipt =data.cardReceipts|| data.cardsProvisioned 
-        console.log(dataObj,'dataobj')
-        dispatch(currentReceipt({ data:dataObj }))
+        const header = data.cardReceiptHeader || data.batchProvisionHeader
+        const receiptInfo = data.cardReceipts || data.cardsProvisioned
+        let dataObj = {
+          batchProvisionHeader: header,
+          cardsReceipt: receiptInfo,
+        }
+        dispatch(currentReceipt({ data: dataObj }))
       } else {
-        console.log(response.status)
+        toast.error(response.status + ': not successful')
       }
     } catch (e) {
       return toast.error('Could not complete the last action')
       // console.log(e)
     }
-  }
-  const edit=async()=>{
-    try{
-const response= await Axios.post(`/Provisioning/updateCardProvisionHeaderByBatchNo?batchno=${id}&status=${1}`)
-console.log(response, "success")
-    }catch(e){
-console.log(e)
+  }, [pathname, dispatch, id])
+  // getBatch()
+  const edit = async () => {
+    try {
+      await Axios.post(
+        `/Provisioning/updateCardProvisionHeaderByBatchNo?batchno=${id}&status=${1}`,
+      )
+      toast.success('successfully edited')
+    } catch (e) {
+      toast.error('could not successfuly edit card')
     }
   }
   const { Cards } = useSelector((state) => state as IrootState)
   const { receipt } = Cards
-  console.log(receipt, 'from view card receipt page')
-  let batchProvisionHeader = receipt?.batchReceiptHeader
-  let cardsProvisioned = receipt?.cardsReceipt
-console.log(batchProvisionHeader, cardsProvisioned,"X3")
+  let batchProvisionHeader = receipt?.batchProvisionHeader
+  let cardsReceipt = receipt?.cardsReceipt
+  console.log(batchProvisionHeader?.receivedBy, "receivedby")
   useEffect(() => {
     getBatch()
-  }, [])
+  }, [getBatch])
 
   return (
-    <ErrorBoundary FallbackComponent={FallbackRender} onReset={(details) => {}}>
-      <h2>Details page</h2>
-      <ButtonElement label={'Edit'} onClick={edit}/>
-      <DetailContainer title={'Receipt Details: '}>
-        <DetailField
-          label="Batch No:"
-          bg={color.auto}
-          value={batchProvisionHeader?.batchNo}
-        />
-        <DetailField
-          label="No of Cards:"
-          bg={color.auto}
-          value={cardsProvisioned?.length}
-        />
-        <DetailField
-          label="Date created:"
-          bg={color.auto}
-          value={batchProvisionHeader?.dateCreated?.substring(0, 10)}
-        />
-        <DetailField
-          label="Date provisioned:"
-          bg={color.auto}
-          value={batchProvisionHeader?.provisionedOn?.substring(0, 10)}
-        />
-        <DetailField
-          label="received By:"
-          bg={color.auto}
-          value={batchProvisionHeader?.receivedBy}
-        />
-        <DetailField
-          label="delivered by:"
-          bg={color.auto}
-          value={batchProvisionHeader?.deliveredBy}
-        />
-      </DetailContainer>
-      <ListContainer title="cards in this Receipt" batchStatus={batchProvisionHeader?.submissionstatus} list={cardsProvisioned} />
-     <ToastContainer position="bottom-right" newestOnTop/>
+    <ErrorBoundary FallbackComponent={FallbackRender} onReset={(details) => { }}>
+      <div className="p-2">
+        <button className='hover:text-red-400 hover:underline' onClick={() => toggleShow(!show)}>{show ? 'Show' : "Hide "} Details</button>
+
+        {show ?
+          <Reports /> :
+          (<>
+            <h2>Details page</h2>
+            <div className='flex-col flex '>
+            {!showCards &&  <div className="grid grid-cols-2 gap-4 bg-white p-3 shadow-md mb-2">
+
+                <div className="min-w-[200px]  justify-between text-slate-400 flex">
+                  Batch no:
+                  <p className="text-gray-700 text-bold"
+                  >{batchProvisionHeader?.batchNo}</p>
+                </div>
+                <div className="min-w-[200px]  justify-between text-slate-400 flex">
+                  No of Cards:
+                  <p className="text-gray-700"
+                  >{cardsReceipt?.length}</p>
+                </div>
+
+                <div className="min-w-[200px]  justify-between text-slate-400 flex">
+                  Date Created:
+                  <p className="text-gray-700"
+                  >{batchProvisionHeader?.dateCreated?.substring(0, 10)}</p>
+                </div>
+
+                <div className="min-w-[200px] justify-between text-slate-400 flex">
+                  Date Provissioned:
+                  <p className="text-gray-700"
+                  >{batchProvisionHeader?.provisionedOn?.substring(0, 10)}</p>
+                </div>
+
+
+                <div className="min-w-[200px] justify-between text-slate-400 flex">
+                  ReceivedBy:
+                  <p className="text-gray-700"
+                  >{batchProvisionHeader?.receivedBy}</p>
+                </div>
+                <div className="min-w-[200px] justify-between text-slate-400 flex">
+                  DeliveredBy:
+                  <p className="text-gray-700"
+                  >{batchProvisionHeader?.deliveredBy}</p>
+                </div>
+              </div>}
+              <div className='self-end flex'>
+                <button
+                  className="bg-green-500 hover:bg-green-700 text-white px-3 py-1 rounded-sm m-2"
+                  onClick={edit}
+                >
+                  Edit
+                </button>
+                <div className="bg-green-500 hover:bg-green-700 text-white px-3 py-1 rounded-sm  m-2 shadow-lg shadow-zinc-950 "
+                onClick={()=>toggleShowCards(!showCards)}>{showCards ? "View Summary" :"View Cards"}</div>
+              </div>
+
+            </div>
+            {showCards && <ListContainer
+              title="cards in this Receipt"
+              batchStatus={batchProvisionHeader?.submissionstatus}
+              list={cardsReceipt}
+            />}
+          </>)}
+      </div>
+
+      <ToastContainer position="bottom-left" newestOnTop />
     </ErrorBoundary>
   )
 }

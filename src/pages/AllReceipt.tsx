@@ -2,23 +2,36 @@ import React from 'react'
 import { Footer, Header } from '../components'
 import { Outlet } from 'react-router-dom'
 import { SideNav } from '../components'
-import { GridContainer, Mainbar } from '../styles/styles'
+// import { GridContainer, Mainbar } from '../styles/styles'
+import { FloatingWhatsApp } from 'react-floating-whatsapp'
+import { PageTrail } from '../components/pageTrail'
+import bg_img from '../assets/bg_img.jpeg'
 
 function AllReceipt() {
-  
   return (
-    <div>
-      <Header />
-      <GridContainer>
+    <div className='flex flex-row w-[100vw]' 
+    >
+    <div className='flex flex-row w-full'>
         <SideNav />
-        <Mainbar>
-          {/* <div id="content"> */}
-            <Outlet />
-          {/* </div> */}
-        </Mainbar>
-      </GridContainer>
+        <div className="overflow-hidden p-0 flex flex-col flex-1 w-[80vw] pl-10 bg-slate-100">
+          <Header />
+          <div className='flex-1 bg-opacity-10'  style={{ backgroundImage: `url(${bg_img})` }}
+>
+            <PageTrail />
+            <div className='mx-10 p-2 h-full'>
+              <Outlet />
+            </div>
+          </div>
+          <Footer />
+        </div>
+      </div>
 
-      <Footer />
+      {/* <FloatingWhatsApp
+        phoneNumber="07035182795"
+        buttonStyle={{ marginBottom: '50px', marginRight: '-20px' }}
+        className=" !relative !top-10"
+        accountName={'Lasrra'}
+      /> */}
     </div>
   )
 }

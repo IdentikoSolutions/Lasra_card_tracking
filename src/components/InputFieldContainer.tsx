@@ -1,36 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Idiv, IinputFieldContainer } from '../interface/interface';
-
-const Div=styled.div<Idiv>`
-${({margin,bg})=>`
-margin:${margin};
-background-color:${bg};
-`}
-display:flex;
-flex-wrap:wrap;
-justify-content:space-between;
-border-radius:8px;
-border:3px solid #02390b;
-min-height:50px;
-width:"fit-container";
-flex:1;
-min-width:75%;
-h3{
-    margin:auto !important;
-    width:"fit-content";
-    text-justify:auto;
-    justify-content:center;
-    font-weight:bold;
-}
-`
+import Container from "react-bootstrap/Container"
+import Row from "react-bootstrap/Row"
+import "bootstrap/dist/css/bootstrap.min.css"
 export const  InputFieldContainer:React.FC<IinputFieldContainer>=({title,children})=>{
     return (
-        <Div margin={"20px"} bg={"#d7f9ed"}>
+        <Container className='mb-2' style={{background:"#d7f9ed"}}>
             <h3>{title}</h3>
-            <Div margin={'3px'} bg={"#ffffff"}>
+            <hr/>
+            <Container style={{background:"#ffffff"}}>
+                <Row>
 {children}
-            </Div>
-        </Div>
+                </Row>
+            </Container>
+        </Container>
     );
 }

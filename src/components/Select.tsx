@@ -30,7 +30,7 @@ export const Select: React.FC<Iselect> = ({ options, path }) => {
           </option>
         ))}
         <option value ={"new"}>create new receipt</option>
-      </select>) : (   <MainSearch  to='/receipts/receipt' field={'Batch No'} padding={'0.5rem'} api={`/Batch/GetCardByBatchId?id=${search}`} search={search} onChange={(e) => setSearch(e.target.value)} />
+      </select>) : (   <MainSearch listPath='a' to='/receipts/receipt' field={'Batch No'} padding={'0.5rem'} api={`/Batch/GetCardByBatchId?id=${search}`} search={search} onChange={(e) => setSearch(e.target.value)} />
 )}
     </label>
   )

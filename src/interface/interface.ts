@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import Provisioned from '../pages/Provisioned';
+// import Provisioned from '../pages/Provisioned';
 
 export interface Icard {
   batch: string
@@ -23,6 +23,7 @@ export interface Icard {
   status: number
   surname: string
   comment: string
+  dispatcherName?: string,
   // dateCreated?:string,
   batchNo?:number
 // cardReceivedOn?: string,
@@ -35,7 +36,7 @@ export interface IbatchDetail{
 bankDataCreatedOn?:string,
 bankJobFilename?:string,
 bankJobNo?:number,
-batchNo?:number,
+batchNo:number,
 cancelledStatus?:number,
 dateCreated?:string,
 description?:string,
@@ -56,6 +57,7 @@ cards?:IcardReceipt[]
 }
 export interface IbatchReceipt{
   batch:number,
+  // batchNo:number,
   receivedBy: string,
   deliveredBy:string,
   destination:string,
@@ -104,8 +106,21 @@ export interface IinputFieldContainer{
     color:string
   }
   export interface Ireceipt{
-batchReceiptHeader?:IbatchDetail|IbatchReceipt,
-cardsReceipt?:Icard[]|IcardReceipt
+batchProvisionHeader:ReceiptType,
+cardsReceipt:Icard[]|IcardReceipt[]
+  }
+  export interface ReceiptType{
+    batchNo:number,
+dateCreated:string,
+deliveredBy:string,
+provisionedOn:string,
+receivedBy:string,
+record_count:number
+status:number
+submissionstatus:number
+//
+id?:number
+receivedOn?:string
   }
   export interface Iselect {
   options?: number[]
@@ -120,7 +135,7 @@ export interface Iimg {
 //interface for filter component
 export interface IFilterProp {
   state: {
-    batchno: number
+    batchId: number
     cardId: number
     comment: string
     surname: string
@@ -132,5 +147,18 @@ export interface IFilterProp {
   setState:(state:IFilterProp['state'],title:string,arg:string)=>void
 
 }
+export interface Iorder {
+  destination: string
+  batchId: number
+  dispatcherName: string
+  pickUpDate: string
+  noRecords?: number
+  batchDispatchStatus: number
+  cards: Icard[]
+  receivedBy?: string,
+  deliveredBy?: string,
+  createdBy?: string,
+  dispatchOrderOn?: string,
 
+}
 // export interface Order

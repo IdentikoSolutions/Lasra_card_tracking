@@ -12,11 +12,10 @@ export const AccordionListContainer: React.FC<Iselect> = ({
   searchId
 }) => {
   const nextroute = to ? to : '/receipts'
-  console.log(to,'to in listaccordioncontainer')
+  // console.log(to,'to in listaccordioncontainer')
   // const [option, setOption] = useState<number[]>([])
   const [search,setSearch] = useState(0)
   const [toggle,setToggle] = useState(false)
-
   const navigate = useNavigate()
   useEffect(() => {
     
@@ -28,6 +27,7 @@ export const AccordionListContainer: React.FC<Iselect> = ({
         
           {!toggle ? (<div onClick={()=>setToggle(true)}>Create new Receipt</div>):
           (<MainSearch
+          listPath=''
             field={'Batch No'}
             to={nextroute}
             api={`${searchId}=${search}`}

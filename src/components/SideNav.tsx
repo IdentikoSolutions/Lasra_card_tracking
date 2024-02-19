@@ -1,66 +1,91 @@
-"use client";
+'use client'
 
-import React, { useEffect } from 'react'
-import {Accordion, AccordionListContainer,ReportACard} from './index'
-import { Sidebar } from '../styles/styles'
-import { Spinner } from '../skeleton.tsx/spinners'
+import React, { useEffect, useState } from 'react'
+import { Accordion } from './index'
+// import { Sidebar } from '../styles/styles'
 import { IrootState } from '../redux/store'
 import { useSelector } from 'react-redux'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FallbackRender } from '../pages/errorpages/error'
+import Navbar from 'react-bootstrap/Navbar'
+import Container from 'react-bootstrap/Container'
+import { CiReceipt } from "react-icons/ci";
+import { GoInbox } from "react-icons/go";
+import { SiPostman } from "react-icons/si";
+
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Logo from './Logo'
 
 export function SideNav() {
   // const
   const { Cards } = useSelector((state) => state as IrootState)
   const { cards } = Cards
+  const [active, toggle] = useState(-1)
+  let options = [
+    {
+      page: '/receipts/viewreceipts',
+      title: 'Card Production Receipt',
+      list: '',
+      icon: <CiReceipt />
+    },
+    {
+      page: '/receipts/viewprovision',
+      title: 'Card Provision  Receipt',
+      list: '',
+      icon: <CiReceipt />
 
-  useEffect(() => {}, [cards])
+    },
+    {
+      page: '/receipts/order', title: 'Dispatch Orders', list: '', icon: <GoInbox />
+
+    },
+    {
+      page: '/receipts/retrival', title: 'Retrival Orders', list: '', icon: <GoInbox />
+
+    },
+    {
+      page: 'delivery', title: 'Home Delivery Orders', list: '', icon: <SiPostman />
+
+    },
+  ]
+  const setActive = (num: number) => {
+    toggle(num)
+  }
+  useEffect(() => { }, [cards])
   return (
-    <ErrorBoundary FallbackComponent={FallbackRender} onReset={(details)=>{console.log("onreset")}}>
+    <ErrorBoundary
 
-    <Sidebar>
-      {cards.length ? (
-        <Accordion page= ''title={'Report a card'}>
-          <ReportACard />
-        </Accordion>
-      )
-      : ""
-    }
-      <Accordion page= '/receipts'title={'Card Production Receipt'} list={'Click to view receipt'}>
-        <AccordionListContainer
-          options={[]}
-          to='/receipts/receipt'
-          path={'cards/'}
-          source={'/receipts/viewreceipts'}
-          searchId={'/Batch/GetCardByBatchId?id'}
-        />
-        {/* <div onClick={()=>Toggle(!value)}>create new receipt</div> */}
-
-      </Accordion>
-      <Accordion
-      page='/receipts/provision'
-        title={'Card Provision  Receipt'}
-        list={'Click on batch to view receipt'}
+      FallbackComponent={FallbackRender}
+      onReset={(details) => {
+        console.log(details)
+      }}
+    >
+      <div
+        className=' flex-col hidden sm:flex w-[20%] p-0'
       >
-        <AccordionListContainer
-        to='/receipts/provision'
-          source={'/receipts/viewprovision'}
-          path={'provision/'}
-          searchId={'/Card/ViewCardReceiptByBatchId?BatchNo'}
-        />
-      </Accordion>
-      <Accordion page='/receipts/order' title={'Dispatch Orders'} list={'spinner'}>
-        <Spinner lines={10} />
-      </Accordion>
-      <Accordion title={'Retrival Orders'} list={'Lorem ipsum tros catn'} />
-      <Accordion
-        title={'Home Delivery Orders'}
-        list={'Lorem ipsum tros catn'}
-      />
-    </Sidebar>
-    </ErrorBoundary>
+        <Logo />
+        <div
+          className='bg-white p-0 lg:px-2 min-h-[90vh] w-full flex-1'
 
+        >
+
+          {options.map((item, idx) => (
+            <>
+              <Accordion
+                key={item.page}
+                page={item.page}
+                title={item.title}
+                list={item.list}
+                active={active}
+                setActive={setActive}
+                idx={idx}
+                icon={item.icon}
+              />
+            </>
+          ))}
+        </div>
+      </div>
+
+    </ErrorBoundary>
   )
 }
-
-// export default SideNav
