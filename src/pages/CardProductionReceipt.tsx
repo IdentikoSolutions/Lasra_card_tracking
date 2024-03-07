@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import {
@@ -7,66 +7,62 @@ import {
 } from '../components'
 import { IoSaveSharp } from "react-icons/io5";
 import { RiSendPlaneFill } from "react-icons/ri";
-import { useDispatch, useSelector } from 'react-redux'
-import { IrootState } from '../redux/store'
-// import { OverlayCard } from '../styles/styles'
-// import { color } from '../artifacts/colors'
-import { Axios } from '../Axios/Axios'
-import { useNavigate } from 'react-router-dom'
-import { reportACard, updateCard } from '../redux/CardReducer'
+// import { useDispatch } from 'react-redux'
+// import { IrootState } from '../redux/store'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Aside } from '../components/Aside'
 import { useApp } from '../context/AppContext'
 import { PrintPdf } from '../components/pdfRender'
 import { button, overlay } from '../styles/styles'
+import { getCardCountByStatus, createNewReceipt } from "../services";
 export { }
 
 function CardProductionReceipt() {
+  const location = useLocation()
+  const { batchNo } = location.state
+  const [selectedValue, setSelectedValue] = useState(true);
+
+  // console.log(batchNo, "from state")
   const { setPageName, printRef } = useApp() as any
   setPageName('Card Production Page')
-  const dispatch = useDispatch()
-  let { Cards } = useSelector((state) => {
-    return state as IrootState
-  })
+  // const dispatch = useDispatch()
+  // let { Cards } = useSelector((state) => {
+  //   return state as IrootState
+  // })
   const [active, toggle] = useState(false)
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
+  // receivedStatus: number;
+  // receivedBy: string;
+  // receivedAt: Date;
+  // batchNo: string;
+  // cardReceipt: CreateCardReceiptDto[];
+  const handleRadioChange = (event) => {
+    setSelectedValue(event.target.value === 'true');
+  };
 
-  const { reports, cards, batchDetail } = Cards
-  const [receiptDetail, setReceiptDetail] = useState({
-    date: '',
+  // const { reports, cards, batchDetail } = Cards
+  const [card, setCard] = useState<any[]>([])
+  const [receiptDetail, setReceiptDetail] = useState<any>({
+    batchNo,
+    receivedStatus: 0,
     receivedBy: '',
-    deliveredBy: '',
+    receivedAt: '',
+    cardReceipt: card.map(card => card.lassraId)
   })
-
-  const details = {
-    batchId: batchDetail.batchNo,
-    cardreceivedOn: receiptDetail.date,
-    receivedOn: receiptDetail.date,
-    receivedBy: receiptDetail.receivedBy,
-    batchCardReceiptStatus: 0,
-    deliveredBy: receiptDetail.deliveredBy,
-    submissionStatus: 0,
-    cards: cards.concat(reports).map((card) => ({
-      cardId: card.id,
-      status: card.status,
-      comment: card.comment || '',
-    })),
-  }
-  const setProvisioned = useCallback(() => {
-    if (cards.length !== 0) {
-      localStorage.setItem(
-        'Receipt',
-        JSON.stringify({ cards, batchDetail, reports }),
-      )
+  const fetchNotReceivedCard =
+    async () => {
+      const result = await getCardCountByStatus(receiptDetail.batchNo, 0)
+      const card = result[0].map(card => ({lassraId:card.lassraId}))
+      setCard(result[0])
+      //  setReceiptDetail(re)
+      //  console.log(result)
     }
-    const storedData = localStorage.getItem('Receipt')
-    if (storedData && cards.length === 0) {
-      dispatch(reportACard({ ...JSON.parse(storedData) }))
-    }
-  }, [cards])
   const save = async () => {
+    const response = await createNewReceipt(receiptDetail)
+    // localStorage.removeItem('Receipt')
     try {
-      await Axios.post('/Card/CreateCardReceipt', details)
-      localStorage.removeItem('Receipt')
+
+      console.log(response, "from save")
       toast.success('receipt created successfull')
     } catch (e: any) {
       toast.error(
@@ -79,24 +75,26 @@ function CardProductionReceipt() {
   const submit = async () => {
     try {
       // save()
-      details.submissionStatus = 1
-      const result = await Axios.post('/Card/CreateCardReceipt', details)
-      localStorage.removeItem('Receipt');
-      // await Axios.post(`/Card/updateCardReceiptHeaderByBatchNo?batchno=${batchDetail.batchNo}&status=1`)
+      receiptDetail.submissionStatus = 1
+      const result = createNewReceipt(receiptDetail)
+      console.log(result)
+      // localStorage.removeItem('Receipt');
       toast.success(<h3>Submitted successfully</h3>)
     } catch (e) {
       toast.error(
         <>
-          <h3>Error occured</h3> <p>Error Detail: Receipt already exist for batch {details.batchId}</p>
+          <h3>Error occured</h3> <p>Erro: can not create a receipt at this time pls try again</p>
         </>,
       )
     }
   }
   useEffect(() => {
-    setProvisioned()
-  }, [Cards])
+    const cardreceipt = card.map(card => ({lassraId:card.lassraId}))
+    setReceiptDetail({ ...receiptDetail, cardReceipt: cardreceipt })
+
+  }, [card])
   return (
-    <div className='transparent w-[79vw] flex-col '>
+    <div className='transparent w-full flex-col flex-1'>
       <div className="flex relative  ">
         <PrintPdf title='card production' >
 
@@ -116,93 +114,84 @@ function CardProductionReceipt() {
                   </div>
                 )}
                 <div>
-                <h2>Batch Details</h2>
-                <div className="flex justify-evenly text-gray-600 p-2 m-2  w-[80%] self-center bg-white">
+                  <h2>Batch Details</h2>
+                  <div className=" grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xxl:grid-cols-4 justify-evenly text-gray-600 p-2 m-2  w-full self-center bg-white shadow-sm">
 
-                  <div className='flex-1 m-3 '>
-                    <div className="text-gray-500 m-auto flex justify-between underline">
-                      <span>Batch No: </span><span>{batchDetail?.batchNo}</span>
+                    <div className='md:col-span-1 lg:cols-span-2 xxl:cols-span-2  items-evenly h-full'>
+                      <div className="text-gray-500 m-auto flex justify-between flex-1">
+                        <span className='font-bold'>Batch No: </span><span>{receiptDetail.batchNo}</span>
+                      </div>
+                      <p className="flex m-auto justify-between"> <p className=" font-bold">
+                        No of Cards:</p> <span>{receiptDetail.cardReceipt?.length}</span></p>
+
                     </div>
-                    <p className="flex m-auto justify-between underline">
-                      No of Cards: <span>{batchDetail?.noRecords}</span>
-                    </p>
-                    <p className="m-auto flex justify-between underline">
-                      Date created:{' '}
-                      <span>
-                        {batchDetail?.bankDataCreatedOn?.substring(0, 10)}
-                      </span>
-                    </p>
-                  </div>
-                  <div className="flex-1 flex-col flex">
-                    {/* <h2>Cards Received Details</h2> */}
-                    <label htmlFor="date" className="mx-5 underline flex justify-between">
-                      {' '}
-                      Date received :
-                      <input
-                      className='p-1 border-b-2 mx-2'
-                        type="date"
-                        id="todayDate"
-                        value={receiptDetail.date}
-                        onChange={(e: any) =>
-                          setReceiptDetail({
-                            ...receiptDetail,
-                            date: e.target.value,
-                          })
-                        }
-                      />
-                    </label>
-                    <label htmlFor="date" className="mx-5 underline flex justify-between">
-                      {' '}
-                      Received by :
-                      <input
-                        type="string"
-                        value={receiptDetail.receivedBy}
-                        className="border-b-[3px] border-l-[3px] ml-4"
-                        onChange={(e: any) =>
-                          setReceiptDetail({
-                            ...receiptDetail,
-                            receivedBy: e.target.value,
-                          })
-                        }
-                      />
-                    </label>
-                    <label htmlFor="date" className="mx-5 underline flex justify-between">
-                      {' '}
-                      Delivered by :
-                      <input
-                        type="date"
-                        id="todayDate"
-                        value={receiptDetail.deliveredBy}
-                        onChange={(e: any) =>
-                          setReceiptDetail({
-                            ...receiptDetail,
-                            deliveredBy: e.target.value,
-                          })
-                        }
-                      />
-                    </label>
-                  </div>
+                    <div className="  ">
+                      {/* <h2>Cards Received Details</h2> */}
+                      <label htmlFor="date" className="mx-5 grid grid-cols-2 gap-1 justify-between w-full">
+                        Received At :
+                        <input
+                          className='p-1 border-b-2 mx-2'
+                          type="date"
+                          id="todayDate"
+                          value={receiptDetail.receivedAt}
+                          onChange={(e: any) =>
+                            setReceiptDetail({
+                              ...receiptDetail,
+                              receivedAt: e.target.value,
+                            })
+                          }
+                        />
+                      </label>
+                      <label htmlFor="date" className="mx-5 grid grid-cols-2 gap-2 w-full">
+                        {' '}
+                        Received by :
+                        <input
+                          type="string"
+                          value={receiptDetail.receivedBy}
+                          className="shadow-sm"
+                          onChange={(e: any) =>
+                            setReceiptDetail({
+                              ...receiptDetail,
+                              receivedBy: e.target.value,
+                            })
+                          }
+                        />
+                      </label>
+
+                    </div>
                   </div>
                 </div>
               </>
             }
             {
               <div className='overflow-scroll'>
-                {cards.length > 0 && active && (
+                {receiptDetail.cardReceipt?.length > 0 && active && (
                   <div className={overlay}>
                     {active && (
                       <button
                         onClick={() => toggle(!active)}
-                        className={button +' m-2'}
-                      > 
-                          {active ? 'close report' : 'open report'}</button>
+                        className={button + ' m-2'}
+                      >
+                        {active ? 'close report' : 'open report'}</button>
                     )}
 
                     <ReportACard />
                   </div>
                 )}
+                <div className='grid grid-cols-2 gap-4 mb-4'>
 
-                <ListContainer title="CARDS" list={cards} />
+                  <button className={button} onClick={fetchNotReceivedCard}>fetch cards</button>
+                  <button className={button}>Enter Card </button>
+                </div>
+                <input
+          type="radio"
+          id="true"
+          name="selection"
+          value="true"
+          checked={selectedValue === true}
+          onChange={handleRadioChange}
+        />
+        <label htmlFor="true">Show Component A</label>               { card.length>0 && <ListContainer title="CARDS" list={card} />}
 
               </div>
             }
@@ -214,11 +203,11 @@ function CardProductionReceipt() {
 
       <ToastContainer position="top-right" newestOnTop />
       {
-        <div className='flex justify-center'>
-          <button className={button+' mx-2'} onClick={save} ><IoSaveSharp className={' mx-2'}/>
-Save</button>
-          <button className={button +' mx-2'} onClick={submit}>Submit<RiSendPlaneFill className={' mx-2'}/>
-</button>
+        card.length>0 &&<div className='flex justify-center'>
+          <button className={button + ' mx-2'} onClick={save} ><IoSaveSharp className={' mx-2'} />
+            Save</button>
+          <button className={button + ' mx-2'} onClick={submit}>Submit<RiSendPlaneFill className={' mx-2'} />
+          </button>
           {/* <button onClick={() => generatePdf('#content')}>generatepdf</button> */}
         </div>
       }
@@ -229,3 +218,7 @@ Save</button>
   )
 }
 export default CardProductionReceipt
+// function createNewReceipt(details: any) {
+//   throw new Error('Function not implemented.');
+// }
+

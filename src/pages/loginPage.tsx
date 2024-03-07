@@ -20,7 +20,7 @@ const LoginPage = () => {
             >
                 {/* access */}
                 <div className='pt-[100px]'>
-                    <h1 className='text-left text-5xl font-extrabold  '>LASRRA INTERNAL TRACKING PORTAL</h1>
+                    <h1 className='text-left text-5xl font-extrabold  '>LASRRA INTERNAL CARD TRACKING PORTAL</h1>
                     <p>Welcome to the LASRRA Internal Tracking Portal. Kindly login with your credentials..</p>
                 </div>
 

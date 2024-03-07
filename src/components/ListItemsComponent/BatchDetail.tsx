@@ -5,22 +5,28 @@ import { useNavigate } from 'react-router-dom';
 interface Field {
   field: string[];
   receiptPath: string
+  onClick?: (event: any) => void
 }
 // export
-const BatchDetail: React.FC<Field> = ({ field, receiptPath }) => {
+const BatchDetail: React.FC<Field> = ({ field, receiptPath, onClick }) => {
   const navigate = useNavigate()
   const handleclick = useCallback((batchnumber: number) => {
-    if (receiptPath === "") return
-    if (receiptPath === '/Card/getAllCardReceipt') {
+    if (receiptPath === "") {
+      onClick()
+      return
+    }
+    if (receiptPath === '/receipt') {
       navigate(`/receipts/cards?batch=${batchnumber}`)
     } else if (receiptPath === '/Provisioning/ViewAllProvisionedBatches') {
       navigate(`/receipts/receipts?batch=${batchnumber}`)
     } else {
+      console.log(receiptPath)
       navigate(receiptPath)
     }
   }, [])
   return (
-    <tr className='border bg-white even:bg-gray-500 hover:bg-gray-300' onClick={() => handleclick(Number(field[0]))}>
+    <tr className='border bg-white even:bg-gray-500 hover:bg-gray-300 text-center' onClick={() => handleclick(Number(field[1
+    ]))}>
       {field.map((item, idx) => <td key={idx}>{item}</td>)}
 
     </tr>

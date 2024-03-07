@@ -2,7 +2,6 @@
   "name": "lasra_card_tracking",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://10.65.10.7",
   "dependencies": {
     "@craco/craco": "^7.1.0",
     "@emotion/react": "^11.11.1",

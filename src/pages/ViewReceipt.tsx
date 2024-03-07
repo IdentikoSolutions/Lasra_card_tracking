@@ -1,7 +1,7 @@
 'use client'
 import React, { useCallback, useEffect, useState } from 'react'
 import {
-  ListContainer,
+  ListContainer,Reports
 } from '../components'
 // import { color } from '../artifacts/colors'
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,7 +13,6 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { FallbackRender } from './errorpages/error'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { Reports } from '../components/pageTrail'
 
 function ViewReceipt() {
   const { id } = useParams()

@@ -13,14 +13,14 @@ interface Ireset{
   export const ListItems: React.FC<any> = (card) => {
   return (
     <tr className='even:bg-gray-200'>
-      <td >{card.lasrraId}</td>
-      <td >{card.firstname}</td>
-      <td >{card.middlename}</td>
+      <td >{card.lassraId}</td>
+      <td >{card.first_name}</td>
+      <td >{card.middle_name}</td>
       <td >{card.surname}</td>
-      <td>{card.primarY_PHONE_NO}</td>
-      <td>{card.status===0?"P":card.status===1?'NP':'To be determind'}</td>
-      {card.comment && <td >{card.comment}</td>}
-     {card.batchStatus===0 && <button onClick={()=>card.setNewActive(card)}><AiOutlineEdit/></button>}
+      <td>{card.primary_phone_no}</td>
+      {/* <td>{card.status===0?"P":card.status===1?'NP':'To be determind'}</td> */}
+      { <td >{card.comment && card.comment}</td>}
+     {/* {card.batchStatus===0 && <button onClick={()=>card.setNewActive(card)}><AiOutlineEdit/></button>} */}
     </tr>
 
   )
