@@ -10,9 +10,11 @@ export const searchBatchByParams = async ({batchNo,jobNo,cardNo,page,pageSize}: 
   // console.log("params")
   if(!batchNo&& !jobNo&& !cardNo)return
   try {
-    return await Axios.get(
+    const result = await Axios.get(
       `/batch/search?batchNo=${batchNo}&jobNo=${jobNo}&lassraId=${cardNo}&page=${page}&pageSize=${pageSize}`,
     )
+    console.log(result, 'from searchzBatchy7 Params')
+    return result;
   } catch (e) {
     console.log(e)
   }

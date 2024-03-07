@@ -13,6 +13,8 @@ interface IlistContainer {
   children?: ReactNode
   list?: Icard[] | IcardReceipt[]
   batchStatus?: number
+  add?: ()=>void
+  remove?: ()=>void
 }
 export const ListContainer: React.FC<IlistContainer> = ({
   title,
@@ -20,6 +22,8 @@ export const ListContainer: React.FC<IlistContainer> = ({
   list,
   width,
   batchStatus,
+  add,
+  remove,
   ...props
 }) => {
   // console.log(list,'list from list container')
@@ -110,6 +114,8 @@ export const ListContainer: React.FC<IlistContainer> = ({
                   idx >= start && idx < end
                   &&
                   <ListItems
+                  add
+                  remove
                     {...card}
                     batchStatus={batchStatus}
                     key={card.cardId + ' ' + idx}

@@ -20,7 +20,7 @@ export { }
 function CardProductionReceipt() {
   const location = useLocation()
   const { batchNo } = location.state
-  const [selectedValue, setSelectedValue] = useState(true);
+  const [manual, updateMode] = useState(true);
 
   // console.log(batchNo, "from state")
   const { setPageName, printRef } = useApp() as any
@@ -36,9 +36,9 @@ function CardProductionReceipt() {
   // receivedAt: Date;
   // batchNo: string;
   // cardReceipt: CreateCardReceiptDto[];
-  const handleRadioChange = (event) => {
-    setSelectedValue(event.target.value === 'true');
-  };
+  // const handleRadioChange = (event) => {
+  //   setSelectedValue(event.target.value === 'true');
+  // };
 
   // const { reports, cards, batchDetail } = Cards
   const [card, setCard] = useState<any[]>([])
@@ -52,7 +52,7 @@ function CardProductionReceipt() {
   const fetchNotReceivedCard =
     async () => {
       const result = await getCardCountByStatus(receiptDetail.batchNo, 0)
-      const card = result[0].map(card => ({lassraId:card.lassraId}))
+      const card = result[0].map(card => ({ lassraId: card.lassraId }))
       setCard(result[0])
       //  setReceiptDetail(re)
       //  console.log(result)
@@ -89,7 +89,7 @@ function CardProductionReceipt() {
     }
   }
   useEffect(() => {
-    const cardreceipt = card.map(card => ({lassraId:card.lassraId}))
+    const cardreceipt = card.map(card => ({ lassraId: card.lassraId }))
     setReceiptDetail({ ...receiptDetail, cardReceipt: cardreceipt })
 
   }, [card])
@@ -180,18 +180,15 @@ function CardProductionReceipt() {
                 )}
                 <div className='grid grid-cols-2 gap-4 mb-4'>
 
-                  <button className={button} onClick={fetchNotReceivedCard}>fetch cards</button>
-                  <button className={button}>Enter Card </button>
+                  {manual&&<button className={button} onClick={fetchNotReceivedCard}>fetch cards</button>}
+                 {!manual &&<button className={button}>Enter Card </button>}
+                {!manual&& <button className={button} onClick={()=>updateMode(!manual)}>Polulate automatically</button>}
+               {manual&& <button className={button} onClick={()=>updateMode(!manual)}>Enter manualy</button>}
+
+
                 </div>
-                <input
-          type="radio"
-          id="true"
-          name="selection"
-          value="true"
-          checked={selectedValue === true}
-          onChange={handleRadioChange}
-        />
-        <label htmlFor="true">Show Component A</label>               { card.length>0 && <ListContainer title="CARDS" list={card} />}
+                {manual &&card.length > 0 && <ListContainer title="CARDS" list={card} add remove/>}
+                {!manual &&card.length > 0 && <h1>Manual</h1>}
 
               </div>
             }
@@ -203,7 +200,7 @@ function CardProductionReceipt() {
 
       <ToastContainer position="top-right" newestOnTop />
       {
-        card.length>0 &&<div className='flex justify-center'>
+        card.length > 0 && <div className='flex justify-center'>
           <button className={button + ' mx-2'} onClick={save} ><IoSaveSharp className={' mx-2'} />
             Save</button>
           <button className={button + ' mx-2'} onClick={submit}>Submit<RiSendPlaneFill className={' mx-2'} />

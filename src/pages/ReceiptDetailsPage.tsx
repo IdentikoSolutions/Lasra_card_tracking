@@ -47,11 +47,14 @@ export const ReceiptDetailsPage = () => {
       const result = await searchBatchByParams(searchParams) as AxiosResponse<any, any>
       if (!result?.data) return
       const data = result.data
-      const received = await getCardCountByStatus(data.batchNo, 1)
-      data.received = received[1]
-      const notReceived =await getCardCountByStatus(data.batchNo, 0)
-      data.notReceived = notReceived[1]
-      updateSearch(data)
+      if(data){
+        const received = await getCardCountByStatus(data.batchNo, 1)
+        data.received = received[1]
+        const notReceived =await getCardCountByStatus(data.batchNo, 0)
+        data.notReceived = notReceived[1]
+        updateSearch(data)
+      }
+      
     }, [searchParams])
 
 
@@ -59,13 +62,16 @@ export const ReceiptDetailsPage = () => {
     if (!batchNo) return
     const result = await searchBatchByParams({ batchNo }) as any
     const { data } = result
-    const received = await getCardCountByStatus(data.batchNo, 1)
-    data.received = received[1]
-    const notReceived =await getCardCountByStatus(data.batchNo, 0)
-    data.notReceived = notReceived[1]
-    // console.log(received,notReceived, "from setBatchdetail")
-    setBatchDetail(data)
-    getReceipts()
+    if(data){
+      const received = await getCardCountByStatus(data.batchNo, 1)
+      data.received = received[1]
+      const notReceived =await getCardCountByStatus(data.batchNo, 0)
+      data.notReceived = notReceived[1]
+      // console.log(received,notReceived, "from setBatchdetail")
+      setBatchDetail(data)
+      getReceipts()
+    }
+    
   }
 
 
@@ -87,7 +93,7 @@ export const ReceiptDetailsPage = () => {
       ? '/receipts/receipt'
       : '/receipts/provision'
   useEffect(() => {
-    console.log(searchResult.batchNo, "batchNo in searchRes",batchNo, 'data in usefeect')
+    // console.log(searchResult.batchNo, "batchNo in searchRes",batchNo, 'data in usefeect')
     setData([])
     getBatchDetail()
   }, [receiptPath, listPath, callSearch,batchNo, searchResult])
@@ -186,7 +192,7 @@ export const ReceiptDetailsPage = () => {
           size="xxl"
           className="mb-3"
         >
-          <thead>
+          {data.length>0&&<thead>
             <tr>
               <th><p className='flex uppercase justify-between'>Receipt ID<HiFilter /></p>
               </th>
@@ -195,7 +201,7 @@ export const ReceiptDetailsPage = () => {
               <th><p className='flex uppercase justify-between'>Received By<HiFilter /></p></th>
               <th><p className='flex uppercase justify-between'>Card received<HiFilter /></p></th>
             </tr>
-          </thead>
+          </thead>}
           <tbody>
             {data.map((receipt, idx) => (
               <BatchDetail
