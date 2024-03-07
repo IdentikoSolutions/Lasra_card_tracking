@@ -96,8 +96,8 @@ export const ListContainer: React.FC<IlistContainer> = ({
                   <th ><p className='flex border-2 p-2 uppercase justify-between'>middlename <HiFilter /></p></th>
                   <th ><p className='flex border-2 p-2 uppercase justify-between'>surname <HiFilter /></p></th>
                   <th ><p className='flex border-2 p-2 uppercase justify-between'>primarY_PHONE_NO <HiFilter /></p></th>
-                  <th ><p className='flex border-2 p-2 uppercase justify-between'>status<HiFilter /></p></th>
-                  <th ><p className='flex border-2 p-2 uppercase justify-between'>comments<HiFilter /></p></th>
+                  {/* <th ><p className='flex border-2 p-2 uppercase justify-between'>status<HiFilter /></p></th> */}
+                  {/* <th ><p className='flex border-2 p-2 uppercase justify-between'>comments<HiFilter /></p></th> */}
                 </tr>
               </thead>
             )}

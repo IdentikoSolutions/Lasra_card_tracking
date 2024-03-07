@@ -85,6 +85,13 @@ export interface Iinput{
   type?:string
   // inputProps?:any
 }
+export interface SearchParamsType {
+  batchNo?:string,
+  jobNo?:string,
+  cardNo?:string,
+  page?:string,
+  pageSize?:string
+}
 export interface SearchType {
   field?: string
   padding?: string,

@@ -63,7 +63,7 @@ export const MainSearch: React.FC<SearchType> = ({
   setToggle,
   onChange,
 }) => {
-  // console.log(listPath, 'listpath')
+  console.log(listPath, 'listpath')
   const [selectList, setSelectList] = useState<[any] | []>([])
   const getAllBatches = useCallback(async () => {
     const { data } = await Axios.get(listPath) as any

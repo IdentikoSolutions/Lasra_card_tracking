@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 const apiKey = process.env.REACT_APP_API_KEY
-console.log(apiKey, 'Api key')
+// console.log(apiKey, 'Api key')
 const options = {
-  baseURL: '/cartrackerapi/api/',
+  // baseURL: '/cartrackerapi/api/',
+  baseURL: 'http://localhost:4000',
   headers: {
     accept: 'text/plain',
     'Content-Type': 'application/json',

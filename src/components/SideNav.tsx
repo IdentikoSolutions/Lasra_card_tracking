@@ -33,19 +33,15 @@ export function SideNav() {
       title: 'Card Provision  Receipt',
       list: '',
       icon: <CiReceipt />
-
     },
     {
       page: '/receipts/order', title: 'Dispatch Orders', list: '', icon: <GoInbox />
-
     },
     {
       page: '/receipts/retrival', title: 'Retrival Orders', list: '', icon: <GoInbox />
-
     },
     {
       page: 'delivery', title: 'Home Delivery Orders', list: '', icon: <SiPostman />
-
     },
   ]
   const setActive = (num: number) => {
@@ -54,7 +50,6 @@ export function SideNav() {
   useEffect(() => { }, [cards])
   return (
     <ErrorBoundary
-
       FallbackComponent={FallbackRender}
       onReset={(details) => {
         console.log(details)
@@ -66,13 +61,11 @@ export function SideNav() {
         <Logo />
         <div
           className='bg-white p-0 lg:px-2 min-h-[90vh] w-full flex-1'
-
         >
-
           {options.map((item, idx) => (
-            <>
+            // <>
               <Accordion
-                key={item.page}
+                key={idx+item.page}
                 page={item.page}
                 title={item.title}
                 list={item.list}
@@ -81,7 +74,7 @@ export function SideNav() {
                 idx={idx}
                 icon={item.icon}
               />
-            </>
+            // </>
           ))}
         </div>
       </div>
