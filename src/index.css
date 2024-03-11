@@ -20,6 +20,9 @@ height: 100px;
 /* background-image:url('./src/assets/images/logo2.png'); */
 background-size: cover;
 }
+.tset{
+  background-color: '#f3f30d';
+}
 /* #whatsapp{
   top:100px
 } */

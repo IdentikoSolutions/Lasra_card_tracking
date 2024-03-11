@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import {
   ListContainer,
   ReportACard,
+  Aside, PrintPdf
 } from '../components'
 import { IoSaveSharp } from "react-icons/io5";
 import { RiSendPlaneFill } from "react-icons/ri";
-// import { useDispatch } from 'react-redux'
-// import { IrootState } from '../redux/store'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Aside } from '../components/Aside'
 import { useApp } from '../context/AppContext'
-import { PrintPdf } from '../components/pdfRender'
 import { button, overlay } from '../styles/styles'
 import { getCardCountByStatus, createNewReceipt } from "../services";
 export { }
@@ -21,47 +18,55 @@ function CardProductionReceipt() {
   const location = useLocation()
   const { batchNo } = location.state
   const [manual, updateMode] = useState(true);
-
-  // console.log(batchNo, "from state")
   const { setPageName, printRef } = useApp() as any
   setPageName('Card Production Page')
-  // const dispatch = useDispatch()
-  // let { Cards } = useSelector((state) => {
-  //   return state as IrootState
-  // })
   const [active, toggle] = useState(false)
-  // const navigate = useNavigate()
-  // receivedStatus: number;
-  // receivedBy: string;
-  // receivedAt: Date;
-  // batchNo: string;
-  // cardReceipt: CreateCardReceiptDto[];
-  // const handleRadioChange = (event) => {
-  //   setSelectedValue(event.target.value === 'true');
-  // };
 
-  // const { reports, cards, batchDetail } = Cards
-  const [card, setCard] = useState<any[]>([])
+  const [card, setCard] = useState<any[]>([])//hold list of xcard and all thhe card details
   const [receiptDetail, setReceiptDetail] = useState<any>({
     batchNo,
     receivedStatus: 0,
     receivedBy: '',
     receivedAt: '',
-    cardReceipt: card.map(card => card.lassraId)
+    cardReceipt: card.length ? card.map(card => card?.lassraId):[]
   })
-  const fetchNotReceivedCard =
-    async () => {
+  const addCard = (lassraId) => {
+    console.log("addinfg " + lassraId)
+  }
+  const removeCard = (lassraId) => {
+    console.log("removing " + lassraId)
+
+    // console.log(card, "from removed")
+    const updatedCard = card.map((item)=>{
+      if(item.lassraId===lassraId){
+        console.log(item.lassraId, lassraId, "LassraId")
+        return {...item,include:false}
+      }else{
+        return item
+      }
+    })
+    // console.log(card,updatedCard, "from removed")
+
+    setCard(updatedCard)
+    console.log("removing " + lassraId)
+
+  }
+  const updateCardReceipt = ()=>{
+    // console.log(card, "from updateCardReceipt")
+    const cardreceipt = card.filter(card=>card.include===true).map(card => ({ lassraId: card.lassraId }))
+    setReceiptDetail({ ...receiptDetail, cardReceipt: cardreceipt })
+
+  }
+  const fetchNotReceivedCard =async () => {
       const result = await getCardCountByStatus(receiptDetail.batchNo, 0)
-      const card = result[0].map(card => ({ lassraId: card.lassraId }))
-      setCard(result[0])
-      //  setReceiptDetail(re)
-      //  console.log(result)
+      const cardform = result[0].map(card=>({...card,include:true}))
+      // console.log(cardform,"fetchcards")
+      setCard(cardform)
+     
     }
   const save = async () => {
     const response = await createNewReceipt(receiptDetail)
-    // localStorage.removeItem('Receipt')
     try {
-
       console.log(response, "from save")
       toast.success('receipt created successfull')
     } catch (e: any) {
@@ -74,11 +79,9 @@ function CardProductionReceipt() {
   }
   const submit = async () => {
     try {
-      // save()
       receiptDetail.submissionStatus = 1
       const result = createNewReceipt(receiptDetail)
       console.log(result)
-      // localStorage.removeItem('Receipt');
       toast.success(<h3>Submitted successfully</h3>)
     } catch (e) {
       toast.error(
@@ -88,16 +91,15 @@ function CardProductionReceipt() {
       )
     }
   }
-  useEffect(() => {
-    const cardreceipt = card.map(card => ({ lassraId: card.lassraId }))
-    setReceiptDetail({ ...receiptDetail, cardReceipt: cardreceipt })
 
+  useEffect(() => {
+    // console.log(card, "Card")
+    updateCardReceipt()
   }, [card])
   return (
     <div className='transparent w-full flex-col flex-1'>
       <div className="flex relative  ">
         <PrintPdf title='card production' >
-
           <div ref={printRef} id="content" className='overflow-hidden '>
             {<h1 className='text-[2rem] text-center font-bold'>CARD PRODUCTION RECEIPT</h1>}
             <br />
@@ -106,9 +108,7 @@ function CardProductionReceipt() {
                 {!active && (
                   <div
                     onClick={() => toggle(!active)}
-                    // className="mb-4 shadow-sm w-fit px-4 mr-0 bg-green-100"
                     className={button + ' w-fit'}
-
                   >
                     {active ? 'close report' : 'open report'}
                   </div>
@@ -116,17 +116,14 @@ function CardProductionReceipt() {
                 <div>
                   <h2>Batch Details</h2>
                   <div className=" grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xxl:grid-cols-4 justify-evenly text-gray-600 p-2 m-2  w-full self-center bg-white shadow-sm">
-
                     <div className='md:col-span-1 lg:cols-span-2 xxl:cols-span-2  items-evenly h-full'>
                       <div className="text-gray-500 m-auto flex justify-between flex-1">
                         <span className='font-bold'>Batch No: </span><span>{receiptDetail.batchNo}</span>
                       </div>
                       <p className="flex m-auto justify-between"> <p className=" font-bold">
                         No of Cards:</p> <span>{receiptDetail.cardReceipt?.length}</span></p>
-
                     </div>
                     <div className="  ">
-                      {/* <h2>Cards Received Details</h2> */}
                       <label htmlFor="date" className="mx-5 grid grid-cols-2 gap-1 justify-between w-full">
                         Received At :
                         <input
@@ -157,7 +154,6 @@ function CardProductionReceipt() {
                           }
                         />
                       </label>
-
                     </div>
                   </div>
                 </div>
@@ -174,30 +170,23 @@ function CardProductionReceipt() {
                       >
                         {active ? 'close report' : 'open report'}</button>
                     )}
-
                     <ReportACard />
                   </div>
                 )}
                 <div className='grid grid-cols-2 gap-4 mb-4'>
-
-                  {manual&&<button className={button} onClick={fetchNotReceivedCard}>fetch cards</button>}
-                 {!manual &&<button className={button}>Enter Card </button>}
-                {!manual&& <button className={button} onClick={()=>updateMode(!manual)}>Polulate automatically</button>}
-               {manual&& <button className={button} onClick={()=>updateMode(!manual)}>Enter manualy</button>}
-
-
+                  {manual && !card.length&& <button className={button} onClick={fetchNotReceivedCard}>fetch cards</button>}
+                  {!manual && <button className={button}>Enter Card </button>}
+                  {!manual && <button className={button} onClick={() => updateMode(!manual)}>Polulate automatically</button>}
+                  {manual && <button className={button} onClick={() => updateMode(!manual)}>Enter manualy</button>}
                 </div>
-                {manual &&card.length > 0 && <ListContainer title="CARDS" list={card} add remove/>}
-                {!manual &&card.length > 0 && <h1>Manual</h1>}
-
+                {manual && card.length > 0 && <ListContainer title="CARDS" list={card} add={addCard} remove={removeCard} />}
+                {!manual && card.length > 0 && <h1>Manual</h1>}
               </div>
             }
           </div>
         </PrintPdf>
-
         <Aside />
       </div>
-
       <ToastContainer position="top-right" newestOnTop />
       {
         card.length > 0 && <div className='flex justify-center'>
@@ -205,17 +194,10 @@ function CardProductionReceipt() {
             Save</button>
           <button className={button + ' mx-2'} onClick={submit}>Submit<RiSendPlaneFill className={' mx-2'} />
           </button>
-          {/* <button onClick={() => generatePdf('#content')}>generatepdf</button> */}
         </div>
       }
-
-      {/* </VariableGrid> */}
-      {/* <Footer/> */}
     </div>
   )
 }
 export default CardProductionReceipt
-// function createNewReceipt(details: any) {
-//   throw new Error('Function not implemented.');
-// }
 

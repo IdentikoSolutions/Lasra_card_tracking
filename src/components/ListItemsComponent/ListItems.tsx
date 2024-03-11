@@ -10,7 +10,8 @@ export {}
 //   batchStatus?:number,
 //   setNewActive:(card: Icard)=>void
 // }
-  export const ListItems: React.FC<any> = (card) => {
+  export const ListItems: React.FC<any> = ({add,remove,...card}) => {
+    // console.log(card)
   return (
     <tr className='even:bg-gray-200'>
       <td >{card.lassraId}</td>
@@ -20,7 +21,7 @@ export {}
       <td>{card.primary_phone_no}</td>
       {/* <td>{card.status===0?"P":card.status===1?'NP':'To be determind'}</td> */}
       { <td >{card.comment && card.comment}</td>}
-     <td><button onClick={()=>card.add(card.lassraId)}>add</button><button onClick={()=>card.add(card.lassraId)}>remove</button></td>
+     <td><button onClick={()=>add(card.lassraId)}>add</button><button onClick={()=>remove(card.lassraId)}>remove</button></td>
     </tr>
 
   )

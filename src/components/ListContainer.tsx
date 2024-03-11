@@ -13,8 +13,8 @@ interface IlistContainer {
   children?: ReactNode
   list?: Icard[] | IcardReceipt[]
   batchStatus?: number
-  add?: ()=>void
-  remove?: ()=>void
+  add?: (lassraId:string)=>void
+  remove?: (lasrraId:string)=>void
 }
 export const ListContainer: React.FC<IlistContainer> = ({
   title,
@@ -40,7 +40,7 @@ export const ListContainer: React.FC<IlistContainer> = ({
     if (active !== -1 && active === card.cardId) return reset(-1)
     // reset()
     if (active !== -1) return
-    setActive(card.cardId)
+    setActive(card.id)
     setCurrentCard(card)
     // console.log(currentCard, 'from setNewActive')
   }
@@ -82,13 +82,13 @@ export const ListContainer: React.FC<IlistContainer> = ({
   }, [list, currentPage])
   return (
     <div className=''>
-      <div className="text-gray-800  font-bold ml-3 py-2">{title?.toLocaleUpperCase()}</div>
+      <div className="text-gray-800  font-bold ml-3  py-2">{title?.toLocaleUpperCase()}</div>
       <div className='m-[5px] pt-[10px] flex flex-col min-w-fit h-fit bg-white min-h-[200px]'>
 
-        <div className='overflow-x-scroll w-[90%]'>
+        <div className='overflow-x-scroll  item-center justify-center flex w-full'>
 
           <table
-            className="table-auto m-3 border-4"
+            className="table-auto m-3 border-4 shadow-md"
           >
             {list?.length && (
               <thead className='shadow-md' >
@@ -114,11 +114,11 @@ export const ListContainer: React.FC<IlistContainer> = ({
                   idx >= start && idx < end
                   &&
                   <ListItems
-                  add
-                  remove
+                  add={add}
+                  remove={remove}
                     {...card}
                     batchStatus={batchStatus}
-                    key={card.cardId + ' ' + idx}
+                    key={idx}
                     active={active}
                     reset={reset}
                     setNewActive={setNewActive}
@@ -166,7 +166,7 @@ export const ListContainer: React.FC<IlistContainer> = ({
         ) : (
           ''
         )}
-        {currentCard.toString() !== '{}' && active === currentCard.cardId && (
+        {currentCard.toString() !== '{}' && active === currentCard.id && (
           <EditCard {...currentCard} reset={reset} active={active} />
         )}
       </div>
