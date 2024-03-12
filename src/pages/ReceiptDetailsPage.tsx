@@ -182,7 +182,7 @@ export const ReceiptDetailsPage = () => {
           <p >Total Cards: {batchDetail.noRecords}</p>
           <p> Total Received: {batchDetail.received}</p>
           <p> Total Not Received: {batchDetail.notReceived}</p>
-          <button className={button} onClick={() => { toggleShowReceipt(false); setSearchParams({ ...searchParams, batchNo }); setToggle(true); callSearch() }}>Create new receipt</button>
+          <button className={button} onClick={()=>navigate('/receipts/receipt', { state: { batchNo } })}>Create new receipt</button>
         </div>
         <Table
           striped

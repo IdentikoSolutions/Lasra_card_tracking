@@ -82,15 +82,17 @@ export const ListContainer: React.FC<IlistContainer> = ({
   }, [list, currentPage])
   return (
     <div className=''>
-      <div className="text-gray-800  font-bold ml-3  py-2">{title?.toLocaleUpperCase()}</div>
-      <div className='m-[5px] pt-[10px] flex flex-col min-w-fit h-fit bg-white min-h-[200px]'>
+     {list?.length>0 
+     && <>
+     <div className="text-gray-800  font-bold ml-3  py-2">{title?.toLocaleUpperCase()}</div>
+      <div className='m-[5px] pt-[10px] flex flex-col min-w-fit h-fit bg-white'>
 
         <div className='overflow-x-scroll  item-center justify-center flex w-full'>
 
           <table
             className="table-auto m-3 border-4 shadow-md"
           >
-            {list?.length && (
+            {list?.length >0 && (
               <thead className='shadow-md' >
                 <tr >
                   <th ><p className='flex border-2 p-2 uppercase justify-between'>lasrraId<HiFilter /></p>
@@ -170,6 +172,7 @@ export const ListContainer: React.FC<IlistContainer> = ({
           <EditCard {...currentCard} reset={reset} active={active} />
         )}
       </div>
+      </>}
     </div>
   )
 }
