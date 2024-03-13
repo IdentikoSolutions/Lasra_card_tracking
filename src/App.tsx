@@ -2,29 +2,18 @@ import React, { Suspense } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 // import ReactPlaceholder from 'react-placeholder';
 
-// import 'react-placeholder/lib/reactPlaceholder.css';
 import { GlobalStytle } from './styles/globalstyle.css'
 import LoginPage from './pages/loginPage'
-import AllReceipt from './pages/AllReceipt'
 import { ListSkeleton } from './skeleton.tsx/Listskeleton'
 import { DispatchOrder, OrdersMAngager } from './pages/DispatchOrder'
-import { ReceiptDetailsPage } from './pages/ReceiptDetailsPage'
-import { LandingPage } from './pages/LandingPage'
-import ViewDispatchOrders from './pages/ViewDispatchOrders'
-import ViewSingleDispatch from './pages/ViewSingleDispatch'
+import { ReceiptDetailsPage,LandingPage,ViewDispatchOrders,ViewSingleDispatch, AllReceipt, RequestSummary,ViewRequestByLGACode, ViewSingleRetrivalOrder, ListRelocationHeader} from './pages'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Container, ListGroup } from 'react-bootstrap'
-import RequestSummary from './pages/RequestSummary'
-import ViewRequestByLGACode from './pages/ViewRequestByLGACode'
-import ListRelocationHeader from './pages/listRelocationHeader'
-import ViewSingleRetrivalOrder from './pages/viewSingleRetrivalOrder'
+import { Container} from 'react-bootstrap'
 import HomeDelivery from './pages/homedelivery/HomeDelivery'
 import AllDeliveryRequest from './pages/homedelivery/AllDeliveryRequest'
 import ErrorPage from './pages/homedelivery/ErrorPage'
 import ViewAllHomeDelivery from './pages/homedelivery/ViewAllHomeDelivery'
 import { DeliveryContextProvider } from './context/DeliveryContext'
-// import Error from './pages/homedelivery/Error';
-// import AllDeliveryRequest from './pages/homedelivery/AllDeliveryRequest'
 const CardProductionReceipt = React.lazy(() =>
   import('./pages/CardProductionReceipt'),
 )

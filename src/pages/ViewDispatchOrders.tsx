@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import BatchDetail from '../components/ListItemsComponent/BatchDetail'
 // import { BatchDetail } from '../components/ListItemsComponent'
 
-const ViewDispatchOrders = () => {
+export const ViewDispatchOrders = () => {
   const [orders, setOrders] = useState([])
   const getDispatchOrders = useCallback(async () => {
     const result = await Axios.get('/Dispatch/GetAllBatchDispatched')
@@ -83,4 +83,4 @@ const ViewDispatchOrders = () => {
   )
 }
 
-export default ViewDispatchOrders
+// export default ViewDispatchOrders

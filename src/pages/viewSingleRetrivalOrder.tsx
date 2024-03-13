@@ -13,7 +13,7 @@ import { Table } from 'react-bootstrap';
 // import { warn } from 'console';
 import { getOneDeliveryOrder } from '../services/index';
 
-const ViewSingleRetrivalOrder = () => {
+export const ViewSingleRetrivalOrder = () => {
   const { id } = useParams()
   const [data, setData] = useState<any>({ createRelocationOrder: [], reLocationOrderHeader: {} })
 
@@ -164,4 +164,4 @@ const ViewSingleRetrivalOrder = () => {
   );
 };
 
-export default ViewSingleRetrivalOrder;
+// export default ViewSingleRetrivalOrder;

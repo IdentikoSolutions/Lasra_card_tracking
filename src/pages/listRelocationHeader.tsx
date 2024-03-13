@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-toastify/dist/ReactToastify.css'
 import { Axios } from '../Axios/Axios'
 import { getLGAName } from '../Axios/helpers/getLgaName'
-const ListRelocationHeader = () => {
+export const ListRelocationHeader = () => {
   const [headerList, setHeaderList] = useState<any[]>([])
   const getAllHeader = async () => {
     try {
@@ -59,4 +59,4 @@ const ListRelocationHeader = () => {
   )
 }
 
-export default ListRelocationHeader
+// export default ListRelocationHeader

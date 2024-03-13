@@ -34,7 +34,13 @@ function CardProductionReceipt() {
     cardReceipt: card.length ? card.map(card => card?.lassraId) : []
   })
   const addCard = (lassraId) => {
-    console.log("addinfg " + lassraId)
+    // console.log("addinfg " + lassraId)
+  const cardtoremove = card.filter(card=>card.lassraId===lassraId)[0]
+  const cardIndex =card.indexOf(cardtoremove)
+  // console.log(cardIndex, cardtoremove, " card index")
+  card[cardIndex].include = true;
+// console.log(card,"card after")
+  setCard(card)
   }
   const removeCard = (lassraId) => {
     const updatedCard = card.map((item) => {
@@ -108,7 +114,7 @@ function CardProductionReceipt() {
   useEffect(() => {
     updateCardReceipt()
     console.log(selectedCardList,notSelectedCard,"myCardList")
-  }, [card, manualBatch,currentView])
+  }, [card, manualBatch, currentView, selectedCardList, notSelectedCard])
   return (
     <div className='transparent w-full flex-col flex-1'>
       <div className="flex relative  ">
@@ -199,8 +205,8 @@ function CardProductionReceipt() {
                   && <>
                     {/* <button onClick={() => setCurrentView(!currentView)} className={button}>{!currentView ? "View selected" : "View Not received"}</button> */}
                     {currentView ?
-                     <ListContainer title="Selected Cards" list={selectedCardList} add={addCard} remove={removeCard} /> 
-                    : <ListContainer title="Removed Cards (Not Received)" list={notSelectedCard} add={addCard} remove={removeCard} />}
+                     <ListContainer title="Selected Cards" list={selectedCardList}  remove={removeCard} /> 
+                    : <ListContainer title="Removed Cards (Not Received)" list={notSelectedCard} add={addCard}  />}
                   </>}
                 {!manual && <Manual manualbatch={manualBatch} updateCards={setManualBatch} batchNo={batchNo} />}
               </div>

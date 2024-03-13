@@ -7,7 +7,7 @@ import { SideNav } from '../components'
 import { PageTrail } from '../components/pageTrail'
 import bg_img from '../assets/bg_img.jpeg'
 
-function AllReceipt() {
+export const  AllReceipt=()=> {
   return (
     <div className='flex flex-row w-[100vw]'
     >
@@ -36,4 +36,4 @@ function AllReceipt() {
   )
 }
 
-export default AllReceipt
+// export default AllReceipt

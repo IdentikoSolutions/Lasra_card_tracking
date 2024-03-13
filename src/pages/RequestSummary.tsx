@@ -7,8 +7,7 @@ import Table from 'react-bootstrap/Table'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { getLGAName } from '../Axios/helpers/getLgaName'
 import { useNavigate } from 'react-router-dom'
-
-const RequestSummary = () => {
+export  const RequestSummary = () => {
   const [list, setList] = useState<any[]>([])
 const navigate = useNavigate()
   const [selected, setSelected] = useState(-1)

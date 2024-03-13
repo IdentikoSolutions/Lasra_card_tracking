@@ -118,11 +118,15 @@ export const ReceiptDetailsPage = () => {
         <>
           {!toggle ? (
             <>
-              <button className={button + " h-fit"} onClick={() => setToggle(!toggle)}><AiOutlinePlus />
+             { <button className={button + " h-fit"} onClick={() => setToggle(!toggle)}><AiOutlinePlus />
                 Create new Receipt
                 <Tooltip message='click to create a new batch receipt' />
-              </button>
-              <button className={button + " h-fit"} onClick={() => navigate(nextroute)}><VscDebugContinue className='text-xl' />
+              </button> }
+             { <button className={button + " h-fit"} onClick={() => setToggle(!toggle)}><AiOutlinePlus />
+                Create new Provision Receipt
+                <Tooltip message='click to create a new batch receipt' />
+              </button>}
+              <button className={button + " h-fit"} onClick={() => navigate(nextroute,{state:{batchNo}})}><VscDebugContinue className='text-xl' />
                 <Tooltip message='click to resume the current process' />
               </button>
             </>
@@ -181,8 +185,12 @@ export const ReceiptDetailsPage = () => {
           {batchDetail.bankJobNo && <p >Bank Job No : {batchDetail.bankJobNo}</p>}
           <p >Total Cards: {batchDetail.noRecords}</p>
           <p> Total Received: {batchDetail.received}</p>
+          <p> Total Provisioned: {"not provisioned"}</p>
           <p> Total Not Received: {batchDetail.notReceived}</p>
-          <button className={button} onClick={()=>navigate('/receipts/receipt', { state: { batchNo } })}>Create new receipt</button>
+
+          <p> Total Received Not Provison: {"recieved but not provisioned"}</p>
+          <button className={button} onClick={()=>navigate('/receipts/receipt', { state: { batchNo } })}>Create new card receipt</button>
+          <button className={button} onClick={()=>navigate('/receipts/provision', { state: { batchNo } })}>Create new Provissioning receipt</button>
         </div>
         <Table
           striped

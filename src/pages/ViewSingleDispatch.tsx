@@ -2,18 +2,17 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Axios } from '../Axios/Axios'
 import  OrderBatchSummary  from '../components/ListItemsComponent/OrderBatchSummary'
-import { DetailContainer, DetailField, InputField } from '../components'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Container, ListGroup } from 'react-bootstrap'
-import Card from 'react-bootstrap/Card'
+import { Container } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import { color } from '../artifacts/colors'
-const ViewSingleDispatch = () => {
+
+
+export const ViewSingleDispatch = () => {
   const { id } = useParams()
   const [acknowledgedBy, setAcknowledgedBy] = useState('')
   const[deliveredBy, setDeliveredBy] = useState('')
@@ -51,7 +50,7 @@ const ViewSingleDispatch = () => {
       }
 
     try {
-      const result = await Axios.put(
+       await Axios.put(
         '/Dispatch/UpdateCardDispatchByOrderId',
         payload,
       )
@@ -153,4 +152,4 @@ return <h1>error has occured</h1>    }
   )
 }
 
-export default ViewSingleDispatch
+// export default ViewSingleDispatch

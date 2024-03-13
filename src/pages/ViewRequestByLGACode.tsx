@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Axios } from '../Axios/Axios'
+// import { Axios } from '../Axios/Axios'
 import { useCallback } from 'react'
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
@@ -24,7 +24,7 @@ interface IRODetail {
   collectionCenter: number
   submissionStatus: number
 }
-const ViewRequestByLGACode = () => {
+export const ViewRequestByLGACode = () => {
   const { printRef } = useApp() as any
   const { lgacode } = useParams()
   const [cards, setCard] = useState<any[]>([])
@@ -267,4 +267,4 @@ const ViewRequestByLGACode = () => {
   )
 }
 
-export default ViewRequestByLGACode
+// export default ViewRequestByLGACode
