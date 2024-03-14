@@ -229,4 +229,3 @@ function CardProductionReceipt() {
   )
 }
 export default CardProductionReceipt
-
