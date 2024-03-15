@@ -6,7 +6,7 @@ const {receipts} = useParams()
     return receipts === 'viewreceipts'
     ? '/receipt'
     : receipts === 'viewprovision'
-      ? '/Provisioning/ViewAllProvisionedBatches'
+      ? '/provision'
       : ''
 }
 export const useListPath =()=>{

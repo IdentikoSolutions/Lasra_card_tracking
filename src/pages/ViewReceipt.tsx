@@ -17,6 +17,7 @@ import 'react-toastify/dist/ReactToastify.css'
 function ViewReceipt() {
   const { id } = useParams()
   const location = useLocation()
+  const incomingReceipt= location.state.receipt
   const pathname = location.pathname.substring(0, 15)
   const dispatch = useDispatch()
   const batchid = location.search.split('=')[1]
@@ -48,6 +49,11 @@ function ViewReceipt() {
       // console.log(e)
     }
   }, [pathname, dispatch, id])
+  const reportdata = [
+    { name: 'Total Cards', value: incomingReceipt.noRecords },
+   { name: 'Total received', value: incomingReceipt.received },
+    { name: 'Total Not received', value: incomingReceipt.notReceived }
+  ]
   // getBatch()
   const edit = async () => {
     try {
@@ -71,10 +77,12 @@ function ViewReceipt() {
   return (
     <ErrorBoundary FallbackComponent={FallbackRender} onReset={(details) => { }}>
       <div className="p-2">
-        <button className='hover:text-red-400 hover:underline' onClick={() => toggleShow(!show)}>{show ? 'Show' : "Hide "} Details</button>
+        <button className='hover:text-red-400 hover:underline'
+         onClick={() => toggleShow(!show)}>{show 
+         ? 'Show' : "Hide "} Details</button>
 
         {show ?
-          <Reports /> :
+          <Reports reportData={reportdata} /> :
           (<>
             <h2>Details page</h2>
             <div className='flex-col flex '>

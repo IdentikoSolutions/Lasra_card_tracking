@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import CardReducer from "./CardReducer";
-import AuthReducer from "./AuthReducer";
+// import AuthReducer from "./AuthReducer";
 import { IbatchDetail, Icard, Ireceipt } from "../interface/interface";
 export interface IrootState{
     Auth:any,
@@ -13,7 +13,7 @@ receipt?:Ireceipt
 }
 export default configureStore({
     reducer:{
-        Auth:AuthReducer,
+        // Auth:AuthReducer,
         Cards:CardReducer
     }
 })

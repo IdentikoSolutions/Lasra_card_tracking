@@ -15,8 +15,9 @@ export const Manual = ({ manualbatch, batchNo, updateCards }) => {
         const isCardAdd =manualbatch.find(card=>card.lassraId===id)
         if(isCardAdd)return toast.error(<><h3>Error</h3> <p>Card already added</p></>)
        if(newcard){
-        console.log(newcard, "new cards",id,batchNo)
+        // console.log(newcard, "new cards",id,batchNo)
         updateCards([...manualbatch, newcard])
+        setId('')
    
        }  }
     const removeCard = async (lassraId) => {

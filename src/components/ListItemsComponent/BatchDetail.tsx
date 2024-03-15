@@ -6,13 +6,14 @@ interface Field {
   field: string[];
   receiptPath: string
   onClick?: (event: any) => void
+  receipt?: any
 }
 // export
-const BatchDetail: React.FC<Field> = ({ field, receiptPath, onClick }) => {
+const BatchDetail: React.FC<Field> = ({ field, receiptPath, onClick,receipt }) => {
   const navigate = useNavigate()
   const handleclick = useCallback((batchnumber: number) => {
     if (receiptPath === "") {
-      onClick()
+      // onClick()
       return
     }
     if (receiptPath === '/receipt') {
@@ -21,7 +22,7 @@ const BatchDetail: React.FC<Field> = ({ field, receiptPath, onClick }) => {
       navigate(`/receipts/receipts?batch=${batchnumber}`)
     } else {
       console.log(receiptPath)
-      navigate(receiptPath)
+      navigate(receiptPath,{state:{receipt}})
     }
   }, [])
   return (

@@ -1,18 +1,18 @@
 import React from 'react';
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { GoHome } from "react-icons/go";
-import { SumaryCard } from './SumaryCard';
-import blue from '../assets/blue.jpeg'
-import purple from '../assets/purple.jpeg'
-import red from '../assets/galaxy.jpeg'
+// import { SumaryCard } from './SumaryCard';
+// import blue from '../assets/blue.jpeg'
+// import purple from '../assets/purple.jpeg'
+// import red from '../assets/galaxy.jpeg'
 // import gift from '../assets/gift.html'
 export const PageTrail = () => {
-    const params =useParams()
+   
+
     const { pathname } = useLocation()
     const paths = pathname.split("/")
     paths.shift()
     paths.shift()
-    console.log(params, 'Params')
 
     return (
         <div className=' my-[15px] mx-12'>

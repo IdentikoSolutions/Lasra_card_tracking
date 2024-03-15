@@ -19,7 +19,7 @@ interface IlistContainer {
 export const ListContainer: React.FC<IlistContainer> = ({
   title,
   children,
-  list,
+  list=[],
   width,
   batchStatus,
   add,
@@ -78,7 +78,7 @@ export const ListContainer: React.FC<IlistContainer> = ({
 
     })
   useEffect(() => {
-    console.log(currentPage)
+    // console.log(currentPage)
   }, [list, currentPage])
   return (
     <div className=''>

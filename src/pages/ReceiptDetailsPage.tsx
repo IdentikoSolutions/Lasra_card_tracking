@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { getReceiptsNos, getCardCountByStatus, searchBatchByParams, getCardsAndCount } from '../services/'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import { FaEye } from "react-icons/fa";
 import { MdOutlinePostAdd } from "react-icons/md";
@@ -38,6 +38,15 @@ export const ReceiptDetailsPage = () => {
   const [data, setData] = useState<any[]>([])
   const [batchDetail, setBatchDetail] = useState<any>({})
   const [showReceipt, toggleShowReceipt] = useState(false)
+  const {receipts} =useParams()
+  // console.log(receipts, 'Params')
+  const receiptPath = useReceiptPath()
+  const listPath = useListPath()
+  const searchApi = useSearchApi()
+  const nextroute =
+    searchApi === '/Batch/GetCardByBatchId?id'
+      ? '/receipts/receipt'
+      : '/receipts/provision'
   // const reset = () => {
   //   toggleShowReceipt(false);
   //   setToggle(false);
@@ -62,11 +71,15 @@ export const ReceiptDetailsPage = () => {
     if (!batchNo) return
     const result = await searchBatchByParams({ batchNo }) as any
     const { data } = result
+    console.log(result, "getBatchDetail" )
     if(data){
       const received = await getCardCountByStatus(data.batchNo, 1)
       data.received = received[1]
       const notReceived =await getCardCountByStatus(data.batchNo, 0)
       data.notReceived = notReceived[1]
+      const provisioned = await getCardCountByStatus(data.batchNo, 3)
+      data.provisioned =provisioned[1]
+      data.receiptNotProvisioned=received[1]-provisioned[1]
       // console.log(received,notReceived, "from setBatchdetail")
       setBatchDetail(data)
       getReceipts()
@@ -75,23 +88,24 @@ export const ReceiptDetailsPage = () => {
   }
 
 
-  const getReceipts = () => batchNo && getReceiptsNos(receiptPath + `?batchNo=${batchNo}`)
+  const getReceipts = () => {
+  console.log(receiptPath, 'receiptpath from get receiptts');
+    batchNo && getReceiptsNos(receiptPath + `?batchNo=${batchNo}`)
     .then(async (result) => {
       // console.log(result,'result')
       for (const r of result) {
         const count = await getCardsAndCount(r.id)
         r.count = count.data[1]
       }
+      console.log(result,'from getReceipts in receiptdetails page')
+
       setData(result)
     })
-    .catch((error) => toast.error(error))
-  const receiptPath = useReceiptPath()
-  const listPath = useListPath()
-  const searchApi = useSearchApi()
-  const nextroute =
-    searchApi === '/Batch/GetCardByBatchId?id'
-      ? '/receipts/receipt'
-      : '/receipts/provision'
+    .catch((error) => toast.error(error))}
+
+  
+
+
   useEffect(() => {
     // console.log(searchResult.batchNo, "batchNo in searchRes",batchNo, 'data in usefeect')
     setData([])
@@ -103,7 +117,7 @@ export const ReceiptDetailsPage = () => {
       {
         !showReceipt && !toggle && <div className='w-fit h-fit flex'>
           <input className={'w-[3rem] m-0 active:border-2 active:bg-green-200'}
-            type="text"
+            type="number"
             value={batchNo}
             onChange={(e) => setBatchNo(e.target.value)} />
           <button className={button}
@@ -118,15 +132,15 @@ export const ReceiptDetailsPage = () => {
         <>
           {!toggle ? (
             <>
-             { <button className={button + " h-fit"} onClick={() => setToggle(!toggle)}><AiOutlinePlus />
+             { receipts==='viewreceipts'&&<button className={button + " h-fit"} onClick={() => setToggle(!toggle)}><AiOutlinePlus />
                 Create new Receipt
                 <Tooltip message='click to create a new batch receipt' />
               </button> }
-             { <button className={button + " h-fit"} onClick={() => setToggle(!toggle)}><AiOutlinePlus />
+             {receipts==='viewprovision'&& <button className={button + " h-fit"} onClick={() => setToggle(!toggle)}><AiOutlinePlus />
                 Create new Provision Receipt
                 <Tooltip message='click to create a new batch receipt' />
               </button>}
-              <button className={button + " h-fit"} onClick={() => navigate(nextroute,{state:{batchNo}})}><VscDebugContinue className='text-xl' />
+              <button className={button + " h-fit"} onClick={() => batchNo &&navigate(nextroute,{state:{batchNo}})}><VscDebugContinue className='text-xl' />
                 <Tooltip message='click to resume the current process' />
               </button>
             </>
@@ -185,12 +199,12 @@ export const ReceiptDetailsPage = () => {
           {batchDetail.bankJobNo && <p >Bank Job No : {batchDetail.bankJobNo}</p>}
           <p >Total Cards: {batchDetail.noRecords}</p>
           <p> Total Received: {batchDetail.received}</p>
-          <p> Total Provisioned: {"not provisioned"}</p>
+          {receipts==='viewprovision' &&<p> Total Provisioned: {batchDetail.provisioned}</p>}
           <p> Total Not Received: {batchDetail.notReceived}</p>
 
-          <p> Total Received Not Provison: {"recieved but not provisioned"}</p>
-          <button className={button} onClick={()=>navigate('/receipts/receipt', { state: { batchNo } })}>Create new card receipt</button>
-          <button className={button} onClick={()=>navigate('/receipts/provision', { state: { batchNo } })}>Create new Provissioning receipt</button>
+          {receipts==='viewprovision' &&<p> Total Received Not Provison: {batchDetail.receiptNotProvisioned}</p>}
+          {receipts==='viewreceipts' &&<button className={button} onClick={()=>navigate('/receipts/receipt', { state: { batchNo } })}>Create new card receipt</button>}
+          {receipts==='viewprovision' &&<button className={button} onClick={()=>navigate('/receipts/provision', { state: { batchNo } })}>Create new Provissioning receipt</button>}
         </div>
         <Table
           striped
@@ -213,6 +227,7 @@ export const ReceiptDetailsPage = () => {
           <tbody>
             {data.map((receipt, idx) => (
               <BatchDetail
+              receipt={receipt}
                 key={idx}
                 field={[
                   receipt?.id,

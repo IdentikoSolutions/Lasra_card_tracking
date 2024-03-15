@@ -54,12 +54,13 @@ function CardProductionReceipt() {
   }
   const selectedCardList = card.filter(cards => cards.include === true)
   const notSelectedCard = card.filter(cards => cards.include === false)
+
   const updateCardReceipt = () => {
     //list of selected cards in automatically populated list
     const cardreceipt = card.filter(card => card.include === true)
     //determines which list to use to generate receive.dependes of mode
     const list = card.length > 0 ? cardreceipt : manualBatch.length > 0 ? manualBatch : []
-    console.log(list, "my list")
+    // console.log(list, "my list")
     //final list for receipt
     const receiptIds = list.map(card => ({ lassraId: card.lassraId }))
     setReceiptDetail({ ...receiptDetail, cardReceipt: receiptIds })
@@ -69,7 +70,7 @@ function CardProductionReceipt() {
     const cardform = result[0].map(card => ({ ...card, include: true }))
     setCard(cardform)
   }
-
+// updateCardReceipt()
   // const save = async () => {
   //   const response = await createNewReceipt(receiptDetail)
   //   try {
@@ -113,8 +114,8 @@ function CardProductionReceipt() {
 
   useEffect(() => {
     updateCardReceipt()
-    console.log(selectedCardList,notSelectedCard,"myCardList")
-  }, [card, manualBatch, currentView, selectedCardList, notSelectedCard])
+    console.log("myCardList")
+  }, [card,manual, manualBatch, currentView,selectedCardList,notSelectedCard])
   return (
     <div className='transparent w-full flex-col flex-1'>
       <div className="flex relative  ">
