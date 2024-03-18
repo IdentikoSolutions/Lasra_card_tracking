@@ -29,7 +29,11 @@ export const Manual = ({ manualbatch, batchNo, updateCards }) => {
             <div className='flex items-center'>
                 <label htmlFor='lassraId' className='text-green-900 font-bold text-center shadow-md'> Lassra Id: </label> <input type="text" id='lassraId'  className='mx-4 h-fit py-1 shadow-md'  value={id} onChange={(e) => setId(e.target.value)} /> <button className={button} onClick={fetchCard}>Add</button>
             </div>
-            {manualbatch.length > 0 && <ListContainer title="CARDS" list={manualbatch} add={() => ''} remove={removeCard} />}
+            {manualbatch.length > 0 && <ListContainer title="CARDS" 
+            list={manualbatch}
+            //  add={() => ''} 
+             add={removeCard} 
+             />}
             <ToastContainer position="bottom-right" newestOnTop />
 
         </div>

@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Outlet, useLocation, useOutletContext } from 'react-router-dom'
 import {  Filter, InputField, InputFieldContainer } from '../components'
-// import { color } from '../artifacts/colors'
-// import { FlexRow, WrapperDiv } from '../styles/styles'
-import styled from 'styled-components'
 import OrderBatchSummary from '../components/ListItemsComponent/OrderBatchSummary'
 import { IFilterProp, Icard, Iorder } from '../interface/interface'
 import { Axios } from '../Axios/Axios'
@@ -13,22 +10,7 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useNavigate } from 'react-router-dom'
 import { button } from '../styles/styles'
-// const FlexX = styled(FlexRow)`
-//   width: fit-content;
-//   align-content: center;
-//   justify-content: center;
-//   margin: 0;
-//   padding: 0;
-//   h2 {
-//     margin: 0;
-//   }
-//   button {
-//     width: fit-content;
-//   }
-//   h3 {
-//     margin: 0;
-//   }
-// `
+
 
 export const DispatchOrder = () => {
   const navigate = useNavigate()
@@ -152,7 +134,7 @@ export const DispatchOrder = () => {
     <div>
       <div className='flex'>
         {' '}
-        <h2>Batches:  </h2>
+        {/* <h2>Batches:  </h2> */}
         <InputGroup className=" mb-3 mx-3">
           <button className='hover:bg-green-500 hover:text-white bg-green-100 p-2 rounded-md border-1' onClick={() => { navigate("/receipts/order") }}>View Orders</button>
           <button className='hover:bg-green-500  hover:text-white bg-green-100 p-2 rounded-md border-1' onClick={getCard} >Add Order</button>
