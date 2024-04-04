@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Axios } from '../Axios/Axios'
-import  OrderBatchSummary  from '../components/ListItemsComponent/OrderBatchSummary'
+import { useLocation } from 'react-router-dom'
+// import  OrderBatchSummary  from '../components/ListItemsComponent/OrderBatchSummary'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -13,6 +14,8 @@ import Col from 'react-bootstrap/Col'
 
 
 export const ViewSingleDispatch = () => {
+  const {receipt} = useLocation().state
+  console.log(receipt,"location")
   const { id } = useParams()
   const [acknowledgedBy, setAcknowledgedBy] = useState('')
   const[deliveredBy, setDeliveredBy] = useState('')
@@ -136,7 +139,7 @@ return <h1>error has occured</h1>    }
         )}
       </Form>
 
-      {order.map((order, idx) => (
+      {/* {order.map((order, idx) => (
         <OrderBatchSummary
           key={idx}
           cards={order.cards}
@@ -145,8 +148,8 @@ return <h1>error has occured</h1>    }
           dispatcherName={''}
           pickUpDate={''}
           batchDispatchStatus={0}
-        />
-      ))}
+        /> */}
+      {/* ))} */}
       <ToastContainer position="bottom-right" newestOnTop/>
     </Container>
   )

@@ -1,58 +1,70 @@
-import React, { memo } from 'react'
-// import { BatchDetail } from './BatchDetail'
-import styled from 'styled-components'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table'
-import { IcardReceipt, Iorder, ReceiptType } from '../../interface/interface'
 import BatchDetail from './BatchDetail'
-const OrderWrapper = styled.div`
-  background: white;
-  border: 3px black solid;
-  display: grid;
-  grid-template-columns: 200px auto;
-`
-const OrderContent = styled(OrderWrapper)`
-  grid-template-columns: auto;
+import { fetchOneCard } from '../../services'
 
-  border-left: 1px solid #ccc;
-  border-radius: 0 0 0 15px;
-  overflow-y: hidden;
-  border: 3px 0;
-  margin: 100px;
-  margin: 5px 2px;
-`
-const OrderBatchSummary: React.FC<Iorder> = (cards) => {
-  console.log(cards.cards[0], 'cards')
+export const OrderBatchSummary: React.FC<{cards:any}> = ({ cards }) => {
+  // console.log(cards, 'cards')
+  const [OrderCard, setOrderCard] = useState<any[]>([])
+  const batchNoList =OrderCard.map(card => card.batchNo)
+    const batchSet = new Set(batchNoList)
+  const batches = Array.from(batchSet).map(card => ({
+    batchId: card,
+    count: OrderCard.filter(item => item.batchNo === card).length,
+    cards: OrderCard.filter(item => item.batchNo === card)
+
+  }))
+  // console.log(batches, 'Batches')
+  const fullCardInfo = useCallback(() => {
+    console.log("callled");
+  return Promise.all(cards.map(async (card: { lassraId: string }) => await fetchOneCard(card.lassraId, '')))
+  .then(values => {
+    setOrderCard(values)
+  })},[cards])
+
+  useEffect(() => {
+    const result = fullCardInfo()
+    // console.log(result, 'full card info')
+
+  }, [cards])
   return (
-    <OrderWrapper>
-      <div style={{ padding: '1rem' }}>
-        <p>batchId: {cards.batchId}</p>
-        <p>noRecords: {cards.noRecords}</p>
-        <p>Destination: {cards.destination}</p>
-      </div>
-      <OrderContent>
-      <Table striped bordered hover variant="flat" size="xxl" className="mb-3">
+    <div className='bg-white shadow-md'>
+      {
+      batches.map((item ,idx)=> (<div key={idx}><BatchSumary batch={item} /> <hr/></div>))
+    }
+    </div>
+  )
+}
+// export default memo(OrderBatchSummary)
+const BatchSumary: React.FC<{ batch: any }> = ({ batch }) => {
+  // console.log(batch)
+  return <div className='flex flex-1 justify-evenly mt-4'>
+    <div className='font-bold '>
+      <p>Batch No: {batch.batchId}</p>
+      <p>No of Records: {batch.count}</p>
+    </div>
+    <div>
+      <Table striped bordered hover variant="flat" size="xxl" className="mb-1 border-l-2 flex-1 rounded-md">
         <tbody>
-          {cards.cards &&
-            cards.cards.map((card, idx) => (
+          {batch.cards.length > 0 &&
+            batch.cards.map((card: { lassraId: string; surname: string; first_name: string; middle_name: string }, idx: React.Key | null | undefined) => (
               <BatchDetail
                 receiptPath=""
                 key={idx}
                 field={[
-                  card.lasrraId,
+                  card.lassraId,
                   card.surname,
-                  card.firstname,
-                  card.middlename,
+                  card.first_name,
+                  card.middle_name,
                   // card.cardId.toString(),
-                  `${card.status === 0 ? 'received' : 'not received'}`,
-                  card.comment,
+                  // `${card.status === 0 ? 'received' : 'not received'}`,
+                  // card.comment,
                 ]}
               />
             ))}
         </tbody>
       </Table>
 
-      </OrderContent>
-    </OrderWrapper>
-  )
+    </div>
+  </div>
 }
-export default memo(OrderBatchSummary)

@@ -6,7 +6,7 @@ import Form from "react-bootstrap/Form"
 import InputGroup from 'react-bootstrap/InputGroup'
 export const InputField: React.FC<Iinput> = ({
   label,
-  onChange,
+  onChange ,
   onClick,
   ...inputProps
 }) => {
@@ -14,12 +14,13 @@ export const InputField: React.FC<Iinput> = ({
     <Col>
       <InputGroup className="my-2 ">
         {label &&
-          <InputGroup.Text className="bg-default"
+          <InputGroup.Text className="bg-default min-w-200"
           >
             {label}
             <Form.Control
               {...inputProps}
-              onChange={onChange} />
+              onChange={onChange} 
+              />
           </InputGroup.Text>}
       </InputGroup>
     </Col>

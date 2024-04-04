@@ -49,7 +49,7 @@ function AllDeliveryRequest() {
     } catch (e) {
       console.log(e)
     }
-  }, [])
+  }, [setRequest])
   useEffect(() => {
     getRequest()
     // console.log(mode,current,'from all delivery')
@@ -152,7 +152,7 @@ const RequestItem: React.FC<IRequest> = (item) => {
   // console.log(item.current,'=current',item.id,'= id all delivery request condition')
   useEffect(() => {
     // console.log(item.current)
-  }, [item.current])
+  }, [item])
   return (
     <tr onClick={handleclick}>
       {/* {item.mode && <ModalWrap><DeliveryOrder {...item} /></ModalWrap>} */}

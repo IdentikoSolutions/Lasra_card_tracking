@@ -31,7 +31,7 @@ function Provisioned() {
     provisioneAt: '',
     cardProvision: card.length ? card.map(card => card?.lassraId) : []
   })
-  const addCard = (lassraId) => {
+  const addCard = (lassraId:string) => {
     // console.log("addinfg " + lassraId)
   const cardtoremove = card.filter(card=>card.lassraId===lassraId)[0]
   const cardIndex =card.indexOf(cardtoremove)
@@ -40,7 +40,7 @@ function Provisioned() {
 // console.log(card,"card after")
   setCard(card)
   }
-  const removeCard = (lassraId) => {
+  const removeCard = (lassraId:string) => {
     const updatedCard = card.map((item) => {
       if (item.lassraId === lassraId) {
         return { ...item, include: false }
@@ -65,11 +65,12 @@ function Provisioned() {
   }
   const fetchReceivedCard = async () => {
     const result = await getCardCountByStatus(provisionDetail.batchNo, 1)
-    const cardform = result[0].map(card => ({ ...card, include: true }))
+    const cardform = result[0].map((card: any) => ({ ...card, include: true }))
     setCard(cardform)
   }
 
   const submit = async () => {
+    if(provisionDetail.cardProvision.length<=0)return
     if(provisionDetail.provisionedAt===''||provisionDetail.provisionedBy==='') {
       toast.warn("make sure all neccessary fields are filled")
       return
@@ -78,8 +79,8 @@ function Provisioned() {
       // receiptDetail.submissionStatus = 1
       const result = await createNewProvision(provisionDetail)
       console.log(result)
-      if(result.status===200){
-        toast.success(<h3>Submitted successfully</h3>)
+      if(result.status===201){
+        toast.success(<h3>result.data</h3>)
 
       }else{
         console.log(result.statusText, "status Text")

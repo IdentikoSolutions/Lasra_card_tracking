@@ -18,7 +18,7 @@ export const Reports:React.FC<any> = ({reportData}) => {
         <h3>Batch report</h3>
         <div className='flex justify-evenly border-2 flex-wrap'>
         {
-            reportData?.map((item, idx) => <SumaryCard name={item.name} value={item.value} main={item.main} sub={item.sub} key={idx} />)
+            reportData?.map((item: { name: any; value: any; main: any; sub: any }, idx: any) => <SumaryCard name={item.name} value={item.value} main={item.main} sub={item.sub} key={idx} />)
         }
     </div>
     </>)

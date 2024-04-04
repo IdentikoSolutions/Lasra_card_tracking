@@ -1,7 +1,7 @@
 import React from 'react';
-import { DetailWrapper } from '../styles/styles';
-import { Idiv, IinputFieldContainer } from '../interface/interface';
-import styled from 'styled-components';
+// import { DetailWrapper } from '../styles/styles';
+import { IinputFieldContainer } from '../interface/interface';
+// import styled from 'styled-components';
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import "bootstrap/dist/css/bootstrap.min.css";

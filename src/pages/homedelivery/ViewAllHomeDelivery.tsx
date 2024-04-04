@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Axios } from '../../Axios/Axios';
-import Logo from '../../artifacts/Logo';
+// import Logo from '../../artifacts/Logo';
 import Table from 'react-bootstrap/Table'
 import 'bootstrap/dist/css/bootstrap.min.css'
 

@@ -56,7 +56,7 @@ export function SideNav() {
       }}
     >
       <div
-        className=' flex-col hidden sm:flex w-[20%] p-0'
+        className=' flex-col hidden sm:flex w-[20%] p-0 border-r-2 border-zinc-500'
       >
         <Logo />
         <div

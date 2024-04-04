@@ -33,7 +33,7 @@ function CardProductionReceipt() {
     receivedAt: '',
     cardReceipt: card.length ? card.map(card => card?.lassraId) : []
   })
-  const addCard = (lassraId) => {
+  const addCard = (lassraId:string) => {
     // console.log("addinfg " + lassraId)
   const cardtoremove = card.filter(card=>card.lassraId===lassraId)[0]
   const cardIndex =card.indexOf(cardtoremove)
@@ -42,7 +42,7 @@ function CardProductionReceipt() {
 // console.log(card,"card after")
   setCard(card)
   }
-  const removeCard = (lassraId) => {
+  const removeCard = (lassraId:string) => {
     const updatedCard = card.map((item) => {
       if (item.lassraId === lassraId) {
         return { ...item, include: false }
@@ -67,7 +67,7 @@ function CardProductionReceipt() {
   }
   const fetchNotReceivedCard = async () => {
     const result = await getCardCountByStatus(receiptDetail.batchNo, 0)
-    const cardform = result[0].map(card => ({ ...card, include: true }))
+    const cardform = result[0].map((card: any) => ({ ...card, include: true }))
     setCard(cardform)
   }
 // updateCardReceipt()

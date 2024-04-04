@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { getReceiptsNos, getCardCountByStatus, searchBatchByParams, getCardsAndCount } from '../services/'
+import { getReceiptsNos, getCardCountByStatus, searchBatchByParams, getCardsAndCount, getProvisionedCardsAndCount } from '../services/'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import { FaEye } from "react-icons/fa";
@@ -55,7 +55,8 @@ export const ReceiptDetailsPage = () => {
     async () => {
       const result = await searchBatchByParams(searchParams) as AxiosResponse<any, any>
       if (!result?.data) return
-      const data = result.data
+      const data = result?.data
+      console.log(data," from callsearch")
       if(data){
         const received = await getCardCountByStatus(data.batchNo, 1)
         data.received = received[1]
@@ -68,20 +69,26 @@ export const ReceiptDetailsPage = () => {
 
 
   const getBatchDetail = async () => {
+    // console.log(batchDetail,"batchdetail", data);
     if (!batchNo) return
     const result = await searchBatchByParams({ batchNo }) as any
-    const { data } = result
-    console.log(result, "getBatchDetail" )
+    // const { data } = result
+    // console.log(result, "getBatchDetail" )
+    console.log(result,'type of result');
+
     if(data){
-      const received = await getCardCountByStatus(data.batchNo, 1)
-      data.received = received[1]
-      const notReceived =await getCardCountByStatus(data.batchNo, 0)
-      data.notReceived = notReceived[1]
-      const provisioned = await getCardCountByStatus(data.batchNo, 3)
-      data.provisioned =provisioned[1]
-      data.receiptNotProvisioned=received[1]-provisioned[1]
+      let batchinfo={...result.data} as any
+      const received = await getCardCountByStatus(batchNo, 1)
+      const notReceived =await getCardCountByStatus(batchNo, 0)
+      batchinfo.notReceived = notReceived[1]
+      const provisioned = await getCardCountByStatus(batchNo, 2)
+      batchinfo.provisioned =provisioned[1]
+      batchinfo.received = received[1]+provisioned[1]
+
+      batchinfo.receiptNotProvisioned=received[1]
+      // console.log(data,'Data ')
       // console.log(received,notReceived, "from setBatchdetail")
-      setBatchDetail(data)
+      setBatchDetail(batchinfo)
       getReceipts()
     }
     
@@ -89,22 +96,31 @@ export const ReceiptDetailsPage = () => {
 
 
   const getReceipts = () => {
-  console.log(receiptPath, 'receiptpath from get receiptts');
+  // console.log(receiptPath, 'receiptpath from get receiptts');
     batchNo && getReceiptsNos(receiptPath + `?batchNo=${batchNo}`)
     .then(async (result) => {
-      // console.log(result,'result')
+      // console.log(result,'result 100')
       for (const r of result) {
-        const count = await getCardsAndCount(r.id)
-        r.count = count.data[1]
-      }
-      console.log(result,'from getReceipts in receiptdetails page')
+        let count;
+        if(receipts==='viewreceipts'){
+          count = await getCardsAndCount(r.id)
 
+        }else if(receipts==='viewprovision'){
+          count= await getProvisionedCardsAndCount(r.id)
+        }
+// console.log(count, 'count')
+        r.count = count?.data[1]
+      }
+      // console.log(result,'from getReceipts in receiptdetails page')
       setData(result)
     })
     .catch((error) => toast.error(error))}
 
-  
-
+  const showforReceipt =[
+    { name: 'Total Cards', value: batchDetail.noRecords },
+     { name: 'Total received', value: batchDetail.received },
+   { name: 'Total Not received', value: batchDetail.notReceived }]
+const showforprovision =showforReceipt.concat( { name: 'Total provisioned', value: batchDetail.provisioned })
 
   useEffect(() => {
     // console.log(searchResult.batchNo, "batchNo in searchRes",batchNo, 'data in usefeect')
@@ -193,7 +209,7 @@ export const ReceiptDetailsPage = () => {
 
       {/* {loading && <Spinner bg="skyblue"></Spinner>} */}
       {showReceipt && <div className='bg-white p-[20px] overflow-hidden'>
-        <Reports reportData={[{ name: 'Total Cards', value: batchDetail.noRecords }, { name: 'Total received', value: batchDetail.received }, { name: 'Total Not received', value: batchDetail.notReceived }]} />
+        <Reports reportData={receipts==="viewreceipts"? showforReceipt : showforprovision} />
         <div className='rounded-md m-3 text-[1.2rem] grid gapc-4 grid-cols-1 md:grid-cols-3 xxl:grid-cols-4'>
           {batchDetail.batchNo && <p>Batch : {batchDetail.batchNo}</p>}
           {batchDetail.bankJobNo && <p >Bank Job No : {batchDetail.bankJobNo}</p>}
@@ -216,12 +232,12 @@ export const ReceiptDetailsPage = () => {
         >
           {data.length>0&&<thead>
             <tr>
-              <th><p className='flex uppercase justify-between'>Receipt ID<HiFilter /></p>
+              <th><p className='flex uppercase justify-between'>{receipts==="viewreceipts" ?"Receipt ID":receipts==="viewprovision"? "Provision ID":""}<HiFilter /></p>
               </th>
               <th><p className='flex uppercase justify-between'>Batch NO.<HiFilter /></p></th>
-              <th><p className='flex uppercase justify-between'>Received On<HiFilter /></p></th>
-              <th><p className='flex uppercase justify-between'>Received By<HiFilter /></p></th>
-              <th><p className='flex uppercase justify-between'>Card received<HiFilter /></p></th>
+              <th><p className='flex uppercase justify-between'>{receipts==="viewreceipts" ?"Received On":receipts==="viewprovision"? "Provision On":""}<HiFilter /></p></th>
+              <th><p className='flex uppercase justify-between'>{receipts==="viewreceipts" ?"Received By ID":receipts==="viewprovision"? "Provisioned By":""}<HiFilter /></p></th>
+              <th><p className='flex uppercase justify-between'>{receipts==='viewreceipts'?"Card received":receipts==='viewprovision'? 'Card Provision':''}<HiFilter /></p></th>
             </tr>
           </thead>}
           <tbody>
@@ -232,8 +248,8 @@ export const ReceiptDetailsPage = () => {
                 field={[
                   receipt?.id,
                   receipt?.batchNo,
-                  receipt?.receivedAt.substring(0, 10),
-                  receipt?.receivedBy,
+                  receipt?.receivedAt?.substring(0, 10)||receipt.provisionedAt.substring(0,10),
+                  receipt?.receivedBy||receipt.provisionedBy,
                   receipt?.count,
                   // receipt?.receivedOn?.substring(0, 10),
                 ]}
@@ -248,7 +264,7 @@ export const ReceiptDetailsPage = () => {
     </div>
   )
 }
-export const Tooltip: React.FC<{ message }> = ({ message }) => {
+export const Tooltip: React.FC<{ message:string }> = ({ message }) => {
   return (<div className='hidden group-hover:inline absolute top-[30px] left-0 text-gray-400 w-fit'>{message}</div>)
 
 }

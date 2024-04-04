@@ -8,11 +8,11 @@ import { ToastContainer, toast } from 'react-toastify'
 
 //WILL Receive list from parent, should updaate the list from parent,
 //should also  receive batchnO from parent
-export const Manual = ({ manualbatch, batchNo, updateCards }) => {
+export const Manual:React.FC<{manualbatch:any, batchNo:string, updateCards:any }> = ({ manualbatch, batchNo, updateCards }) => {
     const [id, setId] = useState<string>('')
     const fetchCard = async () => {
         const newcard = await fetchOneCard(id, batchNo)
-        const isCardAdd =manualbatch.find(card=>card.lassraId===id)
+        const isCardAdd =manualbatch.find((card: { lassraId: string; })=>card.lassraId===id)
         if(isCardAdd)return toast.error(<><h3>Error</h3> <p>Card already added</p></>)
        if(newcard){
         // console.log(newcard, "new cards",id,batchNo)
@@ -20,8 +20,8 @@ export const Manual = ({ manualbatch, batchNo, updateCards }) => {
         setId('')
    
        }  }
-    const removeCard = async (lassraId) => {
-        const newlist = manualbatch.filter(card => card.lassraId !== lassraId)
+    const removeCard = async (lassraId:string) => {
+        const newlist = manualbatch.filter((card:any) => card.lassraId !== lassraId)
         updateCards(newlist)
     }
     return (

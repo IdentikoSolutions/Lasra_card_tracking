@@ -1,13 +1,13 @@
 export * from './AllReceipt'
 export * from  './CardProductionReceipt'
-export * from  "./DispatchOrder"
+export * from  "./dispatchorder"
 export * from './LandingPage'
 export * from  "./Provisioned"
 export * from  './ReceiptDetailsPage'
 export * from "./RequestSummary"
-export * from "./ViewDispatchOrders"
+// export * from "./dispatchorder/ViewDispatchOrders"
 export * from  "./ViewReceipt"
-export * from "./ViewDispatchOrders"
+// export * from "./dispatchorder"
 export * from './ViewReceipt'
 export * from "./ViewSingleDispatch"
 export * from './listRelocationHeader'

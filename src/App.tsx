@@ -5,10 +5,10 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { GlobalStytle } from './styles/globalstyle.css'
 import LoginPage from './pages/loginPage'
 import { ListSkeleton } from './skeleton.tsx/Listskeleton'
-import { DispatchOrder, OrdersMAngager } from './pages/DispatchOrder'
-import { ReceiptDetailsPage,LandingPage,ViewDispatchOrders,ViewSingleDispatch, AllReceipt, RequestSummary,ViewRequestByLGACode, ViewSingleRetrivalOrder, ListRelocationHeader} from './pages'
+// import { DispatchOrder, OrdersMAngager } from './pages/dispatchorder'
+import { ReceiptDetailsPage, LandingPage, ViewDispatchOrders, ViewSingleDispatch, AllReceipt, RequestSummary, ViewRequestByLGACode, ViewSingleRetrivalOrder, ListRelocationHeader, OrdersMAngager, DispatchOrder } from './pages'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Container} from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 import HomeDelivery from './pages/homedelivery/HomeDelivery'
 import AllDeliveryRequest from './pages/homedelivery/AllDeliveryRequest'
 import ErrorPage from './pages/homedelivery/ErrorPage'
@@ -87,22 +87,22 @@ function App() {
               }
             >
               <Route
-              index
-              element={
-                <Suspense fallback={<ListSkeleton lines={15} />}>
-                  <ViewDispatchOrders />
-                </Suspense>
-              }
-            />
-            <Route
-              path={'all'}
-              element={
-                <Suspense fallback={<ListSkeleton lines={15} />}>
-                  {/* <DispatchOrder /> */}
-                  <OrdersMAngager/>
-                </Suspense>
-              }
-            />
+                index
+                element={
+                  <Suspense fallback={<ListSkeleton lines={15} />}>
+                    <ViewDispatchOrders />
+                  </Suspense>
+                }
+              />
+              <Route
+                path={'all'}
+                element={
+                  <Suspense fallback={<ListSkeleton lines={15} />}>
+                    {/* <DispatchOrder /> */}
+                    <OrdersMAngager />
+                  </Suspense>
+                }
+              />
             </Route>
             <Route
               path={'retrival'}
@@ -157,29 +157,29 @@ function App() {
               element={
                 // <Suspense fallback={<ListSkeleton lines={15} />}>
                 <DeliveryContextProvider>
-                  <HomeDelivery/>
+                  <HomeDelivery />
                 </DeliveryContextProvider>
                 // </Suspense>
               }
             >
-                   <Route
-                   index
-                      // path={'home'}
+              <Route
+                index
+                // path={'home'}
                 element={
                   <Suspense fallback={<ListSkeleton lines={15} />}>
                     <AllDeliveryRequest />
                   </Suspense>
-                    }
-                     /> 
-                     <Route
-                    path={'viewall'}
-                        // path={'home'}
-                  element={
-                    <Suspense fallback={<ListSkeleton lines={15} />}>
-                      <ViewAllHomeDelivery />
-                    </Suspense>
-                      }
-                       />
+                }
+              />
+              <Route
+                path={'viewall'}
+                // path={'home'}
+                element={
+                  <Suspense fallback={<ListSkeleton lines={15} />}>
+                    <ViewAllHomeDelivery />
+                  </Suspense>
+                }
+              />
 
               <Route
                 path={'*'}

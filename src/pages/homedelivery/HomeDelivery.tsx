@@ -1,9 +1,6 @@
-import React, { useState,useEffect } from 'react'
-import Nav from 'react-bootstrap/Nav'
-import Navbar from 'react-bootstrap/Navbar'
+import React, { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import ViewAllHomeDelivery from './ViewAllHomeDelivery'
+import { Outlet, useNavigate } from 'react-router-dom'
 const list = [
   { title: 'View All Request', to: '' },
   { title: 'View All Delivery Order', to: 'viewall' },
@@ -38,7 +35,7 @@ function HomeDelivery() {
           <NavLink key={idx} title={item.title} active={active} idx={idx} setActive={setActive} to={item.to} />
         ))}
       </div>
-      <div className='w-[100%] m-0 p-5 bg-white border-0'>
+      <div className='w-[100%] m-0 p-5 bg-white border-0 flex-1 h-full'>
       <Outlet />
 
       </div>

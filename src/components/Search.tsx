@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import AsyncSelect from 'react-select'
-import { saveAs } from 'file-saver'
+// import { saveAs } from 'file-saver'
 import {
   button,
 } from '../styles/styles'
@@ -145,7 +145,7 @@ export const MainSearch: React.FC<SearchType> = ({
 //
 //
 //
-export const MainSearch2 = ({ listPath, api, to }) => {
+export const MainSearch2:React.FC<{listPath:any, api:string, to:string }> = ({ listPath, api, to }) => {
   const [selectedOption, setSelectedOption] = useState(null)
   const [selectList, setSelectList] = useState()
   const rootState = useSelector(state => state as IrootState)
@@ -161,7 +161,7 @@ export const MainSearch2 = ({ listPath, api, to }) => {
         </div>
     })))
   }, [listPath])
-  const handleChange = async (selectedOption) => {
+  const handleChange = async (selectedOption: { value: string }) => {
     try {
       const response = await Axios.get(api + "=" + selectedOption.value)
       console.log(response, 'search by id')
@@ -200,7 +200,7 @@ export const MainSearch2 = ({ listPath, api, to }) => {
   return <AsyncSelect
     className='hover:shadow-md'
     value={selectedOption}
-    onChange={handleChange}
+    onChange={(e)=>handleChange}
     options={selectList}
   />
 }

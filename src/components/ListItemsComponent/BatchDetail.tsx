@@ -10,6 +10,10 @@ interface Field {
 }
 // export
 const BatchDetail: React.FC<Field> = ({ field, receiptPath, onClick,receipt }) => {
+  // if(field.includes(dispatchStatus){
+
+  // })
+  console.log(field,"field")
   const navigate = useNavigate()
   const handleclick = useCallback((batchnumber: number) => {
     if (receiptPath === "") {
@@ -34,3 +38,21 @@ const BatchDetail: React.FC<Field> = ({ field, receiptPath, onClick,receipt }) =
   );
 };
 export default memo(BatchDetail)
+
+export const DispatchDetail: React.FC<Field> =({ field, receiptPath, onClick,receipt }) => {
+  
+  console.log(field,"field")
+  const navigate = useNavigate()
+  const handleclick = useCallback((batchnumber: number) => {
+    
+      navigate(receiptPath,{state:{receipt}})
+  }, [])
+  return (
+    <tr className='border bg-white even:bg-gray-500 hover:bg-gray-300 text-center' onClick={() => handleclick(Number(field[1
+    ]))}>
+      {field.map((item, idx) => <td key={idx}>{item}</td>)}
+
+    </tr>
+  );
+};
+// export default memo(DispatchDetail)

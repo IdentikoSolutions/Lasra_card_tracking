@@ -21,7 +21,7 @@ export const ViewSingleRetrivalOrder = () => {
     try {
       const  data  = getOneDeliveryOrder(id)   
          setData(data)
-    } catch (e) {
+    } catch (e:any) {
       throw new Error(e)
       // console.log(e, "api call not succesfful")
     }
