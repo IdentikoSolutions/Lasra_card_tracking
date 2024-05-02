@@ -12,9 +12,9 @@ export const InputField: React.FC<Iinput> = ({
 }) => {
   return (
     <Col>
-      <InputGroup className="my-2 ">
+      <InputGroup className=" bg-gray-200 rounded-md border-2 border-slate-200 p-2 flex-1">
         {label &&
-          <InputGroup.Text className="bg-default min-w-200"
+          <InputGroup.Text className="bg-default min-w-200 bg-gray-200 rounded-md border-2 border-slate-200 p-2 flex-1"
           >
             {label}
             <Form.Control

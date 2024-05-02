@@ -22,5 +22,5 @@
   },
   "include": [
     "src/**/*.ts"
- ]
+, "src/Axios/helpers/selectCollectionCenterOptions.js" ]
 }

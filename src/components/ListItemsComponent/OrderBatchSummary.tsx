@@ -1,10 +1,9 @@
-import React, { memo, useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table'
 import BatchDetail from './BatchDetail'
 import { fetchOneCard } from '../../services'
 
 export const OrderBatchSummary: React.FC<{cards:any}> = ({ cards }) => {
-  // console.log(cards, 'cards')
   const [OrderCard, setOrderCard] = useState<any[]>([])
   const batchNoList =OrderCard.map(card => card.batchNo)
     const batchSet = new Set(batchNoList)
@@ -16,8 +15,9 @@ export const OrderBatchSummary: React.FC<{cards:any}> = ({ cards }) => {
   }))
   // console.log(batches, 'Batches')
   const fullCardInfo = useCallback(() => {
-    console.log("callled");
-  return Promise.all(cards.map(async (card: { lassraId: string }) => await fetchOneCard(card.lassraId, '')))
+    console.log(cards,"cards");
+    if(!cards.length) return
+  return Promise.all(cards?.map(async (card: { lassraId: string }) => await fetchOneCard(card.lassraId, '')))
   .then(values => {
     setOrderCard(values)
   })},[cards])

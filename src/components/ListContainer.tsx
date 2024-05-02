@@ -13,13 +13,13 @@ interface IlistContainer {
   children?: ReactNode
   list?: Icard[] | IcardReceipt[]
   batchStatus?: number
-  add?: (lassraId:string)=>void
-  remove?: (lasrraId:string)=>void
+  add?: (lassraId: string) => void
+  remove?: (lasrraId: string) => void
 }
 export const ListContainer: React.FC<IlistContainer> = ({
   title,
   children,
-  list=[],
+  list = [],
   width,
   batchStatus,
   add,
@@ -82,97 +82,97 @@ export const ListContainer: React.FC<IlistContainer> = ({
   }, [list, currentPage])
   return (
     <div className=''>
-     {list?.length>0 
-     && <>
-     <div className="text-gray-800  font-bold ml-3  py-2">{title?.toLocaleUpperCase()}</div>
-      <div className='m-[5px] pt-[10px] flex flex-col min-w-fit h-fit bg-white'>
+      {list?.length > 0
+        && <>
+          <div className="text-gray-800  font-bold ml-3  py-2">{title?.toLocaleUpperCase()}</div>
+          <div className='m-[5px] pt-[10px] flex flex-col min-w-fit h-fit bg-white'>
 
-        <div className='overflow-x-scroll  item-center justify-center flex w-full'>
+            <div className='overflow-x-scroll  item-center justify-center flex w-full'>
 
-          <table
-            className="table-auto m-3 border-4 shadow-md"
-          >
-            {list?.length >0 && (
-              <thead className='shadow-md' >
-                <tr >
-                  <th ><p className='flex border-2 p-2 uppercase justify-between'>lasrraId<HiFilter /></p>
-                  </th>
-                  <th ><p className='flex border-2 p-2  uppercase justify-between'>firstname<HiFilter /></p>
-                  </th>
-                  <th ><p className='flex border-2 p-2 uppercase justify-between'>middlename <HiFilter /></p></th>
-                  <th ><p className='flex border-2 p-2 uppercase justify-between'>surname <HiFilter /></p></th>
-                  <th ><p className='flex border-2 p-2 uppercase justify-between'>primarY_PHONE_NO <HiFilter /></p></th>
-                  {/* <th ><p className='flex border-2 p-2 uppercase justify-between'>status<HiFilter /></p></th> */}
-                  {/* <th ><p className='flex border-2 p-2 uppercase justify-between'>comments<HiFilter /></p></th> */}
-                </tr>
-              </thead>
-            )}
-            {children}
-            {/* <ListItems {...tableHeader }/> */}
-
-            <tbody className="bg-white even:bg-red-300">
-              {list && list.length > 0
-                && list.map((card, idx) =>
-                  idx >= start && idx < end
-                  &&
-                  <ListItems
-                  add={add}
-                  remove={remove}
-                    {...card}
-                    batchStatus={batchStatus}
-                    key={idx}
-                    active={active}
-                    reset={reset}
-                    setNewActive={setNewActive}
-                  />
-                )
-              }
-            </tbody>
-          </table>
-        </div>
-        {list && list.length > 1 ? (
-          <div className='flex-row border-2'>
-            <div className='bg-gray-100 flex-row flex-1 text-center'>
-              <div className='flex justify-between items-end'>
-                <div className='flex'>
-
-                <Pagination className="btn-success justify-center m-auto bg-slate-200 text-[2rem]">
-                  <Pagination.Prev onClick={getPrev} />
-                  {pageButtons}
-                  <Pagination.Next onClick={getNext} />
-                </Pagination>
-                </div>
-
-                {<div><p>{`Page ${currentPage + 1} of ${totalPages} pages`}</p></div>}
-
-                {list?.length && list?.length > pageSize ? (
-                  <div
-                    className='flex justify-between  p-2 min-w-[200px] hover:underline'>
-
-                    <p className='hover:text-blue-500 '><FaArrowUp
-
-                      onClick={() => setPageSize(pageSize + 1)}
-                    /></p>
-                    Page Size:{pageSize}
-                    <p className='hover:text-red-500'><FaArrowDown
-                      className=''
-                      onClick={() => pageSize > 20 && setPageSize(pageSize - 1)}
-                    /></p>
-                  </div>
-                ) : (
-                  ''
+              <table
+                className="table-auto m-3 border-4 shadow-md"
+              >
+                {list?.length > 0 && (
+                  <thead className='shadow-md' >
+                    <tr >
+                      <th ><p className='flex border-2 p-2 uppercase justify-between'>lasrraId<HiFilter /></p>
+                      </th>
+                      <th ><p className='flex border-2 p-2  uppercase justify-between'>firstname<HiFilter /></p>
+                      </th>
+                      <th ><p className='flex border-2 p-2 uppercase justify-between'>middlename <HiFilter /></p></th>
+                      <th ><p className='flex border-2 p-2 uppercase justify-between'>surname <HiFilter /></p></th>
+                      <th ><p className='flex border-2 p-2 uppercase justify-between'>primarY_PHONE_NO <HiFilter /></p></th>
+                      {/* <th ><p className='flex border-2 p-2 uppercase justify-between'>status<HiFilter /></p></th> */}
+                      {/* <th ><p className='flex border-2 p-2 uppercase justify-between'>comments<HiFilter /></p></th> */}
+                    </tr>
+                  </thead>
                 )}
-              </div>
+                {children}
+                {/* <ListItems {...tableHeader }/> */}
+
+                <tbody className="bg-white even:bg-red-300">
+                  {list && list.length > 0
+                    && list.map((card, idx) =>
+                      idx >= start && idx < end
+                      &&
+                      <ListItems
+                        add={add}
+                        remove={remove}
+                        {...card}
+                        batchStatus={batchStatus}
+                        key={idx}
+                        active={active}
+                        reset={reset}
+                        setNewActive={setNewActive}
+                      />
+                    )
+                  }
+                </tbody>
+              </table>
             </div>
+            {list && list.length > 1 ? (
+              <div className='flex-row border-2'>
+                <div className='bg-gray-100 flex-row flex-1 text-center'>
+                  <div className='flex justify-between items-end'>
+                    <div className='flex'>
+
+                      <Pagination className="btn-success justify-center m-auto bg-slate-200 text-[2rem]">
+                        <Pagination.Prev onClick={getPrev} />
+                        {pageButtons}
+                        <Pagination.Next onClick={getNext} />
+                      </Pagination>
+                    </div>
+
+                    {<div><p>{`Page ${currentPage + 1} of ${totalPages} pages`}</p></div>}
+
+                    {list?.length && list?.length > pageSize ? (
+                      <div
+                        className='flex justify-between  p-2 min-w-[200px] hover:underline'>
+
+                        <p className='hover:text-blue-500 '><FaArrowUp
+
+                          onClick={() => setPageSize(pageSize + 1)}
+                        /></p>
+                        Page Size:{pageSize}
+                        <p className='hover:text-red-500'><FaArrowDown
+                          className=''
+                          onClick={() => pageSize > 20 && setPageSize(pageSize - 1)}
+                        /></p>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              ''
+            )}
+            {currentCard.toString() !== '{}' && active === currentCard.id && (
+              <EditCard {...currentCard} reset={reset} active={active} />
+            )}
           </div>
-        ) : (
-          ''
-        )}
-        {currentCard.toString() !== '{}' && active === currentCard.id && (
-          <EditCard {...currentCard} reset={reset} active={active} />
-        )}
-      </div>
-      </>}
+        </>}
     </div>
   )
 }

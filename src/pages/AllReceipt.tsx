@@ -2,6 +2,7 @@ import React from 'react'
 import { Footer, Header } from '../components'
 import { Outlet } from 'react-router-dom'
 import { SideNav } from '../components'
+import {AnimatedBanner} from '../Axios/helpers/banner'
 // import { GridContainer, Mainbar } from '../styles/styles'
 // import { FloatingWhatsApp } from 'react-floating-whatsapp'
 import { PageTrail } from '../components/pageTrail'
@@ -18,7 +19,8 @@ export const  AllReceipt=()=> {
           <div className='flex-1 bg-opacity-10' style={{ backgroundImage: `url(${bg_img})` }}
           >
             <PageTrail />
-            <div className='mx-10 p-2 h-full'>
+            {/* <AnimatedBanner/> */}
+            <div className='m-auto p-2 h-full max-w-[1900px]'>
               <Outlet />
             </div>
           </div>

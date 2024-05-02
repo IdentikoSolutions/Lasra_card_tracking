@@ -38,7 +38,7 @@ export const ReceiptDetailsPage = () => {
   const [data, setData] = useState<any[]>([])
   const [batchDetail, setBatchDetail] = useState<any>({})
   const [showReceipt, toggleShowReceipt] = useState(false)
-  const {receipts} =useParams()
+  const { receipts } = useParams()
   // console.log(receipts, 'Params')
   const receiptPath = useReceiptPath()
   const listPath = useListPath()
@@ -56,15 +56,15 @@ export const ReceiptDetailsPage = () => {
       const result = await searchBatchByParams(searchParams) as AxiosResponse<any, any>
       if (!result?.data) return
       const data = result?.data
-      console.log(data," from callsearch")
-      if(data){
+      console.log(data, " from callsearch")
+      if (data) {
         const received = await getCardCountByStatus(data.batchNo, 1)
         data.received = received[1]
-        const notReceived =await getCardCountByStatus(data.batchNo, 0)
+        const notReceived = await getCardCountByStatus(data.batchNo, 0)
         data.notReceived = notReceived[1]
         updateSearch(data)
       }
-      
+
     }, [searchParams])
 
 
@@ -74,69 +74,70 @@ export const ReceiptDetailsPage = () => {
     const result = await searchBatchByParams({ batchNo }) as any
     // const { data } = result
     // console.log(result, "getBatchDetail" )
-    console.log(result,'type of result');
+    console.log(result, 'type of result');
 
-    if(data){
-      let batchinfo={...result.data} as any
+    if (data) {
+      let batchinfo = { ...result.data } as any
       const received = await getCardCountByStatus(batchNo, 1)
-      const notReceived =await getCardCountByStatus(batchNo, 0)
+      const notReceived = await getCardCountByStatus(batchNo, 0)
       batchinfo.notReceived = notReceived[1]
       const provisioned = await getCardCountByStatus(batchNo, 2)
-      batchinfo.provisioned =provisioned[1]
-      batchinfo.received = received[1]+provisioned[1]
+      batchinfo.provisioned = provisioned[1]
+      batchinfo.received = received[1] + provisioned[1]
 
-      batchinfo.receiptNotProvisioned=received[1]
+      batchinfo.receiptNotProvisioned = received[1]
       // console.log(data,'Data ')
       // console.log(received,notReceived, "from setBatchdetail")
       setBatchDetail(batchinfo)
       getReceipts()
     }
-    
+
   }
 
 
   const getReceipts = () => {
-  // console.log(receiptPath, 'receiptpath from get receiptts');
+    // console.log(receiptPath, 'receiptpath from get receiptts');
     batchNo && getReceiptsNos(receiptPath + `?batchNo=${batchNo}`)
-    .then(async (result) => {
-      // console.log(result,'result 100')
-      for (const r of result) {
-        let count;
-        if(receipts==='viewreceipts'){
-          count = await getCardsAndCount(r.id)
+      .then(async (result) => {
+        // console.log(result,'result 100')
+        for (const r of result) {
+          let count;
+          if (receipts === 'viewreceipts') {
+            count = await getCardsAndCount(r.id)
 
-        }else if(receipts==='viewprovision'){
-          count= await getProvisionedCardsAndCount(r.id)
+          } else if (receipts === 'viewprovision') {
+            count = await getProvisionedCardsAndCount(r.id)
+          }
+          // console.log(count, 'count')
+          r.count = count?.data[1]
         }
-// console.log(count, 'count')
-        r.count = count?.data[1]
-      }
-      // console.log(result,'from getReceipts in receiptdetails page')
-      setData(result)
-    })
-    .catch((error) => toast.error(error))}
+        // console.log(result,'from getReceipts in receiptdetails page')
+        setData(result)
+      })
+      .catch((error) => toast.error(error))
+  }
 
-  const showforReceipt =[
+  const showforReceipt = [
     { name: 'Total Cards', value: batchDetail.noRecords },
-     { name: 'Total received', value: batchDetail.received },
-   { name: 'Total Not received', value: batchDetail.notReceived }]
-const showforprovision =showforReceipt.concat( { name: 'Total provisioned', value: batchDetail.provisioned })
+    { name: 'Total received', value: batchDetail.received },
+    { name: 'Total Not received', value: batchDetail.notReceived }]
+  const showforprovision = showforReceipt.concat({ name: 'Total provisioned', value: batchDetail.provisioned })
 
   useEffect(() => {
     // console.log(searchResult.batchNo, "batchNo in searchRes",batchNo, 'data in usefeect')
     setData([])
     getBatchDetail()
-  }, [receiptPath, listPath, callSearch,batchNo, searchResult])
+  }, [receiptPath, listPath, callSearch, batchNo, searchResult])
 
   return (
     <div className='flex flex-col md:flex-row justify-evenly  m-auto h-full relative'>
       {
         !showReceipt && !toggle && <div className='w-fit h-fit flex'>
-          <input className={'w-[3rem] m-0 active:border-2 active:bg-green-200'}
+          <input className={'w-[3rem] m-0 active:border-green-500 border-gray-300 border-2 active:bg-green-200'}
             type="number"
             value={batchNo}
             onChange={(e) => setBatchNo(e.target.value)} />
-          <button className={button}
+          <button className={button + " mr-4"}
             disabled={batchNo ? false : true}
             onClick={() => { getBatchDetail(); toggleShowReceipt(!showReceipt) }} >Select Batch View
             <Tooltip message='select the batch you want to view' />
@@ -148,15 +149,16 @@ const showforprovision =showforReceipt.concat( { name: 'Total provisioned', valu
         <>
           {!toggle ? (
             <>
-             { receipts==='viewreceipts'&&<button className={button + " h-fit"} onClick={() => setToggle(!toggle)}><AiOutlinePlus />
-                Create new Receipt
-                <Tooltip message='click to create a new batch receipt' />
-              </button> }
-             {receipts==='viewprovision'&& <button className={button + " h-fit"} onClick={() => setToggle(!toggle)}><AiOutlinePlus />
-                Create new Provision Receipt
+              {receipts === 'viewreceipts' && <button className={button + " h-fit mr-4"} onClick={() => setToggle(!toggle)}>
+                {/* <AiOutlinePlus /> */}
+                Search Batch
                 <Tooltip message='click to create a new batch receipt' />
               </button>}
-              <button className={button + " h-fit"} onClick={() => batchNo &&navigate(nextroute,{state:{batchNo}})}><VscDebugContinue className='text-xl' />
+              {receipts === 'viewprovision' && <button className={button + " h-fit mr-4"} onClick={() => setToggle(!toggle)}>
+                {/* <AiOutlinePlus /> */}
+                Search Receipt                <Tooltip message='click to create a new batch receipt' />
+              </button>}
+              <button className={button + " h-fit"} onClick={() => batchNo && navigate(nextroute, { state: { batchNo } })}><VscDebugContinue className='text-xl' />
                 <Tooltip message='click to resume the current process' />
               </button>
             </>
@@ -209,18 +211,18 @@ const showforprovision =showforReceipt.concat( { name: 'Total provisioned', valu
 
       {/* {loading && <Spinner bg="skyblue"></Spinner>} */}
       {showReceipt && <div className='bg-white p-[20px] overflow-hidden'>
-        <Reports reportData={receipts==="viewreceipts"? showforReceipt : showforprovision} />
+        <Reports reportData={receipts === "viewreceipts" ? showforReceipt : showforprovision} />
         <div className='rounded-md m-3 text-[1.2rem] grid gapc-4 grid-cols-1 md:grid-cols-3 xxl:grid-cols-4'>
           {batchDetail.batchNo && <p>Batch : {batchDetail.batchNo}</p>}
           {batchDetail.bankJobNo && <p >Bank Job No : {batchDetail.bankJobNo}</p>}
           <p >Total Cards: {batchDetail.noRecords}</p>
           <p> Total Received: {batchDetail.received}</p>
-          {receipts==='viewprovision' &&<p> Total Provisioned: {batchDetail.provisioned}</p>}
+          {receipts === 'viewprovision' && <p> Total Provisioned: {batchDetail.provisioned}</p>}
           <p> Total Not Received: {batchDetail.notReceived}</p>
 
-          {receipts==='viewprovision' &&<p> Total Received Not Provison: {batchDetail.receiptNotProvisioned}</p>}
-          {receipts==='viewreceipts' &&<button className={button} onClick={()=>navigate('/receipts/receipt', { state: { batchNo } })}>Create new card receipt</button>}
-          {receipts==='viewprovision' &&<button className={button} onClick={()=>navigate('/receipts/provision', { state: { batchNo } })}>Create new Provissioning receipt</button>}
+          {receipts === 'viewprovision' && <p> Total Received Not Provison: {batchDetail.receiptNotProvisioned}</p>}
+          {receipts === 'viewreceipts' && <button className={button} onClick={() => navigate('/receipts/receipt', { state: { batchNo } })}>Create new card receipt</button>}
+          {receipts === 'viewprovision' && <button className={button} onClick={() => navigate('/receipts/provision', { state: { batchNo } })}>Create new Provissioning receipt</button>}
         </div>
         <Table
           striped
@@ -230,26 +232,26 @@ const showforprovision =showforReceipt.concat( { name: 'Total provisioned', valu
           size="xxl"
           className="mb-3"
         >
-          {data.length>0&&<thead>
+          {data.length > 0 && <thead>
             <tr>
-              <th><p className='flex uppercase justify-between'>{receipts==="viewreceipts" ?"Receipt ID":receipts==="viewprovision"? "Provision ID":""}<HiFilter /></p>
+              <th><p className='flex uppercase justify-between'>{receipts === "viewreceipts" ? "Receipt ID" : receipts === "viewprovision" ? "Provision ID" : ""}<HiFilter /></p>
               </th>
               <th><p className='flex uppercase justify-between'>Batch NO.<HiFilter /></p></th>
-              <th><p className='flex uppercase justify-between'>{receipts==="viewreceipts" ?"Received On":receipts==="viewprovision"? "Provision On":""}<HiFilter /></p></th>
-              <th><p className='flex uppercase justify-between'>{receipts==="viewreceipts" ?"Received By ID":receipts==="viewprovision"? "Provisioned By":""}<HiFilter /></p></th>
-              <th><p className='flex uppercase justify-between'>{receipts==='viewreceipts'?"Card received":receipts==='viewprovision'? 'Card Provision':''}<HiFilter /></p></th>
+              <th><p className='flex uppercase justify-between'>{receipts === "viewreceipts" ? "Received On" : receipts === "viewprovision" ? "Provision On" : ""}<HiFilter /></p></th>
+              <th><p className='flex uppercase justify-between'>{receipts === "viewreceipts" ? "Received By ID" : receipts === "viewprovision" ? "Provisioned By" : ""}<HiFilter /></p></th>
+              <th><p className='flex uppercase justify-between'>{receipts === 'viewreceipts' ? "Card received" : receipts === 'viewprovision' ? 'Card Provision' : ''}<HiFilter /></p></th>
             </tr>
           </thead>}
           <tbody>
             {data.map((receipt, idx) => (
               <BatchDetail
-              receipt={receipt}
+                receipt={receipt}
                 key={idx}
                 field={[
                   receipt?.id,
                   receipt?.batchNo,
-                  receipt?.receivedAt?.substring(0, 10)||receipt.provisionedAt.substring(0,10),
-                  receipt?.receivedBy||receipt.provisionedBy,
+                  receipt?.receivedAt?.substring(0, 10) || receipt.provisionedAt.substring(0, 10),
+                  receipt?.receivedBy || receipt.provisionedBy,
                   receipt?.count,
                   // receipt?.receivedOn?.substring(0, 10),
                 ]}
@@ -264,7 +266,7 @@ const showforprovision =showforReceipt.concat( { name: 'Total provisioned', valu
     </div>
   )
 }
-export const Tooltip: React.FC<{ message:string }> = ({ message }) => {
+export const Tooltip: React.FC<{ message: string }> = ({ message }) => {
   return (<div className='hidden group-hover:inline absolute top-[30px] left-0 text-gray-400 w-fit'>{message}</div>)
 
 }

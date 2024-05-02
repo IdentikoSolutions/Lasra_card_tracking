@@ -118,7 +118,7 @@ cardsReceipt:Icard[]|IcardReceipt[]
   }
   export interface ReceiptType{
     batchNo:number,
-dateCreated:string,
+createdAt:string,
 deliveredBy:string,
 provisionedOn:string,
 receivedBy:string,

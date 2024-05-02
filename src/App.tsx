@@ -6,7 +6,7 @@ import { GlobalStytle } from './styles/globalstyle.css'
 import LoginPage from './pages/loginPage'
 import { ListSkeleton } from './skeleton.tsx/Listskeleton'
 // import { DispatchOrder, OrdersMAngager } from './pages/dispatchorder'
-import { ReceiptDetailsPage, LandingPage, ViewDispatchOrders, ViewSingleDispatch, AllReceipt, RequestSummary, ViewRequestByLGACode, ViewSingleRetrivalOrder, ListRelocationHeader, OrdersMAngager, DispatchOrder } from './pages'
+import { ReceiptDetailsPage, LandingPage, ViewDispatchOrders, ViewSingleDispatch, AllReceipt, RequestSummary, ViewRequestByLGACode, ViewSingleRetrivalOrder, ListRelocationHeader, OrdersMAngager, DispatchOrder, RetrivalOrder } from './pages'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Container } from 'react-bootstrap'
 import HomeDelivery from './pages/homedelivery/HomeDelivery'
@@ -86,56 +86,66 @@ function App() {
                 </Suspense>
               }
             >
-              <Route
-                index
-                element={
-                  <Suspense fallback={<ListSkeleton lines={15} />}>
-                    <ViewDispatchOrders />
-                  </Suspense>
-                }
-              />
-              <Route
-                path={'all'}
-                element={
-                  <Suspense fallback={<ListSkeleton lines={15} />}>
-                    {/* <DispatchOrder /> */}
-                    <OrdersMAngager />
-                  </Suspense>
-                }
-              />
+                         <Route
+                         index
+                         element={
+                           <Suspense fallback={<ListSkeleton lines={15} />}>
+                             <ViewDispatchOrders />
+                            </Suspense>
+                              }
+                             />
+                           <Route
+                              path={'all'}
+                               element={
+                            <Suspense fallback={<ListSkeleton lines={15} />}>
+                              <OrdersMAngager />
+                            </Suspense>
+                             }
+                               />
             </Route>
             <Route
               path={'retrival'}
+              element={
+                <Suspense fallback={<ListSkeleton lines={15} />}>
+                  <RetrivalOrder/>
+                  {/* <RequestSummary /> */}
+                </Suspense>
+              }
+            >
+               <Route
+               index
+              // path={'retrival/single/:id'}
               element={
                 <Suspense fallback={<ListSkeleton lines={15} />}>
                   <RequestSummary />
                 </Suspense>
               }
             />
-            <Route
+            {/* <Route
               path={'retrival/single/:id'}
               element={
                 <Suspense fallback={<ListSkeleton lines={15} />}>
                   <ViewSingleRetrivalOrder />
                 </Suspense>
               }
-            />
+            /> */}
             <Route
-              path={'retrival/all'}
+              path={'all'}
               element={
                 <Suspense fallback={<ListSkeleton lines={15} />}>
                   <ListRelocationHeader />
                 </Suspense>
               }
             />
-            <Route
-              path={'retrival/:lgacode'}
+            {/* <Route
+              path={'retrival/all/:lgacode'}
               element={
                 <Suspense fallback={<ListSkeleton lines={15} />}>
                   <ViewRequestByLGACode />
                 </Suspense>
               }
-            />
+            /> */}
+            </Route>
             {/* <Route
               path={'order/vieworders'}
               element={

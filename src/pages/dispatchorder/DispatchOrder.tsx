@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom'
 import { button, input } from '../../styles/styles'
 import { getCardsForDispatch, createDispatchOrder } from '../../services';
 import { OrderBatchSummary } from '../../components/ListItemsComponent/OrderBatchSummary'
+import Select from 'react-select';
+import { selectCollectionCenter } from '../../Axios/helpers/selectCollectionCenterOptions';
 
 
 export const DispatchOrder = () => {
@@ -22,7 +24,7 @@ export const DispatchOrder = () => {
     } else if (location.pathname === "/receipts/order/all")
       setActive(2)
 
-  }, [])
+  }, [location.pathname])
   return (
     <div>
       <div className="flex m-0 border-0">
@@ -82,6 +84,7 @@ export const OrdersMAngager = () => {
 
 
   }
+  console.log(filter)
 
   const getCards = useCallback(async () => {
     try {
@@ -119,12 +122,25 @@ export const OrdersMAngager = () => {
   return <div className='bg-white rounded-md shadow-md px-5'>
     {
       <InputFieldContainer title={'Order Details: '}>
-        <InputField
+        {/* <InputField
           label="CollectionCenter:"
           value={dispatchDetail.destination.trim()}
           onChange={(e) => setDispatchDetail({ ...dispatchDetail, destination: e.target.value })}
           bg={'green'}
-        />
+        /> */}
+        <label
+          htmlFor="CollectionCenter:"
+          className='max-w-[400px]flex items-center  bg-gray-200 rounded-md border-2 border-slate-200 p-2 flex-1'
+
+        >
+          Collection Center:
+          <Select
+          className='flex-1'
+            onChange={(e) => setDispatchDetail({ ...dispatchDetail, destination: e?.value })}
+            defaultInputValue={dispatchDetail.destination.trim()}
+            options={selectCollectionCenter()} />
+        </label>
+
         <InputField
           label="Dispatcher's Name:"
           type='text'
@@ -163,23 +179,23 @@ export const OrdersMAngager = () => {
         />
       </InputFieldContainer>}
     {
-      <>
-        <div className='flex-col md:flex-row flex  w-full m-4 justify-center gap-2 items-end '>
+      < div className='border-2 '>
+        <div className='flex-col md:flex-row flex  w-full m-auto justify-evenly gap-2 items-end '>
           {/* <button className={button} onClick={getCards}>Add</button> */}
-          <label htmlFor='CollectionCenter'> Collection Center
-            <input className={input} type='text' name="CollectionCenter" value={filter.collectionCenter.trim()} onChange={(e) => setFilter({ ...filter, collectionCenter: e.target.value })} />
+          <label htmlFor='CollectionCenter' className='bg-gray-200 rounded-md border-2 border-slate-200 p-2 flex-1'> Collection Center
+            <Select className={'w-full'} options={selectCollectionCenter()} name="CollectionCenter" defaultValue={filter.collectionCenter.trim()} onChange={(e) => setFilter({ ...filter, collectionCenter: e?.value })} />
           </label>
-          <label htmlFor='batchNo'>Batch No:
+          <label htmlFor='batchNo' className='bg-gray-200 rounded-md border-2 border-slate-200 p-2 flex flex-col flex-1'>Batch No:
             <input className={input} type='number' name="batchNo" value={filter.batchNo} onChange={(e) => setFilter({ ...filter, batchNo: e.target.value })} />
           </label>
-          <label htmlFor='LassraId'>LassraId:
+          <label htmlFor='LassraId' className='bg-gray-200 rounded-md border-2 border-slate-200 p-2 flex-col flex flex-1'>LassraId:
             <input className={input} type='text' name="LassraId" value={filter.lassraId.trim()} onChange={(e) => setFilter({ ...filter, lassraId: e.target.value })} />
           </label>
           {/* <button className={button} onClick={removeCards}>Remove</button> */}
         </div>
-        <div className='flex-col md:flex-row flex  w-full m-4 justify-center gap-2 items-end '>
-          <button className={button} onClick={getCards} disabled={!filter.collectionCenter&& !filter.lassraId}>Add</button>
-          <button className={button} onClick={removeCards} disabled={!card.length||!filter.lassraId}>Remove</button>
+        <div className='flex-col md:flex-row flex  w-full m-auto justify-center gap-2 items-end '>
+          <button className={button} onClick={getCards} disabled={!filter.collectionCenter && !filter.lassraId}>Add</button>
+          <button className={button} onClick={removeCards} disabled={!card.length || !filter.lassraId}>Remove</button>
         </div>
         <div className='flex flex-col flex-1 p-[0.5rem] m-[0.5rem] overfow-x-hidden'>
           <h3 className='font-bold bg-whitemx-2'>Cards summary</h3>
@@ -191,11 +207,11 @@ export const OrdersMAngager = () => {
         </div>
         <button onClick={createDispatch} className={button} >Create Dispatch</button>
 
-      </>
+      </div>
     }
   </div>
 }
-const NavLink: React.FC<{ title: string, index: number, to: string, active: number, setActive: (state: any) => void }> = ({ title, index, to, active, setActive }) => {
+export const NavLink: React.FC<{ title: string, index: number, to: string, active: number, setActive: (state: any) => void }> = ({ title, index, to, active, setActive }) => {
   const navigate = useNavigate()
   const handler = () => {
     setActive(index);

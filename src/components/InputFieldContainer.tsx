@@ -6,18 +6,19 @@ import Row from "react-bootstrap/Row"
 import "bootstrap/dist/css/bootstrap.min.css"
 export const  InputFieldContainer:React.FC<IinputFieldContainer>=({title,children})=>{
     return (
-        <Container className='mb-2 bg-white' 
+        <Container className='mb-2 bg-white ' 
         // style={{background:"#d7f9ed"}}
         >
             <h3>{title}</h3>
             <hr/>
-            <Container 
+            <div
+            className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 "
             // style={{background:"#ffffff"}}
             >
-                <Row>
+                {/* <Row> */}
 {children}
-                </Row>
-            </Container>
+                {/* </Row> */}
+            </div>
         </Container>
     );
 }

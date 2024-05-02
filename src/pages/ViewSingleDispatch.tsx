@@ -1,158 +1,219 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Axios } from '../Axios/Axios'
-import { useLocation } from 'react-router-dom'
-// import  OrderBatchSummary  from '../components/ListItemsComponent/OrderBatchSummary'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Container } from 'react-bootstrap'
-import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-
+import { Formik } from 'formik'
+import { OrderBatchSummary } from '../components'
+import { button } from '../styles/styles'
+import {
+  getcardDispatchBylassraIdandDispatchId,
+  getDispatchById,
+} from '../services'
+import { acknowledgeDispatch } from '../services/acknowledgeDispatch'
+// export {}
 
 export const ViewSingleDispatch = () => {
-  const {receipt} = useLocation().state
-  console.log(receipt,"location")
+  const navigate = useNavigate()
   const { id } = useParams()
-  const [acknowledgedBy, setAcknowledgedBy] = useState('')
-  const[deliveredBy, setDeliveredBy] = useState('')
-  const [order, updateOrder] = useState<any[]>([])
-  console.log('Orders', order)
+  const [loaded, setLoaded] = useState(false)
+  const [dispatch, setDispatch] = useState<any>({})
+  const [lassraId, setLassraId] = useState('')
+  const [errors, updateErrors] = useState<any>({})
   const getOneDispatch = useCallback(async () => {
     try {
-      const result = await Axios.get(
-        `/Dispatch/getCardDispatchByHeaderId?headerId=${id}`
-      )
-      // console.log(result, 'from get dispatch by id')
-      const orderlist = result.data.cardDispatchHeader.map((order: any) => ({
-        ...order,
-        cards: result.data.cardDispatchHeaderDetail.filter(
-          (cards: any) =>
-            cards.contacT_LGA.toLowerCase() === order.destination.toLowerCase(),
-        ),
-      }))
-      updateOrder(orderlist)
+      const result = await Axios.get(`/dispatch/${id}`)
+      setDispatch(result.data)
     } catch (e) {
-      console.log(e)
+      console.log(e, 'error')
     }
-  }, [id])
-  const handleSubmit = async (e:any) => {
-    // e.preventDefault;
-    const payload = {
-        status: 1,
-        acknowledgedBy: acknowledgedBy,
-        receivedBy: order[0].receivedBy,
-        deliveredBy: deliveredBy,
-        dispatcherName: order[0].dispatcherName,
-        dispatchorderid: id,
-        dispatchorderon: order[0].dispatchedOrderOn,
-        // "dispatchorderon"
-      }
+  }, [])
 
+  const handleSubmit = useCallback(async (e: any) => {
+    e.preventDefault()
+    // if (dispatch.receivedBy) {
+    //   const { receivedBy, ...err } = errors
+    //   updateErrors(err)
+    // } else {
+    //   updateErrors((errors: any) => ({ ...errors, receivedBy: "Received By is Required" }))
+    // }
+    if (dispatch.acknowledgedBy) {
+      const { acknowledgedBy, ...err } = errors
+      updateErrors(err)
+    } else {
+      updateErrors((errors: any) => ({ ...errors, acknowledgedBy: "Acknowleged By is Required" }))
+    }
+    if (!dispatch.acknowledgedBy) {
+      return
+    }
+    // here iswhere you make api call
     try {
-       await Axios.put(
-        '/Dispatch/UpdateCardDispatchByOrderId',
-        payload,
+      const result = await acknowledgeDispatch(dispatch)
+      if (result.status === 200) {
+        toast.success('Dispatch acknowlegded')
+        setTimeout(() => {
+          navigate('/receipts/order')
+        }, 5000)
+
+      }
+    } catch (e: any) {
+      toast.error("Already acknowledge",{position:"top-center"})
+      setTimeout(() => {
+        navigate('/receipts/order')
+      }, 5000)
+    }
+  }, [dispatch.acknowledgedBy, dispatch.receivedBy, errors.receivedBy, errors.acknowledgedMy])
+  const add = useCallback(
+    async (lassraId: string) => {
+      const cardToAdd = await getcardDispatchBylassraIdandDispatchId(
+        lassraId,
+        dispatch.id,
       )
-      toast.success("Successfully updated dispatch status")
-    } catch (e) {
-return <h1>error has occured</h1>    }
-  }
+      console.log('card to add ', cardToAdd)
+      if (cardToAdd !== undefined) {
+        const newList = dispatch.cardDispatch.concat(cardToAdd)
+        console.log(cardToAdd, newList, 'add to card')
+        setDispatch({ ...dispatch, cardDispatch: newList })
+      }
+    },
+    [dispatch],
+  )
+
+  const remove = useCallback(
+    (lassraId: string) => {
+      const newList = dispatch.cardDispatch.filter(
+        (card: any) => card.lassraId !== lassraId.trim(),
+      )
+      setDispatch({ ...dispatch, cardDispatch: newList })
+    },
+    [dispatch],
+  )
   useEffect(() => {
-    getOneDispatch()
-  }, [getOneDispatch])
+    !loaded && getOneDispatch()
+  }, [])
   return (
-    <Container className="container-fluid my-5">
-
+    <div className="w-full ">
       <h2>Dispatch Orders</h2>
-      <Form onSubmit={handleSubmit} style={{ background: '#8bceb3',fontWeight:900 }}>
-        {order.length > 0 && (
-          <>
-              <Row>
-                <Form.Group as={Col} controlId="formGridOrderId">
-                  <Form.Label>Order id:</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={order[0].id}
-                    readOnly
-                  />
-                </Form.Group>
+      <Formik
+        initialValues={dispatch}
+        onSubmit={(values, { setSubmitting }) => {
+          setTimeout(() => {
+            alert(JSON.stringify(values, null, 2))
+            setSubmitting(false)
+          }, 400)
+        }}
+      >
+        {() => (
+          <Form
+            onSubmit={handleSubmit}
+            className="bg-gray-100 shadow-md w-full h-full my-5 p-5"
+          >
+            {
+              <>
+                <Row>
+                  <Form.Group as={Col} controlId="formGridOrderId">
+                    <Form.Label>Order id:</Form.Label>
+                    <Form.Control type="text" value={dispatch.id} readOnly />
+                  </Form.Group>
 
-                <Form.Group as={Col} controlId="formGridCreated" className='md'>
-                  <Form.Label>Created By:</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={order[0].createdBy}
-                    readOnly
-                  />
-                </Form.Group>
+                  <Form.Group
+                    as={Col}
+                    controlId="formGridCreated"
+                    className="md"
+                  >
+                    <Form.Label>Created By:</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={dispatch.createdBy}
+                      readOnly
+                    />
+                  </Form.Group>
 
-            <Form.Group  as={Col} className="mb-3" controlId="formGridDestination">
-              <Form.Label>Destination</Form.Label>
-              <Form.Control value={order[0].destination} readOnly />
-            </Form.Group>
-            </Row>
-            <Row>
+                  <Form.Group
+                    as={Col}
+                    className="mb-3"
+                    controlId="formGridDestination"
+                  >
+                    <Form.Label>Destination</Form.Label>
+                    <Form.Control value={dispatch.destination} readOnly />
+                  </Form.Group>
+                </Row>
+                <Row>
+                  <Form.Group
+                    as={Col}
+                    className="mb-3"
+                    controlId="formGridDispatcher"
+                  >
+                    <Form.Label>Dispatcher </Form.Label>
+                    <Form.Control value={dispatch.dispatcher} readOnly />
+                  </Form.Group>
 
-            <Form.Group  as={Col}  className="mb-3" controlId="formGridDispatcher">
-              <Form.Label>Dispatcher </Form.Label>
-              <Form.Control value={order[0].dispatcherName} readOnly />
-            </Form.Group>
-              <Form.Group as={Col} controlId="formGridPickup" >
-                <Form.Label>Pickup date:</Form.Label>
-                <Form.Control type="date" value={order[0].pickupdate} readOnly />
-              </Form.Group>
-        
+                  <div>
+                    <Form.Group as={Col} controlId="formGridReceivedBy">
+                      <Form.Label>Received By:</Form.Label>
+                      <Form.Control
+                        value={dispatch?.receivedBy}
+                        onChange={(e: any) =>
+                          setDispatch({
+                            ...dispatch,
+                            receivedBy: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+                    <p className="text-red-500  relative top-[-1.7rem] m-0 p-0"> {errors?.receivedBy}</p>
 
-              <Form.Group as={Col} controlId="formGridReceivedBy">
-                <Form.Label>Received By:</Form.Label>
-                <Form.Control
-                  value={order[0].receivedBy}
-                  readOnly
-                  // onChange={(e) => setReceivedBy(e.target.value)}
-                />
-              </Form.Group>
-              <Form.Group as={Col} controlId="formGridDeliveredBy">
-                <Form.Label>delivered By:</Form.Label>
-                <Form.Control
-                  value={deliveredBy}
-                  onChange={(e) => setDeliveredBy(e.target.value)}
-                />
-              </Form.Group>
-              <Form.Group as={Col} controlId="formGridAcknowledgedBy">
-                <Form.Label>AcknowlegdedBy:</Form.Label>
-                <Form.Control
-                  value={acknowledgedBy}
-                  onChange={(e) => setAcknowledgedBy(e.target.value)}
-                />
-              </Form.Group>
-            </Row>
-
-            <Button variant="success" className='mb-3' type="submit">
-              Acknowledge
-            </Button>
-        </>
-           
+                  </div>
+                  <div>
+                    <Form.Group as={Col} controlId="formGridAcknowledgedBy">
+                      <Form.Label>AcknowlegdedBy:</Form.Label>
+                      <Form.Control
+                        value={dispatch?.acknowledgedBy}
+                        onChange={(e: any) =>
+                          setDispatch({
+                            ...dispatch,
+                            acknowledgedBy: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+                    <p className="text-red-500 relative top-[-1.7rem] m-0 p-0"> {errors?.acknowledgedBy}</p>
+                  </div>
+                </Row>
+                <button className={button + ' h-fit '} type="submit">
+                  Acknowledge
+                </button>
+              </>
+            }
+          </Form>
         )}
-      </Form>
 
-      {/* {order.map((order, idx) => (
-        <OrderBatchSummary
-          key={idx}
-          cards={order.cards}
-          destination={order.destination}
-          batchId={order.batchNo}
-          dispatcherName={''}
-          pickUpDate={''}
-          batchDispatchStatus={0}
-        /> */}
-      {/* ))} */}
-      <ToastContainer position="bottom-right" newestOnTop/>
-    </Container>
+      </Formik>
+
+      <>
+        <div className="w-full flex justify-between gap-10 text-center ">
+          <button className={button} onClick={(e) => add(lassraId)}>
+            Add
+          </button>
+          <input
+            type="text"
+            value={lassraId}
+            onChange={(e) => setLassraId(e.target.value)}
+          />
+          <button className={button} onClick={() => remove(lassraId)}>
+            Remove
+          </button>
+        </div>
+        {dispatch.cardDispatch && (
+          <OrderBatchSummary cards={dispatch.cardDispatch} />
+        )}
+      </>
+
+      <ToastContainer position="bottom-right" newestOnTop />
+    </div>
   )
 }
-
-// export default ViewSingleDispatch
